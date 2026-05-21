@@ -110,22 +110,21 @@ export default function ProblemScrollFX() {
 
     gsap.registerPlugin(ScrollTrigger)
 
-    // Entrance blur — the whole pinned panel arrives blurred and
-    // sharpens as the user scrolls toward it. Runs from when the
-    // section's top hits the bottom of the viewport until it reaches
-    // the top (where the pin takes over). Works on every viewport,
-    // hence outside matchMedia.
+    // Entrance blur — confined to the immediate handoff zone right
+    // before the pin engages, so the hero above is never affected.
+    // Starts only when the section's top is already 30% into the
+    // viewport, ends when it reaches the top (pin takes over).
     const entranceBlur = ScrollTrigger.create({
       trigger: sectionRef.current,
-      start: 'top bottom',
+      start: 'top 30%',
       end: 'top top',
-      scrub: 0.7,
+      scrub: 0.5,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         if (!pinRef.current) return
         const p = self.progress
-        pinRef.current.style.filter = `blur(${(1 - p) * 18}px)`
-        pinRef.current.style.opacity = String(0.45 + p * 0.55)
+        pinRef.current.style.filter = `blur(${(1 - p) * 10}px)`
+        pinRef.current.style.opacity = String(0.7 + p * 0.3)
       },
     })
 

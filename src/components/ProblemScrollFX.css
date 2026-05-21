@@ -24,11 +24,33 @@
 
 .pscroll__pin {
   position: relative;
+  isolation: isolate;
   height: 100vh;
   width: 100%;
   overflow: hidden;
   background-color: var(--graphite);
   will-change: filter, opacity;
+}
+
+.pscroll__pin::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(84px, 12vh, 148px);
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(23, 23, 23, 0.74) 0%,
+    rgba(23, 23, 23, 0.32) 48%,
+    rgba(23, 23, 23, 0) 100%
+  );
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
 }
 
 /* ───────── Diagnosis grid ───────── */

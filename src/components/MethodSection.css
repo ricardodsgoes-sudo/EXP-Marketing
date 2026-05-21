@@ -12,6 +12,7 @@
 
 .method {
   position: relative;
+  isolation: isolate;
   background-color: #000;
   color: rgba(247, 247, 245, 0.9);
   padding:
@@ -24,8 +25,30 @@
   overflow: hidden;
 }
 
+.method::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(84px, 12vh, 148px);
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.74) 0%,
+    rgba(0, 0, 0, 0.32) 48%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+}
+
 .method__container {
   position: relative;
+  z-index: 1;
   max-width: var(--container);
   margin: 0 auto;
 }
@@ -162,8 +185,8 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(28px, 3vw, 56px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 36px);
 }
 
 .method__pillar {
@@ -181,6 +204,58 @@
 .method__pillar.is-reached {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+}
+
+.method__pillar {
+  min-width: 0;
+  padding-right: 0;
+  opacity: 1;
+  transform: none;
+}
+
+.method__pillar-card {
+  min-height: clamp(300px, 31vw, 390px);
+  padding: clamp(24px, 2.4vw, 34px);
+  border: 1px solid rgba(245, 243, 239, 0.12);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.028) 36%,
+      rgba(0, 0, 0, 0.32) 68%,
+      rgba(255, 255, 255, 0.035) 100%
+    ),
+    linear-gradient(180deg, #101010 0%, #050505 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(245, 243, 239, 0.04),
+    0 22px 70px rgba(0, 0, 0, 0.28);
+  opacity: 0.42;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    border-color 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    background 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    box-shadow 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    transform 760ms cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+.method__pillar.is-reached .method__pillar-card {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  border-color: rgba(245, 243, 239, 0.26);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.045) 38%,
+      rgba(0, 0, 0, 0.28) 70%,
+      rgba(255, 255, 255, 0.06) 100%
+    ),
+    linear-gradient(180deg, #181818 0%, #070707 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(245, 243, 239, 0.08),
+    0 24px 80px rgba(0, 0, 0, 0.32),
+    0 0 44px rgba(245, 243, 239, 0.045);
 }
 
 /* Asymmetric vertical rhythm — each subsequent pillar's content sits
@@ -243,7 +318,10 @@
   box-shadow:
     0 0 0 5px rgba(216, 185, 140, 0.06),
     0 0 14px rgba(216, 185, 140, 0.32);
-  transition: box-shadow 360ms ease, background-color 360ms ease;
+  transition:
+    box-shadow 360ms ease,
+    background-color 360ms ease,
+    transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1);
 }
 
 .method__pillar:first-child .method__pillar-node {
@@ -251,6 +329,23 @@
   box-shadow:
     0 0 0 6px rgba(216, 185, 140, 0.08),
     0 0 18px rgba(216, 185, 140, 0.45);
+}
+
+.method__pillar:not(.is-reached):first-child .method__pillar-node {
+  background: var(--graphite);
+  box-shadow:
+    0 0 0 5px rgba(216, 185, 140, 0.06),
+    0 0 14px rgba(216, 185, 140, 0.32);
+}
+
+.method__pillar.is-reached .method__pillar-node {
+  border-color: var(--champagne);
+  background: var(--champagne);
+  transform: translate(-50%, -50%) scale(1.12);
+  box-shadow:
+    0 0 0 7px rgba(216, 185, 140, 0.11),
+    0 0 18px rgba(216, 185, 140, 0.58),
+    0 0 38px rgba(216, 185, 140, 0.2);
 }
 
 /* Outlined editorial numerals — large hairline stroke with transparent
@@ -413,6 +508,11 @@
     padding-right: 0;
   }
 
+  .method__pillar-card {
+    min-height: auto;
+    padding: 22px;
+  }
+
   /* Horizontal tick from the vertical rail to each pillar. */
   .method__pillar::before,
   .method__pillar:nth-child(2)::before,
@@ -461,8 +561,21 @@
   transition: none;
 }
 
+.method--reduced .method__pillar-card {
+  opacity: 1;
+  transform: none;
+}
+
 .method--reduced .method__pillar-num {
   color: var(--champagne);
+}
+
+.method--reduced .method__pillar-node {
+  background: var(--champagne);
+  box-shadow:
+    0 0 0 7px rgba(216, 185, 140, 0.11),
+    0 0 18px rgba(216, 185, 140, 0.58),
+    0 0 38px rgba(216, 185, 140, 0.2);
 }
 
 @media (max-width: 860px) {

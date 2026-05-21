@@ -69,7 +69,7 @@ export default function MethodSection() {
       // each pillar at the exact moment the rail crosses its node —
       // 0.00, 0.25, 0.50, 0.75 of the line.
       if (railRef.current) {
-        const PILLAR_THRESHOLDS = [0.02, 0.27, 0.52, 0.77]
+        const PILLAR_THRESHOLDS = [0.02, 0.26, 0.5, 0.72]
         gsap.to(railRef.current, {
           '--rail-progress': 1,
           ease: 'none',
@@ -131,10 +131,12 @@ export default function MethodSection() {
                 }
               >
                 <span className="method__pillar-node" aria-hidden="true" />
-                <span className="method__pillar-num">{p.num}</span>
-                <h3 className="method__pillar-title">{p.title}</h3>
-                <span className="method__pillar-rule" aria-hidden="true" />
-                <p className="method__pillar-text">{p.text}</p>
+                <div className="method__pillar-card">
+                  <span className="method__pillar-num">{p.num}</span>
+                  <h3 className="method__pillar-title">{p.title}</h3>
+                  <span className="method__pillar-rule" aria-hidden="true" />
+                  <p className="method__pillar-text">{p.text}</p>
+                </div>
               </li>
             ))}
           </ol>

@@ -46,7 +46,7 @@
     clamp(48px, 6vw, 112px);
   align-items: stretch;
   z-index: 1;
-  will-change: opacity;
+  will-change: opacity, filter;
 }
 
 .pscroll__anchor {

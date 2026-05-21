@@ -101,9 +101,6 @@ export default function MethodSection() {
       className={`method${reducedMotion ? ' method--reduced' : ''}`}
       aria-labelledby="method-title"
     >
-      <span className="method__x method__x--tl" aria-hidden="true" />
-      <span className="method__x method__x--br" aria-hidden="true" />
-
       <div className="method__container">
         <header className="method__header">
           <span className="method__eyebrow">Cómo EXP acelera el crecimiento</span>

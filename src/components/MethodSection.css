@@ -24,21 +24,6 @@
   overflow: hidden;
 }
 
-/* Subtle radial glow behind the rail to give the section a
-   center of gravity. */
-.method::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(
-      ellipse 70% 50% at 50% 55%,
-      rgba(216, 185, 140, 0.07),
-      transparent 70%
-    );
-  pointer-events: none;
-}
-
 .method__container {
   position: relative;
   max-width: var(--container);
@@ -260,41 +245,6 @@
   max-width: 340px;
 }
 
-/* ───────── X motif (corner decoration, echoes EXP logo) ───────── */
-
-.method__x {
-  position: absolute;
-  width: 56px;
-  height: 56px;
-  pointer-events: none;
-  opacity: 0.06;
-  background-image:
-    linear-gradient(
-      45deg,
-      transparent 47.5%,
-      var(--champagne) 47.5%,
-      var(--champagne) 52.5%,
-      transparent 52.5%
-    ),
-    linear-gradient(
-      -45deg,
-      transparent 47.5%,
-      var(--champagne) 47.5%,
-      var(--champagne) 52.5%,
-      transparent 52.5%
-    );
-}
-
-.method__x--tl {
-  top: clamp(48px, 6vw, 80px);
-  left: clamp(28px, 4vw, 64px);
-}
-
-.method__x--br {
-  bottom: clamp(48px, 6vw, 80px);
-  right: clamp(28px, 4vw, 64px);
-}
-
 /* ============================================================
    Mobile (≤860px) — turn the horizontal rail into a vertical
    timeline along the left edge; pillars stack underneath.
@@ -403,10 +353,6 @@
 
   .method__pillar-text {
     max-width: none;
-  }
-
-  .method__x {
-    display: none;
   }
 }
 

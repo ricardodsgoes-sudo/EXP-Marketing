@@ -166,6 +166,7 @@ export default function ProblemScrollFX() {
       gsap.set(revealRect, { attr: { width: 0 } })
       gsap.set(dangerRect, { attr: { width: 0 } })
       gsap.set(dangerPath, { opacity: 0 })
+      gsap.set(diag, { opacity: 1, filter: 'blur(0px)' })
       gsap.set(resolution, { opacity: 0 })
       gsap.set(resolutionLine, { strokeDasharray: 1, strokeDashoffset: 1 })
       gsap.set(resolutionParts, { opacity: 0, y: 18 })
@@ -187,6 +188,7 @@ export default function ProblemScrollFX() {
             gsap.set(revealRect, { attr: { width: 0 } })
             gsap.set(dangerRect, { attr: { width: 0 } })
             gsap.set(dangerPath, { opacity: 0 })
+            gsap.set(diag, { opacity: 1, filter: 'blur(0px)' })
             gsap.set(resolution, { opacity: 0 })
             gsap.set(resolutionLine, { strokeDasharray: 1, strokeDashoffset: 1 })
             gsap.set(resolutionParts, { opacity: 0, y: 18 })
@@ -226,16 +228,22 @@ export default function ProblemScrollFX() {
         DANGER_START,
       )
 
-      // ── Phase C — Settle: the crashed line softens, diag dims so
-      //               the resolution overlay can take the spotlight
+      // ── Phase C — Settle: the crashed line softens, the diag dims
+      //               AND blurs so the resolution overlay reads as the
+      //               only thing in focus.
       tl.to(
         dangerPath,
-        { opacity: 0.18, ease: 'power2.out', duration: 0.05 },
+        { opacity: 0.12, ease: 'power2.out', duration: 0.05 },
         H_END + 0.005,
       )
       tl.to(
         diag,
-        { opacity: 0.22, ease: 'power2.out', duration: 0.08 },
+        {
+          opacity: 0.12,
+          filter: 'blur(8px)',
+          ease: 'power2.out',
+          duration: 0.1,
+        },
         H_END,
       )
 

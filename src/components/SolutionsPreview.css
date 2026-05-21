@@ -50,10 +50,10 @@
 
 .solutions__header {
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(300px, 0.58fr);
-  gap: clamp(32px, 6vw, 96px);
+  grid-template-columns: minmax(0, 0.82fr) minmax(300px, 0.58fr);
+  gap: clamp(32px, 5vw, 82px);
   align-items: end;
-  margin-bottom: clamp(56px, 7vw, 92px);
+  margin-bottom: clamp(48px, 6vw, 76px);
 }
 
 .solutions__eyebrow {
@@ -78,13 +78,13 @@
 }
 
 .solutions__title {
-  max-width: 900px;
+  max-width: 780px;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(44px, 6vw, 86px);
+  font-size: clamp(42px, 5.15vw, 74px);
   font-weight: 300;
-  line-height: 0.98;
-  letter-spacing: -0.018em;
+  line-height: 1.04;
+  letter-spacing: -0.012em;
   color: var(--graphite);
 }
 
@@ -108,13 +108,27 @@
 .solutions__card {
   position: relative;
   display: flex;
-  min-height: clamp(420px, 33vw, 520px);
+  min-height: clamp(360px, 27vw, 440px);
   flex-direction: column;
-  padding: clamp(28px, 3vw, 46px);
+  padding: clamp(26px, 2.5vw, 38px);
   border-right: 1px solid rgba(23, 23, 23, 0.12);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0)),
     rgba(247, 247, 245, 0.72);
+  transition:
+    border-color 360ms ease,
+    box-shadow 360ms ease,
+    transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+.solutions__card-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  min-height: 100%;
+  flex-direction: column;
+  will-change: transform;
 }
 
 .solutions__card:first-child {
@@ -133,17 +147,58 @@
   pointer-events: none;
 }
 
+.solutions__card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: clamp(26px, 2.5vw, 38px);
+  right: clamp(26px, 2.5vw, 38px);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--champagne),
+    rgba(216, 185, 140, 0.18)
+  );
+  transform: scaleX(0.55);
+  transform-origin: left center;
+  transition:
+    opacity 360ms ease,
+    transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+.solutions__card:nth-child(2) {
+  border-inline-color: rgba(216, 185, 140, 0.52);
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 185, 140, 0.24),
+    0 22px 70px rgba(23, 23, 23, 0.045);
+}
+
+.solutions__card:nth-child(2)::after {
+  transform: scaleX(0.78);
+}
+
+.solutions__card:hover {
+  border-color: rgba(216, 185, 140, 0.68);
+  transform: translateY(-6px);
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 185, 140, 0.26),
+    0 26px 80px rgba(23, 23, 23, 0.08);
+}
+
 .solutions__card:hover::before {
   opacity: 1;
 }
 
+.solutions__card:hover::after {
+  transform: scaleX(1);
+}
+
 .solutions__card-head {
   position: relative;
-  z-index: 1;
   display: flex;
   align-items: center;
   gap: 18px;
-  margin-bottom: clamp(52px, 7vw, 86px);
+  margin-bottom: clamp(34px, 4.4vw, 58px);
 }
 
 .solutions__num {
@@ -163,32 +218,29 @@
 
 .solutions__card-title {
   position: relative;
-  z-index: 1;
-  max-width: 320px;
-  margin: 0 0 clamp(22px, 2.4vw, 34px);
+  max-width: 340px;
+  margin: 0 0 clamp(18px, 2vw, 28px);
   font-family: var(--font-display);
-  font-size: clamp(30px, 3vw, 46px);
+  font-size: clamp(29px, 2.55vw, 39px);
   font-weight: 300;
-  line-height: 1.04;
-  letter-spacing: -0.014em;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
   color: var(--graphite);
 }
 
 .solutions__card-text {
   position: relative;
-  z-index: 1;
   max-width: 380px;
   margin: 0;
   font-family: var(--font-body);
-  font-size: clamp(0.98rem, 1.02vw, 1.08rem);
+  font-size: clamp(0.95rem, 0.98vw, 1.03rem);
   font-weight: 300;
-  line-height: 1.7;
+  line-height: 1.66;
   color: rgba(23, 23, 23, 0.68);
 }
 
 .solutions__cta {
   position: relative;
-  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -196,7 +248,7 @@
   width: 100%;
   min-height: 48px;
   margin-top: auto;
-  padding-top: clamp(32px, 4vw, 54px);
+  padding-top: clamp(26px, 3vw, 40px);
   border-top: 1px solid rgba(23, 23, 23, 0.12);
   font-family: var(--font-body);
   font-size: 0.86rem;
@@ -223,7 +275,7 @@
 .solutions__cta:hover .solutions__cta-mark {
   background: var(--champagne);
   color: var(--graphite);
-  transform: translateX(3px);
+  transform: translateX(5px);
 }
 
 @media (max-width: 980px) {
@@ -246,6 +298,10 @@
   .solutions__card:first-child {
     min-height: auto;
     border: 1px solid rgba(23, 23, 23, 0.12);
+  }
+
+  .solutions__card:nth-child(2) {
+    border-color: rgba(216, 185, 140, 0.52);
   }
 
   .solutions__card-head {
@@ -283,7 +339,15 @@
 
 @media (prefers-reduced-motion: reduce) {
   .solutions__card::before,
-  .solutions__cta-mark {
+  .solutions__card::after,
+  .solutions__cta-mark,
+  .solutions__card,
+  .solutions__card-inner {
     transition: none;
+    transform: none !important;
+  }
+
+  .solutions__card:hover {
+    transform: none;
   }
 }

@@ -69,24 +69,26 @@ export default function MethodSection() {
       // each pillar at the exact moment the rail crosses its node —
       // 0.00, 0.25, 0.50, 0.75 of the line.
       if (railRef.current) {
-        const PILLAR_THRESHOLDS = [0.02, 0.26, 0.5, 0.72]
+        const PILLAR_THRESHOLDS = [0.06, 0.26, 0.5, 0.72]
+        const updateReached = (self) => {
+          const p = self.progress
+          const reached = PILLAR_THRESHOLDS.filter((t) => p >= t).length
+          if (reached !== lastReachedRef.current) {
+            lastReachedRef.current = reached
+            setReachedCount(reached)
+          }
+        }
+
         gsap.to(railRef.current, {
-          '--rail-progress': 1,
+          '--method-progress': 1,
           ease: 'none',
           scrollTrigger: {
-            trigger: railRef.current,
-            start: 'top 80%',
-            end: 'bottom 65%',
-            scrub: 0.6,
+            trigger: sectionRef.current,
+            start: 'top 72%',
+            end: 'bottom 72%',
+            scrub: 1.25,
             invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const p = self.progress
-              const reached = PILLAR_THRESHOLDS.filter((t) => p >= t).length
-              if (reached !== lastReachedRef.current) {
-                lastReachedRef.current = reached
-                setReachedCount(reached)
-              }
-            },
+            onUpdate: updateReached,
           },
         })
       }
@@ -116,26 +118,68 @@ export default function MethodSection() {
           </p>
         </header>
 
-        <div ref={railRef} className="method__rail">
-          <span className="method__rail-track" aria-hidden="true" />
-          <span className="method__rail-ghost" aria-hidden="true" />
-          <span className="method__rail-active" aria-hidden="true" />
+        <div ref={railRef} className="method__map">
+          <div className="method__visual" aria-hidden="true">
+            <svg
+              className="method__connectors"
+              viewBox="0 0 620 500"
+              preserveAspectRatio="none"
+            >
+              <path className="method__connector method__connector--one" d="M 92 156 H 218" />
+              <path className="method__connector method__connector--two" d="M 222 66 V 148" />
+              <path className="method__connector method__connector--three" d="M 392 168 H 520 V 112" />
+              <path className="method__connector method__connector--four" d="M 322 386 V 448 H 118" />
+              <path className="method__connector method__connector--cards" d="M 392 250 H 590" />
+            </svg>
 
-          <ol className="method__pillars">
+            <span className="method__orbit-label method__orbit-label--one">
+              DiagnÃ³stico profundo
+            </span>
+            <span className="method__orbit-label method__orbit-label--two">
+              Estrategia clara
+            </span>
+            <span className="method__orbit-label method__orbit-label--three">
+              EjecuciÃ³n profesional
+            </span>
+            <span className="method__orbit-label method__orbit-label--four">
+              GestiÃ³n con datos
+            </span>
+
+            <div className="method__wheel">
+              <div className="method__wheel-progress" />
+              <div className="method__wheel-ring">
+                {PILLARS.map((p, i) => (
+                  <span
+                    key={p.num}
+                    className={
+                      'method__wheel-step method__wheel-step--' +
+                      (i + 1) +
+                      (i < reachedCount ? ' is-reached' : '')
+                    }
+                  >
+                    {p.num}
+                  </span>
+                ))}
+              </div>
+              <div className="method__wheel-core">
+                <span>EXP</span>
+              </div>
+            </div>
+          </div>
+
+          <ol className="method__strategy-list">
             {PILLARS.map((p, i) => (
               <li
                 key={p.num}
                 ref={(el) => (pillarsRef.current[i] = el)}
                 className={
-                  'method__pillar' + (i < reachedCount ? ' is-reached' : '')
+                  'method__strategy-card' + (i < reachedCount ? ' is-reached' : '')
                 }
               >
-                <span className="method__pillar-node" aria-hidden="true" />
-                <div className="method__pillar-card">
-                  <span className="method__pillar-num">{p.num}</span>
-                  <h3 className="method__pillar-title">{p.title}</h3>
-                  <span className="method__pillar-rule" aria-hidden="true" />
-                  <p className="method__pillar-text">{p.text}</p>
+                <span className="method__strategy-num">{p.num}</span>
+                <div>
+                  <h3 className="method__strategy-title">{p.title}</h3>
+                  <p className="method__strategy-text">{p.text}</p>
                 </div>
               </li>
             ))}

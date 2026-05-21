@@ -1,28 +1,22 @@
 /* ============================================================
-   METHOD SECTION — strategic, editorial answer to the Problem
-   section. Four pillars distributed along a single champagne
-   rail that draws progressively as the section enters view.
-
-   The previous section narrates instability (jagged chart);
-   this one narrates direction (a continuous, calm line).
-
-   Visual brief: bigger, more present, with clear contrast on
-   small copy and a rail that reads as a "strategic route".
+   METHOD SECTION — strategic circular map
    ============================================================ */
 
 .method {
   position: relative;
   isolation: isolate;
-  background-color: #000;
+  overflow-x: clip;
+  overflow-y: visible;
+  min-height: 142vh;
+  scroll-margin-top: 120px;
+  background:
+    radial-gradient(circle at 50% 70%, rgba(216, 185, 140, 0.08), transparent 32%),
+    #000;
   color: rgba(247, 247, 245, 0.9);
   padding:
-    clamp(88px, 11vh, 136px)
-    clamp(40px, 6vw, 112px)
-    clamp(96px, 12vh, 152px);
-  /* Sticky header is 104px tall — keep the title clear of it
-     during anchor scrolls. */
-  scroll-margin-top: 120px;
-  overflow: hidden;
+    clamp(88px, 11vh, 132px)
+    clamp(32px, 5vw, 88px)
+    clamp(92px, 13vh, 150px);
 }
 
 .method::before {
@@ -46,6 +40,19 @@
   mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
 }
 
+.method::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 32%;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(216, 185, 140, 0.08),
+    rgba(216, 185, 140, 0)
+  );
+}
+
 .method__container {
   position: relative;
   z-index: 1;
@@ -53,11 +60,9 @@
   margin: 0 auto;
 }
 
-/* ───────── Header ───────── */
-
 .method__header {
-  max-width: 1000px;
-  margin: 0 auto clamp(56px, 7vh, 88px);
+  max-width: 980px;
+  margin: 0 auto clamp(54px, 6vw, 82px);
   text-align: center;
 }
 
@@ -65,13 +70,13 @@
   display: inline-flex;
   align-items: center;
   gap: 14px;
+  margin-bottom: clamp(24px, 3vw, 34px);
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.38em;
   text-transform: uppercase;
   color: var(--champagne);
-  margin-bottom: clamp(24px, 3vw, 36px);
 }
 
 .method__eyebrow::before,
@@ -84,364 +89,333 @@
 }
 
 .method__title {
+  max-width: 920px;
+  margin: 0 auto clamp(22px, 2.6vw, 32px);
   font-family: var(--font-display);
-  font-size: clamp(44px, 5.5vw, 82px);
+  font-size: clamp(42px, 5.1vw, 78px);
   font-weight: 300;
   line-height: 1.04;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.018em;
   color: #f5f3ef;
-  margin: 0 auto clamp(24px, 2.8vw, 36px);
-  max-width: 980px;
 }
 
-/* Champagne italic accent — same treatment as "crecimiento estructurado"
-   in the ProblemSection's closing phrase. Carries the narrative thread
-   from the bridge into the method. */
 .method__title-accent {
   color: var(--champagne);
   font-style: italic;
 }
 
 .method__intro {
-  font-family: var(--font-body);
-  font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
-  font-weight: 300;
-  line-height: 1.6;
-  color: rgba(240, 237, 232, 0.82);
-  max-width: 760px;
+  max-width: 740px;
   margin: 0 auto;
+  font-family: var(--font-body);
+  font-size: clamp(1.02rem, 1.16vw, 1.2rem);
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(240, 237, 232, 0.76);
 }
 
-/* ───────── Rail (strategic horizontal route) ───────── */
+.method__map {
+  --method-progress: 0;
+  position: sticky;
+  top: clamp(92px, 11vh, 118px);
+  display: grid;
+  grid-template-columns: minmax(520px, 0.96fr) minmax(360px, 0.7fr);
+  gap: clamp(42px, 6vw, 92px);
+  align-items: center;
+}
 
-.method__rail {
+.method__visual {
   position: relative;
-  padding-top: clamp(56px, 7vh, 88px);
-  --rail-progress: 0;
+  min-height: clamp(430px, 42vw, 560px);
 }
 
-/* Thin guides above the rail to make it feel like a strategic
-   route rather than a random line. */
-.method__rail-track {
+.method__connectors {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: rgba(240, 237, 232, 0.42);
+  pointer-events: none;
 }
 
-.method__rail-track::before,
-.method__rail-track::after {
-  content: '';
+.method__connector {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 2 6;
+  opacity: 0.58;
+  vector-effect: non-scaling-stroke;
+}
+
+.method__connector--cards {
+  stroke: rgba(216, 185, 140, 0.72);
+  stroke-dasharray: 5 8;
+  opacity: calc(0.22 + (var(--method-progress) * 0.64));
+}
+
+.method__orbit-label {
   position: absolute;
+  max-width: 210px;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.35vw, 36px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: rgba(245, 243, 239, 0.9);
+  text-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.method__orbit-label--one {
   left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--champagne);
+  top: 28%;
 }
 
-.method__rail-track::before {
-  top: -14px;
-  opacity: 0.08;
+.method__orbit-label--two {
+  left: 28%;
+  top: 2%;
 }
 
-.method__rail-track::after {
-  top: 14px;
-  opacity: 0.04;
+.method__orbit-label--three {
+  right: 1%;
+  top: 35%;
 }
 
-/* Ghost line — faint baseline, runs the full rail width. */
-.method__rail-ghost {
+.method__orbit-label--four {
+  left: 16%;
+  bottom: 2%;
+}
+
+.method__wheel {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--champagne);
-  opacity: 0.22;
+  left: 50%;
+  top: 50%;
+  width: clamp(260px, 28vw, 360px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
 }
 
-/* Active line — same geometry; transform: scaleX driven by JS
-   through --rail-progress, revealing the route left → right. */
-.method__rail-active {
+.method__wheel-progress,
+.method__wheel-ring,
+.method__wheel-core {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--champagne);
-  transform: scaleX(var(--rail-progress));
-  transform-origin: left center;
+  border-radius: 50%;
+}
+
+.method__wheel-progress {
+  inset: 0;
+  background:
+    conic-gradient(
+      from -90deg,
+      rgba(216, 185, 140, 0.9) calc(var(--method-progress) * 360deg),
+      rgba(216, 185, 140, 0.14) 0
+    );
+  filter:
+    drop-shadow(0 0 18px rgba(216, 185, 140, 0.2))
+    drop-shadow(0 0 44px rgba(216, 185, 140, 0.09));
+}
+
+.method__wheel-ring {
+  inset: 10px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at center, transparent 0 32%, #000 33% 44%, transparent 45%),
+    conic-gradient(
+      from -45deg,
+      rgba(216, 185, 140, 0.24) 0 25%,
+      rgba(247, 247, 245, 0.06) 25% 26%,
+      rgba(216, 185, 140, 0.18) 26% 50%,
+      rgba(247, 247, 245, 0.06) 50% 51%,
+      rgba(216, 185, 140, 0.22) 51% 75%,
+      rgba(247, 247, 245, 0.06) 75% 76%,
+      rgba(216, 185, 140, 0.16) 76% 100%
+    );
   box-shadow:
-    0 0 4px rgba(216, 185, 140, 0.5),
-    0 0 14px rgba(216, 185, 140, 0.32),
+    inset 0 0 0 1px rgba(216, 185, 140, 0.12),
+    inset 0 0 0 34px rgba(0, 0, 0, 0.72);
+}
+
+.method__wheel-core {
+  inset: 34%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(216, 185, 140, 0.54);
+  background: #000;
+  box-shadow:
+    0 0 0 10px rgba(0, 0, 0, 0.72),
     0 0 30px rgba(216, 185, 140, 0.18);
 }
 
-/* ───────── Pillars (4 columns under the rail) ───────── */
+.method__wheel-core span {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 68px);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  color: var(--champagne);
+}
 
-.method__pillars {
+.method__wheel-step {
+  position: absolute;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid rgba(216, 185, 140, 0.28);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.62);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: rgba(216, 185, 140, 0.58);
+  transform: translate(-50%, -50%);
+  transition:
+    background-color 520ms ease,
+    border-color 520ms ease,
+    box-shadow 520ms ease,
+    color 520ms ease;
+}
+
+.method__wheel-step--1 {
+  left: 50%;
+  top: 18%;
+}
+
+.method__wheel-step--2 {
+  left: 82%;
+  top: 50%;
+}
+
+.method__wheel-step--3 {
+  left: 50%;
+  top: 82%;
+}
+
+.method__wheel-step--4 {
+  left: 18%;
+  top: 50%;
+}
+
+.method__wheel-step.is-reached {
+  border-color: rgba(216, 185, 140, 0.92);
+  background: var(--champagne);
+  color: #000;
+  box-shadow:
+    0 0 0 7px rgba(216, 185, 140, 0.12),
+    0 0 24px rgba(216, 185, 140, 0.42);
+}
+
+.method__strategy-list {
+  display: grid;
+  gap: clamp(18px, 2vw, 26px);
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.method__strategy-card {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(18px, 2vw, 36px);
-}
-
-.method__pillar {
-  position: relative;
-  padding-top: clamp(36px, 4.2vh, 56px);
-  padding-right: clamp(12px, 1.4vw, 24px);
-  /* Hidden by default — revealed once the rail crosses the node. */
-  opacity: 0;
-  transform: translate3d(0, 22px, 0);
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+  min-height: 132px;
+  padding: clamp(20px, 2vw, 28px);
+  border: 1px solid rgba(245, 243, 239, 0.2);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.045), transparent 56%),
+    rgba(0, 0, 0, 0.3);
+  opacity: 0.42;
+  transform: translate3d(0, 18px, 0);
   transition:
-    opacity 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
-    transform 760ms cubic-bezier(0.22, 0.7, 0.2, 1);
+    opacity 620ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    transform 620ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    border-color 620ms ease,
+    box-shadow 620ms ease;
 }
 
-.method__pillar.is-reached {
+.method__strategy-card.is-reached {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  border-color: rgba(216, 185, 140, 0.54);
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 185, 140, 0.08),
+    0 22px 70px rgba(0, 0, 0, 0.28);
 }
 
-.method__pillar {
-  min-width: 0;
-  padding-right: 0;
+.method__strategy-num {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  color: var(--champagne);
+  font-variant-numeric: tabular-nums;
+}
+
+.method__strategy-title {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-size: clamp(27px, 2.2vw, 34px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #f5f3ef;
+}
+
+.method__strategy-text {
+  max-width: 520px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(0.92rem, 0.96vw, 1rem);
+  font-weight: 300;
+  line-height: 1.55;
+  color: rgba(240, 237, 232, 0.68);
+}
+
+.method--reduced .method__map {
+  --method-progress: 1;
+}
+
+.method--reduced .method__strategy-card {
   opacity: 1;
   transform: none;
 }
 
-.method__pillar-card {
-  min-height: clamp(300px, 31vw, 390px);
-  padding: clamp(24px, 2.4vw, 34px);
-  border: 1px solid rgba(245, 243, 239, 0.12);
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.045) 0%,
-      rgba(255, 255, 255, 0.018) 38%,
-      rgba(0, 0, 0, 0.26) 72%,
-      rgba(255, 255, 255, 0.018) 100%
-    ),
-    linear-gradient(180deg, #0d0d0d 0%, #050505 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(245, 243, 239, 0.04),
-    0 22px 70px rgba(0, 0, 0, 0.28);
-  opacity: 0.42;
-  transform: translate3d(0, 18px, 0);
-  transition:
-    opacity 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
-    border-color 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
-    background 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
-    box-shadow 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
-    transform 760ms cubic-bezier(0.22, 0.7, 0.2, 1);
-}
-
-.method__pillar.is-reached .method__pillar-card {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  border-color: rgba(245, 243, 239, 0.26);
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.075) 0%,
-      rgba(255, 255, 255, 0.026) 40%,
-      rgba(0, 0, 0, 0.24) 72%,
-      rgba(255, 255, 255, 0.028) 100%
-    ),
-    linear-gradient(180deg, #131313 0%, #060606 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(245, 243, 239, 0.08),
-    0 24px 80px rgba(0, 0, 0, 0.32),
-    0 0 44px rgba(245, 243, 239, 0.045);
-}
-
-/* Asymmetric vertical rhythm — each subsequent pillar's content sits
-   distinctly lower than the previous, creating an editorial staircase
-   descending from Diagnóstico → Gestión. Nodes stay on the rail (top: 0
-   of pillar is constant); only the content offset grows. */
-.method__pillar:nth-child(2) {
-  padding-top: clamp(96px, 11vh, 132px);
-}
-
-.method__pillar:nth-child(3) {
-  padding-top: clamp(156px, 17vh, 208px);
-}
-
-.method__pillar:nth-child(4) {
-  padding-top: clamp(216px, 23vh, 284px);
-}
-
-/* Vertical tick rising from each pillar up to the rail — makes
-   the connection between line and pillar unmistakable. Its height
-   grows with the staircase so it always reaches the content. */
-.method__pillar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  height: clamp(24px, 3vh, 36px);
-  background: linear-gradient(
-    to bottom,
-    var(--champagne),
-    rgba(216, 185, 140, 0)
-  );
-  opacity: 0.6;
-}
-
-.method__pillar:nth-child(2)::before {
-  height: clamp(84px, 9.5vh, 112px);
-}
-
-.method__pillar:nth-child(3)::before {
-  height: clamp(144px, 16vh, 188px);
-}
-
-.method__pillar:nth-child(4)::before {
-  height: clamp(204px, 22vh, 264px);
-}
-
-/* Node on the rail — slightly larger, sits exactly on the rail. */
-.method__pillar-node {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  border: 1px solid var(--champagne);
-  background: var(--graphite);
-  box-shadow:
-    0 0 0 5px rgba(216, 185, 140, 0.06),
-    0 0 14px rgba(216, 185, 140, 0.32);
-  transition:
-    box-shadow 360ms ease,
-    background-color 360ms ease,
-    transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1);
-}
-
-.method__pillar:first-child .method__pillar-node {
+.method--reduced .method__wheel-step {
+  border-color: rgba(216, 185, 140, 0.92);
   background: var(--champagne);
-  box-shadow:
-    0 0 0 6px rgba(216, 185, 140, 0.08),
-    0 0 18px rgba(216, 185, 140, 0.45);
+  color: #000;
 }
 
-.method__pillar:not(.is-reached):first-child .method__pillar-node {
-  background: var(--graphite);
-  box-shadow:
-    0 0 0 5px rgba(216, 185, 140, 0.06),
-    0 0 14px rgba(216, 185, 140, 0.32);
+@media (max-width: 1100px) {
+  .method {
+    min-height: auto;
+  }
+
+  .method__map {
+    position: relative;
+    top: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .method__visual {
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 
-.method__pillar.is-reached .method__pillar-node {
-  border-color: var(--champagne);
-  background: var(--champagne);
-  transform: translate(-50%, -50%) scale(1.12);
-  box-shadow:
-    0 0 0 7px rgba(216, 185, 140, 0.11),
-    0 0 18px rgba(216, 185, 140, 0.58),
-    0 0 38px rgba(216, 185, 140, 0.2);
-}
-
-/* Outlined editorial numerals — large hairline stroke with transparent
-   fill by default. When the rail reaches the pillar (.is-reached), the
-   fill solidifies to champagne so the numeral "ignites" as the method
-   touches it. */
-.method__pillar-num {
-  display: block;
-  font-family: var(--font-display);
-  font-size: clamp(64px, 6vw, 96px);
-  font-weight: 300;
-  letter-spacing: 0.01em;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--champagne);
-  margin-bottom: clamp(18px, 2.2vh, 28px);
-  font-variant-numeric: tabular-nums;
-  line-height: 0.95;
-  transition: color 720ms cubic-bezier(0.22, 0.7, 0.2, 1);
-}
-
-.method__pillar.is-reached .method__pillar-num {
-  color: var(--champagne);
-}
-
-.method__pillar-title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 2.6vw, 40px);
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: -0.014em;
-  color: #f5f3ef;
-  margin: 0 0 clamp(16px, 1.8vh, 22px);
-  transition: transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1);
-}
-
-.method__pillar-rule {
-  display: block;
-  width: 32px;
-  height: 1px;
-  background: var(--champagne);
-  opacity: 0.55;
-  margin-bottom: clamp(16px, 1.8vh, 22px);
-  transform-origin: left center;
-  transition:
-    transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1),
-    opacity 360ms ease;
-}
-
-.method__pillar-text {
-  font-family: var(--font-body);
-  font-size: clamp(1rem, 1.05vw, 1.125rem);
-  font-weight: 300;
-  line-height: 1.65;
-  color: rgba(240, 237, 232, 0.86);
-  margin: 0;
-  max-width: 340px;
-  transition: color 360ms ease;
-}
-
-/* ───────── Hover — refined interactivity cue ───────── */
-
-.method__pillar:hover .method__pillar-rule {
-  transform: scaleX(1.75);
-  opacity: 0.85;
-}
-
-.method__pillar:hover .method__pillar-title {
-  transform: translateY(-2px);
-}
-
-.method__pillar:hover .method__pillar-text {
-  color: rgba(240, 237, 232, 0.98);
-}
-
-.method__pillar:hover .method__pillar-node {
-  box-shadow:
-    0 0 0 7px rgba(216, 185, 140, 0.1),
-    0 0 22px rgba(216, 185, 140, 0.55);
-}
-
-/* ============================================================
-   Mobile (≤860px) — turn the horizontal rail into a vertical
-   timeline along the left edge; pillars stack underneath.
-   ============================================================ */
-
-@media (max-width: 860px) {
+@media (max-width: 760px) {
   .method {
     padding:
-      clamp(96px, 18vw, 128px)
+      clamp(92px, 18vw, 128px)
       24px
-      clamp(112px, 20vw, 144px);
+      clamp(96px, 18vw, 136px);
   }
 
   .method__header {
     text-align: left;
-    margin-bottom: clamp(64px, 12vw, 88px);
+    margin-bottom: clamp(52px, 12vw, 72px);
   }
 
   .method__eyebrow {
@@ -464,122 +438,28 @@
   .method__intro {
     margin: 0;
     max-width: none;
-    font-size: 1.0625rem;
+    font-size: 1rem;
   }
 
-  .method__rail {
-    padding-top: 0;
-    padding-left: 36px;
+  .method__visual {
+    min-height: 440px;
   }
 
-  /* Re-orient the rail vertically along the left edge. */
-  .method__rail-ghost,
-  .method__rail-active {
-    top: 0;
-    bottom: 0;
-    left: 8px;
-    right: auto;
-    width: 1px;
-    height: auto;
-  }
-
-  .method__rail-track::before,
-  .method__rail-track::after {
+  .method__connectors {
     display: none;
   }
 
-  .method__rail-active {
-    transform: scaleY(var(--rail-progress));
-    transform-origin: center top;
+  .method__orbit-label {
+    display: none;
   }
 
-  .method__pillars {
+  .method__wheel {
+    width: min(78vw, 320px);
+  }
+
+  .method__strategy-card {
     grid-template-columns: 1fr;
-    gap: clamp(48px, 11vw, 64px);
-  }
-
-  /* Flatten the desktop staircase — single column timeline. */
-  .method__pillar,
-  .method__pillar:nth-child(2),
-  .method__pillar:nth-child(3),
-  .method__pillar:nth-child(4) {
-    padding-top: 4px;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .method__pillar-card {
+    gap: 12px;
     min-height: auto;
-    padding: 22px;
-  }
-
-  /* Horizontal tick from the vertical rail to each pillar. */
-  .method__pillar::before,
-  .method__pillar:nth-child(2)::before,
-  .method__pillar:nth-child(3)::before,
-  .method__pillar:nth-child(4)::before {
-    top: 18px;
-    left: -28px;
-    width: clamp(20px, 5vw, 28px);
-    height: 1px;
-    background: linear-gradient(
-      to right,
-      var(--champagne),
-      rgba(216, 185, 140, 0)
-    );
-  }
-
-  .method__pillar-node {
-    top: 18px;
-    left: -36px;
-    transform: translate(-50%, -50%);
-  }
-
-  .method__pillar-num {
-    font-size: 1.625rem;
-    margin-bottom: 14px;
-  }
-
-  .method__pillar-title {
-    font-size: 1.75rem;
-  }
-
-  .method__pillar-text {
-    max-width: none;
-  }
-}
-
-/* ───────── Reduced motion ───────── */
-
-.method--reduced .method__rail-active {
-  transform: scaleX(1);
-}
-
-.method--reduced .method__pillar {
-  opacity: 1;
-  transform: none;
-  transition: none;
-}
-
-.method--reduced .method__pillar-card {
-  opacity: 1;
-  transform: none;
-}
-
-.method--reduced .method__pillar-num {
-  color: var(--champagne);
-}
-
-.method--reduced .method__pillar-node {
-  background: var(--champagne);
-  box-shadow:
-    0 0 0 7px rgba(216, 185, 140, 0.11),
-    0 0 18px rgba(216, 185, 140, 0.58),
-    0 0 38px rgba(216, 185, 140, 0.2);
-}
-
-@media (max-width: 860px) {
-  .method--reduced .method__rail-active {
-    transform: scaleY(1);
   }
 }

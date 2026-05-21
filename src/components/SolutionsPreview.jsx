@@ -1,3 +1,6 @@
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import RevealOnScroll from './RevealOnScroll'
 import './SolutionsPreview.css'
 
@@ -23,8 +26,61 @@ const SOLUTIONS = [
 ]
 
 export default function SolutionsPreview() {
+  const sectionRef = useRef(null)
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const ctx = gsap.context(() => {
+      gsap.from(
+        ['.solutions__eyebrow', '.solutions__title', '.solutions__subtitle'],
+        {
+          y: 26,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 72%',
+          },
+        },
+      )
+
+      const cardInners = gsap.utils.toArray('.solutions__card-inner')
+      cardInners.forEach((card, index) => {
+        const startY = index === 1 ? 10 : 18
+        const endY = index === 1 ? -18 : index === 0 ? -10 : -24
+
+        gsap.fromTo(
+          card,
+          { y: startY },
+          {
+            y: endY,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 85%',
+              end: 'bottom 20%',
+              scrub: 0.8,
+              invalidateOnRefresh: true,
+            },
+          },
+        )
+      })
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <section className="solutions" aria-labelledby="solutions-title">
+    <section
+      ref={sectionRef}
+      className="solutions"
+      aria-labelledby="solutions-title"
+    >
       <div className="solutions__container">
         <header className="solutions__header">
           <span className="solutions__eyebrow">Soluciones EXP</span>
@@ -46,18 +102,20 @@ export default function SolutionsPreview() {
               delay={index * 120}
               threshold={0.18}
             >
-              <div className="solutions__card-head">
-                <span className="solutions__num">{solution.num}</span>
-                <span className="solutions__line" aria-hidden="true" />
+              <div className="solutions__card-inner">
+                <div className="solutions__card-head">
+                  <span className="solutions__num">{solution.num}</span>
+                  <span className="solutions__line" aria-hidden="true" />
+                </div>
+                <h3 className="solutions__card-title">{solution.title}</h3>
+                <p className="solutions__card-text">{solution.text}</p>
+                <a className="solutions__cta" href="#">
+                  <span>{solution.cta}</span>
+                  <span className="solutions__cta-mark" aria-hidden="true">
+                    →
+                  </span>
+                </a>
               </div>
-              <h3 className="solutions__card-title">{solution.title}</h3>
-              <p className="solutions__card-text">{solution.text}</p>
-              <a className="solutions__cta" href="#">
-                <span>{solution.cta}</span>
-                <span className="solutions__cta-mark" aria-hidden="true">
-                  →
-                </span>
-              </a>
             </RevealOnScroll>
           ))}
         </div>

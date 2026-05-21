@@ -5,17 +5,35 @@
 
    The previous section narrates instability (jagged chart);
    this one narrates direction (a continuous, calm line).
+
+   Visual brief: bigger, more present, with clear contrast on
+   small copy and a rail that reads as a "strategic route".
    ============================================================ */
 
 .method {
   position: relative;
   background-color: var(--graphite);
-  color: rgba(247, 247, 245, 0.86);
+  color: rgba(247, 247, 245, 0.9);
   padding:
-    clamp(96px, 14vh, 168px)
+    clamp(140px, 18vh, 220px)
     clamp(40px, 6vw, 112px)
-    clamp(120px, 16vh, 200px);
+    clamp(160px, 20vh, 240px);
   overflow: hidden;
+}
+
+/* Subtle radial glow behind the rail to give the section a
+   center of gravity. */
+.method::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 70% 50% at 50% 55%,
+      rgba(216, 185, 140, 0.07),
+      transparent 70%
+    );
+  pointer-events: none;
 }
 
 .method__container {
@@ -27,49 +45,90 @@
 /* ───────── Header ───────── */
 
 .method__header {
-  max-width: 920px;
-  margin: 0 auto clamp(72px, 9vh, 128px);
+  max-width: 980px;
+  margin: 0 auto clamp(96px, 12vh, 160px);
   text-align: center;
 }
 
 .method__eyebrow {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
   font-family: var(--font-body);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.36em;
+  letter-spacing: 0.38em;
   text-transform: uppercase;
   color: var(--champagne);
-  margin-bottom: clamp(28px, 3.4vw, 44px);
+  margin-bottom: clamp(32px, 4vw, 48px);
+}
+
+.method__eyebrow::before,
+.method__eyebrow::after {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--champagne);
+  opacity: 0.55;
 }
 
 .method__title {
   font-family: var(--font-display);
-  font-size: clamp(34px, 4.2vw, 60px);
+  font-size: clamp(42px, 5.4vw, 80px);
   font-weight: 300;
-  line-height: 1.08;
-  letter-spacing: -0.014em;
-  color: #f0ede8;
-  margin: 0 auto clamp(28px, 3.4vw, 40px);
-  max-width: 880px;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: #f5f3ef;
+  margin: 0 auto clamp(32px, 3.6vw, 44px);
+  max-width: 980px;
 }
 
 .method__intro {
   font-family: var(--font-body);
-  font-size: clamp(1rem, 1.05vw, 1.0625rem);
+  font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
   font-weight: 300;
-  line-height: 1.7;
-  color: rgba(240, 237, 232, 0.66);
-  max-width: 700px;
+  line-height: 1.65;
+  color: rgba(240, 237, 232, 0.78);
+  max-width: 760px;
   margin: 0 auto;
 }
 
-/* ───────── Rail (strategic horizontal line) ───────── */
+/* ───────── Rail (strategic horizontal route) ───────── */
 
 .method__rail {
   position: relative;
-  padding-top: clamp(56px, 7vh, 88px);
+  padding-top: clamp(96px, 12vh, 140px);
   --rail-progress: 0;
+}
+
+/* Thin guides above the rail to make it feel like a strategic
+   route rather than a random line. */
+.method__rail-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.method__rail-track::before,
+.method__rail-track::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--champagne);
+}
+
+.method__rail-track::before {
+  top: -14px;
+  opacity: 0.08;
+}
+
+.method__rail-track::after {
+  top: 14px;
+  opacity: 0.04;
 }
 
 /* Ghost line — faint baseline, runs the full rail width. */
@@ -80,7 +139,7 @@
   right: 0;
   height: 1px;
   background: var(--champagne);
-  opacity: 0.14;
+  opacity: 0.22;
 }
 
 /* Active line — same geometry; transform: scaleX driven by JS
@@ -92,10 +151,12 @@
   right: 0;
   height: 1px;
   background: var(--champagne);
-  opacity: 0.85;
   transform: scaleX(var(--rail-progress));
   transform-origin: left center;
-  box-shadow: 0 0 8px rgba(216, 185, 140, 0.28);
+  box-shadow:
+    0 0 4px rgba(216, 185, 140, 0.5),
+    0 0 14px rgba(216, 185, 140, 0.32),
+    0 0 30px rgba(216, 185, 140, 0.18);
 }
 
 /* ───────── Pillars (4 columns under the rail) ───────── */
@@ -106,70 +167,103 @@
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: clamp(24px, 2.4vw, 48px);
+  gap: clamp(28px, 3vw, 56px);
 }
 
 .method__pillar {
   position: relative;
-  padding-top: clamp(40px, 5vh, 64px);
-  padding-right: clamp(8px, 1vw, 16px);
+  padding-top: clamp(64px, 7vh, 96px);
+  padding-right: clamp(12px, 1.4vw, 24px);
 }
 
-/* Node on the rail — small circle aligned to the line. */
+/* Vertical tick rising from each pillar up to the rail — makes
+   the connection between line and pillar unmistakable. */
+.method__pillar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: clamp(40px, 4.8vh, 64px);
+  background: linear-gradient(
+    to bottom,
+    var(--champagne),
+    rgba(216, 185, 140, 0)
+  );
+  opacity: 0.55;
+}
+
+/* Node on the rail — slightly larger, sits exactly on the rail. */
 .method__pillar-node {
   position: absolute;
   top: 0;
   left: 0;
-  transform: translateY(-50%);
-  width: 9px;
-  height: 9px;
+  transform: translate(-50%, -50%);
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   border: 1px solid var(--champagne);
   background: var(--graphite);
+  box-shadow:
+    0 0 0 5px rgba(216, 185, 140, 0.06),
+    0 0 14px rgba(216, 185, 140, 0.32);
 }
 
 .method__pillar:first-child .method__pillar-node {
   background: var(--champagne);
+  box-shadow:
+    0 0 0 6px rgba(216, 185, 140, 0.08),
+    0 0 18px rgba(216, 185, 140, 0.45);
 }
 
 .method__pillar-num {
   display: block;
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.34em;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 2.6vw, 38px);
+  font-weight: 300;
+  letter-spacing: 0.02em;
   color: var(--champagne);
   margin-bottom: clamp(16px, 2vh, 22px);
+  font-variant-numeric: tabular-nums;
 }
 
 .method__pillar-title {
   font-family: var(--font-display);
-  font-size: clamp(22px, 2vw, 30px);
+  font-size: clamp(26px, 2.4vw, 38px);
   font-weight: 300;
-  line-height: 1.18;
-  letter-spacing: -0.008em;
-  color: #f0ede8;
-  margin: 0 0 clamp(14px, 1.6vh, 20px);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  color: #f5f3ef;
+  margin: 0 0 clamp(18px, 2vh, 26px);
+}
+
+.method__pillar-rule {
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--champagne);
+  opacity: 0.5;
+  margin-bottom: clamp(18px, 2vh, 26px);
 }
 
 .method__pillar-text {
   font-family: var(--font-body);
-  font-size: clamp(0.875rem, 0.95vw, 0.9375rem);
+  font-size: clamp(0.9375rem, 1vw, 1.0625rem);
   font-weight: 300;
   line-height: 1.7;
-  color: rgba(240, 237, 232, 0.6);
+  color: rgba(240, 237, 232, 0.78);
   margin: 0;
-  max-width: 280px;
+  max-width: 320px;
 }
 
 /* ───────── X motif (corner decoration, echoes EXP logo) ───────── */
 
 .method__x {
   position: absolute;
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.06;
   background-image:
     linear-gradient(
       45deg,
@@ -188,13 +282,13 @@
 }
 
 .method__x--tl {
-  top: clamp(40px, 5vw, 64px);
-  left: clamp(24px, 4vw, 56px);
+  top: clamp(48px, 6vw, 80px);
+  left: clamp(28px, 4vw, 64px);
 }
 
 .method__x--br {
-  bottom: clamp(40px, 5vw, 64px);
-  right: clamp(24px, 4vw, 56px);
+  bottom: clamp(48px, 6vw, 80px);
+  right: clamp(28px, 4vw, 64px);
 }
 
 /* ============================================================
@@ -205,29 +299,42 @@
 @media (max-width: 860px) {
   .method {
     padding:
-      clamp(72px, 14vw, 96px)
+      clamp(96px, 18vw, 128px)
       24px
-      clamp(80px, 16vw, 112px);
+      clamp(112px, 20vw, 144px);
   }
 
   .method__header {
     text-align: left;
-    margin-bottom: clamp(48px, 10vw, 72px);
+    margin-bottom: clamp(64px, 12vw, 88px);
+  }
+
+  .method__eyebrow {
+    gap: 12px;
+  }
+
+  .method__eyebrow::before {
+    width: 18px;
+  }
+
+  .method__eyebrow::after {
+    display: none;
   }
 
   .method__title {
-    font-size: clamp(30px, 8vw, 42px);
+    font-size: clamp(34px, 9vw, 48px);
     margin-inline: 0;
   }
 
   .method__intro {
     margin: 0;
     max-width: none;
+    font-size: 1.0625rem;
   }
 
   .method__rail {
     padding-top: 0;
-    padding-left: 32px;
+    padding-left: 36px;
   }
 
   /* Re-orient the rail vertically along the left edge. */
@@ -241,27 +348,53 @@
     height: auto;
   }
 
+  .method__rail-track::before,
+  .method__rail-track::after {
+    display: none;
+  }
+
   .method__rail-active {
     transform: scaleY(var(--rail-progress));
     transform-origin: center top;
-    box-shadow: 0 0 8px rgba(216, 185, 140, 0.24);
   }
 
   .method__pillars {
     grid-template-columns: 1fr;
-    gap: clamp(40px, 9vw, 56px);
+    gap: clamp(48px, 11vw, 64px);
   }
 
   .method__pillar {
-    padding-top: 0;
-    padding-left: 24px;
+    padding-top: 4px;
+    padding-left: 0;
     padding-right: 0;
   }
 
+  /* Horizontal tick from the vertical rail to each pillar. */
+  .method__pillar::before {
+    top: 18px;
+    left: -28px;
+    width: clamp(20px, 5vw, 28px);
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      var(--champagne),
+      rgba(216, 185, 140, 0)
+    );
+  }
+
   .method__pillar-node {
-    top: 8px;
-    left: -32px;
-    transform: none;
+    top: 18px;
+    left: -36px;
+    transform: translate(-50%, -50%);
+  }
+
+  .method__pillar-num {
+    font-size: 1.625rem;
+    margin-bottom: 14px;
+  }
+
+  .method__pillar-title {
+    font-size: 1.75rem;
   }
 
   .method__pillar-text {

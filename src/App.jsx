@@ -7,7 +7,6 @@ import Header from './components/Header'
 import HeroScrollSequence from './components/HeroScrollSequence'
 import ProblemScrollFX from './components/ProblemScrollFX'
 import MethodSection from './components/MethodSection'
-import Manifesto from './components/Manifesto'
 
 export default function App() {
   useEffect(() => {
@@ -47,7 +46,6 @@ export default function App() {
         <HeroScrollSequence />
         <ProblemScrollFX />
         <MethodSection />
-        <Manifesto />
       </main>
     </>
   )

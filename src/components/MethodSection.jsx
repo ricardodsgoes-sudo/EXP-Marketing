@@ -118,6 +118,7 @@ export default function MethodSection() {
         </header>
 
         <div ref={railRef} className="method__rail">
+          <span className="method__rail-track" aria-hidden="true" />
           <span className="method__rail-ghost" aria-hidden="true" />
           <span className="method__rail-active" aria-hidden="true" />
 
@@ -131,6 +132,7 @@ export default function MethodSection() {
                 <span className="method__pillar-node" aria-hidden="true" />
                 <span className="method__pillar-num">{p.num}</span>
                 <h3 className="method__pillar-title">{p.title}</h3>
+                <span className="method__pillar-rule" aria-hidden="true" />
                 <p className="method__pillar-text">{p.text}</p>
               </li>
             ))}

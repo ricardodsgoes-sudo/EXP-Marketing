@@ -30,6 +30,8 @@ export default function MethodSection() {
   const sectionRef = useRef(null)
   const railRef = useRef(null)
   const pillarsRef = useRef([])
+  const lastReachedRef = useRef(0)
+  const [reachedCount, setReachedCount] = useState(0)
   const [reducedMotion, setReducedMotion] = useState(false)
 
   useEffect(() => {
@@ -63,8 +65,11 @@ export default function MethodSection() {
 
       // Strategic rail draws progressively. The active line's transform
       // reads from the CSS custom property --rail-progress which GSAP
-      // animates 0 → 1 in sync with scroll.
+      // animates 0 → 1 in sync with scroll. The onUpdate also reveals
+      // each pillar at the exact moment the rail crosses its node —
+      // 0.00, 0.25, 0.50, 0.75 of the line.
       if (railRef.current) {
+        const PILLAR_THRESHOLDS = [0.02, 0.27, 0.52, 0.77]
         gsap.to(railRef.current, {
           '--rail-progress': 1,
           ease: 'none',
@@ -73,23 +78,18 @@ export default function MethodSection() {
             start: 'top 80%',
             end: 'bottom 65%',
             scrub: 0.6,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const p = self.progress
+              const reached = PILLAR_THRESHOLDS.filter((t) => p >= t).length
+              if (reached !== lastReachedRef.current) {
+                lastReachedRef.current = reached
+                setReachedCount(reached)
+              }
+            },
           },
         })
       }
-
-      // Pillars enter in sequence (01 → 02 → 03 → 04), echoing the
-      // direction of the drawn rail.
-      gsap.from(pillarsRef.current, {
-        y: 32,
-        opacity: 0,
-        duration: 0.75,
-        ease: 'power2.out',
-        stagger: 0.18,
-        scrollTrigger: {
-          trigger: railRef.current,
-          start: 'top 72%',
-        },
-      })
     }, sectionRef)
 
     return () => ctx.revert()
@@ -105,7 +105,9 @@ export default function MethodSection() {
         <header className="method__header">
           <span className="method__eyebrow">Cómo EXP acelera el crecimiento</span>
           <h2 id="method-title" className="method__title">
-            Cómo aceleramos el crecimiento de tu negocio beauty
+            Cómo aceleramos el{' '}
+            <span className="method__title-accent">crecimiento</span> de tu
+            negocio beauty
           </h2>
           <p className="method__intro">
             EXP trabaja uniendo diagnóstico, estrategia y ejecución para
@@ -124,7 +126,9 @@ export default function MethodSection() {
               <li
                 key={p.num}
                 ref={(el) => (pillarsRef.current[i] = el)}
-                className="method__pillar"
+                className={
+                  'method__pillar' + (i < reachedCount ? ' is-reached' : '')
+                }
               >
                 <span className="method__pillar-node" aria-hidden="true" />
                 <span className="method__pillar-num">{p.num}</span>

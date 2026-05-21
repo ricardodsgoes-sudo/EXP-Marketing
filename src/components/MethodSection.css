@@ -71,6 +71,14 @@
   max-width: 980px;
 }
 
+/* Champagne italic accent — same treatment as "crecimiento estructurado"
+   in the ProblemSection's closing phrase. Carries the narrative thread
+   from the bridge into the method. */
+.method__title-accent {
+  color: var(--champagne);
+  font-style: italic;
+}
+
 .method__intro {
   font-family: var(--font-body);
   font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
@@ -162,6 +170,17 @@
   position: relative;
   padding-top: clamp(36px, 4.2vh, 56px);
   padding-right: clamp(12px, 1.4vw, 24px);
+  /* Hidden by default — revealed once the rail crosses the node. */
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition:
+    opacity 760ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    transform 760ms cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+.method__pillar.is-reached {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 /* Vertical tick rising from each pillar up to the rail — makes
@@ -195,6 +214,7 @@
   box-shadow:
     0 0 0 5px rgba(216, 185, 140, 0.06),
     0 0 14px rgba(216, 185, 140, 0.32);
+  transition: box-shadow 360ms ease, background-color 360ms ease;
 }
 
 .method__pillar:first-child .method__pillar-node {
@@ -224,6 +244,7 @@
   letter-spacing: -0.014em;
   color: #f5f3ef;
   margin: 0 0 clamp(16px, 1.8vh, 22px);
+  transition: transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1);
 }
 
 .method__pillar-rule {
@@ -233,6 +254,10 @@
   background: var(--champagne);
   opacity: 0.55;
   margin-bottom: clamp(16px, 1.8vh, 22px);
+  transform-origin: left center;
+  transition:
+    transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    opacity 360ms ease;
 }
 
 .method__pillar-text {
@@ -243,6 +268,28 @@
   color: rgba(240, 237, 232, 0.86);
   margin: 0;
   max-width: 340px;
+  transition: color 360ms ease;
+}
+
+/* ───────── Hover — refined interactivity cue ───────── */
+
+.method__pillar:hover .method__pillar-rule {
+  transform: scaleX(1.75);
+  opacity: 0.85;
+}
+
+.method__pillar:hover .method__pillar-title {
+  transform: translateY(-2px);
+}
+
+.method__pillar:hover .method__pillar-text {
+  color: rgba(240, 237, 232, 0.98);
+}
+
+.method__pillar:hover .method__pillar-node {
+  box-shadow:
+    0 0 0 7px rgba(216, 185, 140, 0.1),
+    0 0 22px rgba(216, 185, 140, 0.55);
 }
 
 /* ============================================================
@@ -360,6 +407,12 @@
 
 .method--reduced .method__rail-active {
   transform: scaleX(1);
+}
+
+.method--reduced .method__pillar {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 @media (max-width: 860px) {

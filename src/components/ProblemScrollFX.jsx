@@ -90,9 +90,6 @@ export default function ProblemScrollFX() {
   const dangerPathRef = useRef(null)
   const chartRef = useRef(null)
   const finalRef = useRef(null)
-  const finalLineTopRef = useRef(null)
-  const finalLineBottomRef = useRef(null)
-  const finalXRef = useRef(null)
   const finalPartsRef = useRef([])
   const [activeIndex, setActiveIndex] = useState(0)
   const [reducedMotion, setReducedMotion] = useState(false)
@@ -198,24 +195,14 @@ export default function ProblemScrollFX() {
       )
     })
 
-    // ── Final phrase bridge — the chaotic chart "calms down" into a
-    // clean horizontal line, a subtle X motif appears, and the closing
-    // sentence reveals in three editorial stages. Lives outside the
-    // matchMedia so the bridge plays on every viewport size.
+    // ── Final phrase bridge — a compact transition between the
+    // chaotic chart and the structured method below. The sentence
+    // reveals in three editorial stages (opacity + translateY only).
     const finalEl = finalRef.current
     let finalTl
     if (finalEl) {
-      const topLine = finalLineTopRef.current
-      const bottomLine = finalLineBottomRef.current
-      const xMotif = finalXRef.current
       const parts = finalPartsRef.current.filter(Boolean)
-
-      gsap.set([topLine, bottomLine], {
-        strokeDasharray: 1,
-        strokeDashoffset: 1,
-      })
-      gsap.set(xMotif, { opacity: 0, scale: 0.7 })
-      gsap.set(parts, { opacity: 0, y: 16 })
+      gsap.set(parts, { opacity: 0, y: 14 })
 
       finalTl = gsap.timeline({
         scrollTrigger: {
@@ -225,33 +212,13 @@ export default function ProblemScrollFX() {
         },
       })
 
-      finalTl
-        .to(topLine, {
-          strokeDashoffset: 0,
-          duration: 1.4,
-          ease: 'power2.inOut',
-        })
-        .to(
-          xMotif,
-          { opacity: 0.55, scale: 1, duration: 0.7, ease: 'power2.out' },
-          '-=0.6',
-        )
-        .to(
-          parts,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.9,
-            ease: 'power2.out',
-            stagger: 0.32,
-          },
-          '-=0.3',
-        )
-        .to(
-          bottomLine,
-          { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut' },
-          '-=0.7',
-        )
+      finalTl.to(parts, {
+        opacity: 1,
+        y: 0,
+        duration: 0.85,
+        ease: 'power2.out',
+        stagger: 0.28,
+      })
     }
 
     return () => {
@@ -434,71 +401,34 @@ export default function ProblemScrollFX() {
         {/* ── Final centered phrase ── */}
       </div>
 
-      {/* ── Final phrase — bridge between the chaotic diagnosis and the
-          structured method that follows. The line draws calmly across,
-          a subtle X motif appears, and the sentence is revealed in
-          three editorial stages. ── */}
+      {/* ── Final phrase — compact bridge between the chaotic diagnosis
+          and the structured method that follows. Three editorial stages,
+          opacity + translateY only. ── */}
       <div ref={finalRef} className="pscroll__final">
-        <div className="pscroll__final-frame">
-          <svg
-            ref={finalLineTopRef}
-            className="pscroll__final-line"
-            viewBox="0 0 600 2"
-            preserveAspectRatio="none"
-            aria-hidden="true"
+        <p className="pscroll__final-text">
+          <span
+            ref={(el) => (finalPartsRef.current[0] = el)}
+            className="pscroll__final-part"
           >
-            <line
-              x1="0" y1="1" x2="600" y2="1"
-              stroke="var(--champagne)" strokeWidth="1"
-              pathLength="1"
-              vectorEffect="non-scaling-stroke"
-              className="pscroll__final-line-stroke"
-            />
-          </svg>
-
-          <span ref={finalXRef} className="pscroll__final-x" aria-hidden="true" />
-
-          <p className="pscroll__final-text">
-            <span
-              ref={(el) => (finalPartsRef.current[0] = el)}
-              className="pscroll__final-part"
-            >
-              EXP existe para transformar
-            </span>{' '}
-            <span
-              ref={(el) => (finalPartsRef.current[1] = el)}
-              className="pscroll__final-part"
-            >
-              esfuerzos sueltos
-            </span>{' '}
-            <span
-              ref={(el) => (finalPartsRef.current[2] = el)}
-              className="pscroll__final-part"
-            >
-              en{' '}
-              <span className="pscroll__final-accent">
-                crecimiento estructurado
-              </span>
-              .
+            EXP existe para transformar
+          </span>{' '}
+          <span
+            ref={(el) => (finalPartsRef.current[1] = el)}
+            className="pscroll__final-part"
+          >
+            esfuerzos sueltos
+          </span>{' '}
+          <span
+            ref={(el) => (finalPartsRef.current[2] = el)}
+            className="pscroll__final-part"
+          >
+            en{' '}
+            <span className="pscroll__final-accent">
+              crecimiento estructurado
             </span>
-          </p>
-
-          <svg
-            ref={finalLineBottomRef}
-            className="pscroll__final-line"
-            viewBox="0 0 600 2"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            <line
-              x1="0" y1="1" x2="600" y2="1"
-              stroke="var(--champagne)" strokeWidth="1"
-              pathLength="1"
-              vectorEffect="non-scaling-stroke"
-              className="pscroll__final-line-stroke"
-            />
-          </svg>
-        </div>
+            .
+          </span>
+        </p>
       </div>
     </section>
   )

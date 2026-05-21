@@ -15,7 +15,7 @@
   background-color: var(--graphite);
   color: rgba(247, 247, 245, 0.9);
   padding:
-    clamp(72px, 9vh, 120px)
+    clamp(104px, 13vh, 160px)
     clamp(40px, 6vw, 112px)
     clamp(96px, 12vh, 152px);
   /* Sticky header is 104px tall — keep the title clear of it
@@ -77,13 +77,13 @@
 
 .method__title {
   font-family: var(--font-display);
-  font-size: clamp(48px, 6vw, 88px);
+  font-size: clamp(44px, 5.5vw, 82px);
   font-weight: 300;
-  line-height: 1.02;
+  line-height: 1.04;
   letter-spacing: -0.02em;
   color: #f5f3ef;
   margin: 0 auto clamp(24px, 2.8vw, 36px);
-  max-width: 1000px;
+  max-width: 980px;
 }
 
 .method__intro {

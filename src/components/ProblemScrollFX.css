@@ -28,6 +28,7 @@
   width: 100%;
   overflow: hidden;
   background-color: var(--graphite);
+  will-change: filter, opacity;
 }
 
 /* ───────── Diagnosis grid ───────── */
@@ -54,7 +55,6 @@
   justify-content: center;
   max-width: 560px;
   min-height: 0;
-  will-change: filter, opacity;
 }
 
 .pscroll__eyebrow {
@@ -316,53 +316,6 @@
   /* A subtle text shadow keeps reading clean when the chart line passes
      directly behind the text. */
   text-shadow: 0 0 24px rgba(23, 23, 23, 0.6);
-}
-
-/* Reveal-on-scroll — the card's inner pieces start hidden and rise
-   into place when the card is reached (is-revealed). Each piece has
-   its own delay so num → rule → text reads as an editorial cascade.
-   Past cards stay revealed; only upcoming ones remain hidden. */
-.pscroll__card-num,
-.pscroll__card-rule,
-.pscroll__card-text {
-  opacity: 0;
-  transform: translate3d(0, 18px, 0);
-  transition:
-    opacity 720ms cubic-bezier(0.22, 0.7, 0.2, 1),
-    transform 720ms cubic-bezier(0.22, 0.7, 0.2, 1);
-  will-change: opacity, transform;
-}
-
-.pscroll__card.is-revealed .pscroll__card-num {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  transition-delay: 60ms;
-}
-
-.pscroll__card.is-revealed .pscroll__card-rule {
-  opacity: 0.7;
-  transform: translate3d(0, 0, 0);
-  transition-delay: 180ms;
-}
-
-.pscroll__card.is-revealed .pscroll__card-text {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  transition-delay: 300ms;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pscroll__card-num,
-  .pscroll__card-rule,
-  .pscroll__card-text {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .pscroll__card-rule {
-    opacity: 0.7;
-  }
 }
 
 /* ───────── Final phrase ───────── */

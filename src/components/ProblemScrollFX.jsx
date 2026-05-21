@@ -110,21 +110,20 @@ export default function ProblemScrollFX() {
 
     gsap.registerPlugin(ScrollTrigger)
 
-    // Entrance blur — applied ONLY to the editorial text column
-    // (.pscroll__anchor) so the eyebrow + title arrive a touch
-    // blurred and sharpen as the pin engages. The chart side and
-    // the section background stay clean.
+    // Entrance — the whole section arrives a touch blurred and faded,
+    // sharpening into place during the immediate handoff zone right
+    // before the pin engages.
     const entranceBlur = ScrollTrigger.create({
       trigger: sectionRef.current,
-      start: 'top 30%',
+      start: 'top 40%',
       end: 'top top',
       scrub: 0.5,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
-        if (!anchorRef.current) return
+        if (!pinRef.current) return
         const p = self.progress
-        anchorRef.current.style.filter = `blur(${(1 - p) * 10}px)`
-        anchorRef.current.style.opacity = String(0.7 + p * 0.3)
+        pinRef.current.style.filter = `blur(${(1 - p) * 12}px)`
+        pinRef.current.style.opacity = String(0.35 + p * 0.65)
       },
     })
 
@@ -275,9 +274,9 @@ export default function ProblemScrollFX() {
 
     return () => {
       entranceBlur.kill()
-      if (anchorRef.current) {
-        anchorRef.current.style.filter = ''
-        anchorRef.current.style.opacity = ''
+      if (pinRef.current) {
+        pinRef.current.style.filter = ''
+        pinRef.current.style.opacity = ''
       }
       mm.revert()
     }
@@ -449,11 +448,7 @@ export default function ProblemScrollFX() {
                   <article
                     key={i}
                     ref={(el) => (cardsRef.current[i] = el)}
-                    className={
-                      'pscroll__card' +
-                      (i <= activeIndex ? ' is-revealed' : '') +
-                      (i === activeIndex ? ' is-active' : '')
-                    }
+                    className={`pscroll__card${i === activeIndex ? ' is-active' : ''}`}
                   >
                     <span className="pscroll__card-num">{num}</span>
                     <span className="pscroll__card-rule" aria-hidden="true" />

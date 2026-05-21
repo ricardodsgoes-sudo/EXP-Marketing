@@ -1,0 +1,286 @@
+/* ============================================================
+   METHOD SECTION — strategic, editorial answer to the Problem
+   section. Four pillars distributed along a single champagne
+   rail that draws progressively as the section enters view.
+
+   The previous section narrates instability (jagged chart);
+   this one narrates direction (a continuous, calm line).
+   ============================================================ */
+
+.method {
+  position: relative;
+  background-color: var(--graphite);
+  color: rgba(247, 247, 245, 0.86);
+  padding:
+    clamp(96px, 14vh, 168px)
+    clamp(40px, 6vw, 112px)
+    clamp(120px, 16vh, 200px);
+  overflow: hidden;
+}
+
+.method__container {
+  position: relative;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+/* ───────── Header ───────── */
+
+.method__header {
+  max-width: 920px;
+  margin: 0 auto clamp(72px, 9vh, 128px);
+  text-align: center;
+}
+
+.method__eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  margin-bottom: clamp(28px, 3.4vw, 44px);
+}
+
+.method__title {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.2vw, 60px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.014em;
+  color: #f0ede8;
+  margin: 0 auto clamp(28px, 3.4vw, 40px);
+  max-width: 880px;
+}
+
+.method__intro {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.05vw, 1.0625rem);
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(240, 237, 232, 0.66);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ───────── Rail (strategic horizontal line) ───────── */
+
+.method__rail {
+  position: relative;
+  padding-top: clamp(56px, 7vh, 88px);
+  --rail-progress: 0;
+}
+
+/* Ghost line — faint baseline, runs the full rail width. */
+.method__rail-ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--champagne);
+  opacity: 0.14;
+}
+
+/* Active line — same geometry; transform: scaleX driven by JS
+   through --rail-progress, revealing the route left → right. */
+.method__rail-active {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--champagne);
+  opacity: 0.85;
+  transform: scaleX(var(--rail-progress));
+  transform-origin: left center;
+  box-shadow: 0 0 8px rgba(216, 185, 140, 0.28);
+}
+
+/* ───────── Pillars (4 columns under the rail) ───────── */
+
+.method__pillars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(24px, 2.4vw, 48px);
+}
+
+.method__pillar {
+  position: relative;
+  padding-top: clamp(40px, 5vh, 64px);
+  padding-right: clamp(8px, 1vw, 16px);
+}
+
+/* Node on the rail — small circle aligned to the line. */
+.method__pillar-node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--champagne);
+  background: var(--graphite);
+}
+
+.method__pillar:first-child .method__pillar-node {
+  background: var(--champagne);
+}
+
+.method__pillar-num {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  color: var(--champagne);
+  margin-bottom: clamp(16px, 2vh, 22px);
+}
+
+.method__pillar-title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2vw, 30px);
+  font-weight: 300;
+  line-height: 1.18;
+  letter-spacing: -0.008em;
+  color: #f0ede8;
+  margin: 0 0 clamp(14px, 1.6vh, 20px);
+}
+
+.method__pillar-text {
+  font-family: var(--font-body);
+  font-size: clamp(0.875rem, 0.95vw, 0.9375rem);
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(240, 237, 232, 0.6);
+  margin: 0;
+  max-width: 280px;
+}
+
+/* ───────── X motif (corner decoration, echoes EXP logo) ───────── */
+
+.method__x {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 47.5%,
+      var(--champagne) 47.5%,
+      var(--champagne) 52.5%,
+      transparent 52.5%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 47.5%,
+      var(--champagne) 47.5%,
+      var(--champagne) 52.5%,
+      transparent 52.5%
+    );
+}
+
+.method__x--tl {
+  top: clamp(40px, 5vw, 64px);
+  left: clamp(24px, 4vw, 56px);
+}
+
+.method__x--br {
+  bottom: clamp(40px, 5vw, 64px);
+  right: clamp(24px, 4vw, 56px);
+}
+
+/* ============================================================
+   Mobile (≤860px) — turn the horizontal rail into a vertical
+   timeline along the left edge; pillars stack underneath.
+   ============================================================ */
+
+@media (max-width: 860px) {
+  .method {
+    padding:
+      clamp(72px, 14vw, 96px)
+      24px
+      clamp(80px, 16vw, 112px);
+  }
+
+  .method__header {
+    text-align: left;
+    margin-bottom: clamp(48px, 10vw, 72px);
+  }
+
+  .method__title {
+    font-size: clamp(30px, 8vw, 42px);
+    margin-inline: 0;
+  }
+
+  .method__intro {
+    margin: 0;
+    max-width: none;
+  }
+
+  .method__rail {
+    padding-top: 0;
+    padding-left: 32px;
+  }
+
+  /* Re-orient the rail vertically along the left edge. */
+  .method__rail-ghost,
+  .method__rail-active {
+    top: 0;
+    bottom: 0;
+    left: 8px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+
+  .method__rail-active {
+    transform: scaleY(var(--rail-progress));
+    transform-origin: center top;
+    box-shadow: 0 0 8px rgba(216, 185, 140, 0.24);
+  }
+
+  .method__pillars {
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 9vw, 56px);
+  }
+
+  .method__pillar {
+    padding-top: 0;
+    padding-left: 24px;
+    padding-right: 0;
+  }
+
+  .method__pillar-node {
+    top: 8px;
+    left: -32px;
+    transform: none;
+  }
+
+  .method__pillar-text {
+    max-width: none;
+  }
+
+  .method__x {
+    display: none;
+  }
+}
+
+/* ───────── Reduced motion ───────── */
+
+.method--reduced .method__rail-active {
+  transform: scaleX(1);
+}
+
+@media (max-width: 860px) {
+  .method--reduced .method__rail-active {
+    transform: scaleY(1);
+  }
+}

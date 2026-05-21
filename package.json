@@ -1,0 +1,29 @@
+{
+  "name": "exp-marketing-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "remotion:studio": "remotion studio src/remotion/index.jsx",
+    "remotion:render": "remotion render src/remotion/index.jsx ProblemMotion public/videos/problem-motion.mp4 --codec=h264 --crf=20 --pixel-format=yuv420p --overwrite",
+    "remotion:render-webm": "remotion render src/remotion/index.jsx ProblemMotion public/videos/problem-motion.webm --codec=vp9 --crf=32 --overwrite",
+    "remotion:render-vertical": "remotion render src/remotion/index.jsx ProblemMotionVertical public/videos/problem-motion-vertical.mp4 --codec=h264 --crf=20 --pixel-format=yuv420p --overwrite",
+    "remotion:poster": "remotion still src/remotion/index.jsx ProblemMotion public/videos/problem-motion-poster.jpg --frame=345 --image-format=jpeg --overwrite"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.464",
+    "@remotion/google-fonts": "^4.0.464",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.23",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.464"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.3.5"
+  }
+}

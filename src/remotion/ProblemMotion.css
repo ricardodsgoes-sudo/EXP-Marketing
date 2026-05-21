@@ -1,0 +1,107 @@
+/* ============================================================
+   PROBLEM MOTION — base styles shared across the 4 scenes.
+   Animated properties (opacity, transform, dash offsets) are
+   computed in JSX via interpolate(); this file holds only the
+   static editorial typography & layout primitives.
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background: #000000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.pm-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: #171717;
+}
+
+/* Scatter word — small uppercase letterspaced label used in scenes 1, 2, 3 */
+.pm-scatter {
+  position: absolute;
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(240, 237, 232, 0.55);
+}
+
+/* Centered editorial headline — serif, low weight, tight tracking */
+.pm-headline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+  color: #f0ede8;
+}
+
+.pm-headline--italic {
+  font-style: italic;
+}
+
+/* Sub headline used for the longer phrases in scenes 2 and 3 */
+.pm-subline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: 300;
+  letter-spacing: -0.012em;
+  line-height: 1.16;
+  color: #f0ede8;
+}
+
+/* Pillar — used in scene 4 (Diagnóstico / Estrategia / Ejecución / Gestión) */
+.pm-pillar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  text-align: center;
+}
+
+.pm-pillar__num {
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.32em;
+  color: #D8B98C;
+}
+
+.pm-pillar__line {
+  width: 1px;
+  height: 96px;
+  background: #D8B98C;
+  transform-origin: top center;
+}
+
+.pm-pillar__label {
+  font-weight: 300;
+  font-size: 36px;
+  letter-spacing: -0.012em;
+  color: #f0ede8;
+}
+
+.pm-rule {
+  display: block;
+  width: 56px;
+  height: 1px;
+  background: #D8B98C;
+  margin: 0 auto 24px;
+}
+
+.pm-accent {
+  color: #D8B98C;
+  font-style: italic;
+}

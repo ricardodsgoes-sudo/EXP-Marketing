@@ -1,0 +1,562 @@
+/* ============================================================
+   PROBLEM SCROLL FX — pinned editorial diagnosis with a
+   horizontal track of pain cards over a continuous chart.
+
+   - Left column (anchor): eyebrow, headline, intro paragraph,
+     live "01 / 07" progress counter — all fixed during the pin.
+   - Right column (viewport): horizontal track of 7 pain cards
+   riding on top of a champagne line chart. The cards scrub
+   left-to-right as the user scrolls; a single SVG clip reveals
+   the chart line continuously through all 7 points.
+   - After the track exhausts, the whole diagnosis fades and a
+     centered closing phrase takes the full pin.
+
+   Mobile (≤860px) and reduced-motion: stacked, no pin, no
+   horizontal scroll; chart is shown statically above a vertical
+   numbered list of pains.
+   ============================================================ */
+
+.pscroll {
+  position: relative;
+  background-color: var(--graphite);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.pscroll__pin {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--graphite);
+  will-change: filter, opacity;
+}
+
+/* ───────── Diagnosis grid ───────── */
+
+.pscroll__diag {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(360px, 44%) 1fr;
+  gap: clamp(40px, 4vw, 80px);
+  padding:
+    clamp(88px, 11vh, 132px)
+    0
+    clamp(72px, 9vh, 108px)
+    clamp(48px, 6vw, 112px);
+  align-items: stretch;
+  z-index: 1;
+  will-change: opacity;
+}
+
+.pscroll__anchor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 560px;
+  min-height: 0;
+}
+
+.pscroll__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  margin: 0 0 clamp(28px, 3.4vw, 44px);
+}
+
+.pscroll__title {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 4.6vw, 72px);
+  font-weight: 300;
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+  color: #f0ede8;
+  margin: 0 0 clamp(28px, 3.2vw, 44px);
+}
+
+.pscroll__intro {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(240, 237, 232, 0.66);
+  max-width: 480px;
+  margin: 0 0 clamp(36px, 4.4vw, 56px);
+}
+
+.pscroll__progress {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--champagne);
+}
+
+.pscroll__progress-cur {
+  font-variant-numeric: tabular-nums;
+}
+
+.pscroll__progress-sep {
+  color: rgba(216, 185, 140, 0.4);
+}
+
+.pscroll__progress-total {
+  color: rgba(216, 185, 140, 0.55);
+}
+
+/* ───────── Horizontal viewport + track ───────── */
+
+.pscroll__viewport {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  /* Soft edge fades so cards dissolve in/out instead of hard-cropping */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+          mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+}
+
+.pscroll__track {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: max-content;
+  align-items: stretch;
+  will-change: transform;
+}
+
+/* ───────── Chart background (behind cards) ───────── */
+
+.pscroll__chart {
+  position: absolute;
+  /* Confined to the bottom 52% of the track — the chart lives below the
+     card text band, so the line and dots never overlap reading. */
+  top: 48%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.pscroll__chart-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: rgba(240, 237, 232, 0.4);
+}
+
+.pscroll__chart-axis {
+  opacity: 0.12;
+}
+
+.pscroll__chart-grid {
+  opacity: 0.04;
+  stroke-dasharray: 2 4;
+}
+
+/* Horizontal reference levels — TradingView-style resistance/support
+   markers. Desaturated to keep the editorial palette. */
+.pscroll__chart-ref--dashed {
+  stroke: rgba(240, 237, 232, 0.22);
+  stroke-dasharray: 6 6;
+}
+
+.pscroll__chart-ref--dotted {
+  stroke: rgba(216, 185, 140, 0.32);
+  stroke-dasharray: 1 5;
+}
+
+/* Active drawn price line — revealed by a single SVG clip.
+   This is the only visible chart line before each point is reached. */
+.pscroll__chart-line {
+  opacity: 0.42;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter:
+    drop-shadow(0 0 3px rgba(216, 185, 140, 0.7))
+    drop-shadow(0 0 12px rgba(216, 185, 140, 0.32))
+    drop-shadow(0 0 26px rgba(216, 185, 140, 0.16));
+}
+
+.pscroll__chart-line-danger {
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter:
+    drop-shadow(0 0 4px rgba(255, 75, 62, 0.8))
+    drop-shadow(0 0 16px rgba(255, 75, 62, 0.42))
+    drop-shadow(0 0 34px rgba(255, 75, 62, 0.22));
+}
+
+/* Plotted points — HTML so they stay perfectly circular regardless of
+   the SVG's stretched aspect ratio. Live in the same top-band layer as
+   the chart line. */
+.pscroll__chart-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  border-radius: 50%;
+  border: 1px solid var(--champagne);
+  background: var(--graphite);
+  opacity: 0;
+  transition:
+    transform 420ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    background-color 420ms ease,
+    opacity 420ms ease,
+    box-shadow 420ms ease;
+}
+
+.pscroll__chart-dot.is-past {
+  opacity: 0.4;
+}
+
+.pscroll__chart-dot.is-active {
+  background-color: var(--champagne);
+  opacity: 0.95;
+  transform: scale(1.4);
+  box-shadow:
+    0 0 0 6px rgba(216, 185, 140, 0.1),
+    0 0 16px rgba(216, 185, 140, 0.5);
+}
+
+.pscroll__chart-dot.is-failure {
+  border-color: #ff4b3e;
+  background-color: #ff4b3e;
+  opacity: 0.98;
+  transform: scale(1.45);
+  box-shadow:
+    0 0 0 7px rgba(255, 75, 62, 0.12),
+    0 0 18px rgba(255, 75, 62, 0.58),
+    0 0 36px rgba(255, 75, 62, 0.2);
+}
+
+.pscroll__chart-dot.is-warning {
+  border-color: #ff9f2e;
+  background-color: #ff9f2e;
+  opacity: 0.96;
+  transform: scale(1.42);
+  box-shadow:
+    0 0 0 7px rgba(255, 159, 46, 0.12),
+    0 0 18px rgba(255, 159, 46, 0.55),
+    0 0 34px rgba(255, 159, 46, 0.18);
+}
+
+/* ───────── Cards (flex children of the track, on top of the chart) ───────── */
+
+.pscroll__card {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 clamp(280px, 30vw, 420px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 6vh, 72px) clamp(28px, 2.6vw, 44px);
+  border-left: 1px solid rgba(216, 185, 140, 0.22);
+  background: transparent;
+  transition: border-left-color 320ms ease;
+}
+
+.pscroll__card:last-child {
+  border-right: 1px solid rgba(216, 185, 140, 0.22);
+}
+
+.pscroll__card.is-active {
+  border-left-color: var(--champagne);
+}
+
+.pscroll__card-num {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  color: var(--champagne);
+  margin-bottom: clamp(20px, 2.4vw, 32px);
+}
+
+.pscroll__card-rule {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--champagne);
+  opacity: 0.7;
+  margin-bottom: clamp(28px, 3.4vw, 44px);
+}
+
+.pscroll__card-text {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.4vw, 38px);
+  font-weight: 300;
+  line-height: 1.22;
+  letter-spacing: -0.008em;
+  color: #f0ede8;
+  margin: 0;
+  /* A subtle text shadow keeps reading clean when the chart line passes
+     directly behind the text. */
+  text-shadow: 0 0 24px rgba(23, 23, 23, 0.6);
+}
+
+/* ───────── Final phrase ───────── */
+
+.pscroll__final {
+  display: grid;
+  place-items: center;
+  min-height: clamp(360px, 56vh, 620px);
+  padding:
+    clamp(96px, 14vh, 164px)
+    clamp(48px, 6vw, 112px)
+    clamp(108px, 16vh, 180px);
+  background-color: var(--graphite);
+  text-align: center;
+}
+
+.pscroll__final-rule {
+  display: block;
+  width: 56px;
+  height: 1px;
+  background: var(--champagne);
+  margin: 0 auto clamp(28px, 3.4vw, 44px);
+}
+
+.pscroll__final-text {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4.2vw, 64px);
+  font-weight: 300;
+  line-height: 1.16;
+  letter-spacing: -0.012em;
+  color: #f0ede8;
+  max-width: 940px;
+  margin: 0 auto;
+}
+
+.pscroll__final-accent {
+  color: var(--champagne);
+  font-style: italic;
+}
+
+/* ============================================================
+   Reduced motion + mobile fallback — stacked, static.
+   Show a small static chart above a vertical numbered list.
+   ============================================================ */
+
+.pscroll--reduced .pscroll__pin {
+  height: auto;
+  padding: clamp(72px, 12vw, 120px) 0;
+}
+
+.pscroll--reduced .pscroll__diag {
+  position: relative;
+  inset: auto;
+  display: block;
+  padding: 0 clamp(40px, 6vw, 96px);
+  opacity: 1 !important;
+}
+
+.pscroll--reduced .pscroll__anchor {
+  max-width: 760px;
+  margin: 0 auto clamp(40px, 5vw, 64px);
+}
+
+.pscroll--reduced .pscroll__viewport {
+  height: auto;
+  overflow: visible;
+  -webkit-mask-image: none;
+          mask-image: none;
+}
+
+.pscroll--reduced .pscroll__track {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  transform: none !important;
+}
+
+.pscroll--reduced .pscroll__chart {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  aspect-ratio: 5 / 2.4;
+  max-width: 760px;
+  margin: 0 auto clamp(32px, 4vw, 48px);
+}
+
+.pscroll--reduced .pscroll__chart-line,
+.pscroll--reduced .pscroll__chart-line-danger {
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
+}
+
+.pscroll--reduced .pscroll__chart-dot {
+  opacity: 0.55;
+}
+
+.pscroll--reduced .pscroll__card {
+  flex: 0 0 auto;
+  height: auto;
+  border-left: none;
+  border-bottom: 1px solid rgba(240, 237, 232, 0.07);
+  padding: clamp(20px, 2.4vw, 28px) 0 clamp(20px, 2.4vw, 28px) 56px;
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(16px, 2vw, 24px);
+  position: relative;
+}
+
+.pscroll--reduced .pscroll__card:last-child {
+  border-right: none;
+}
+
+.pscroll--reduced .pscroll__card-num {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
+
+.pscroll--reduced .pscroll__card-rule {
+  display: none;
+}
+
+.pscroll--reduced .pscroll__card-text {
+  font-size: clamp(18px, 2vw, 24px);
+  text-shadow: none;
+}
+
+.pscroll--reduced .pscroll__final {
+  min-height: auto;
+  padding:
+    clamp(72px, 10vw, 112px)
+    clamp(40px, 6vw, 96px)
+    clamp(84px, 12vw, 128px);
+}
+
+/* ───────── Mobile breakpoint ───────── */
+
+@media (max-width: 860px) {
+  .pscroll__pin {
+    height: auto;
+    padding: clamp(72px, 14vw, 100px) 0;
+  }
+
+  .pscroll__diag {
+    position: relative;
+    inset: auto;
+    display: block;
+    padding: 0 24px;
+    opacity: 1 !important;
+  }
+
+  .pscroll__anchor {
+    max-width: none;
+    margin-bottom: clamp(40px, 8vw, 56px);
+  }
+
+  .pscroll__title {
+    font-size: clamp(34px, 8.6vw, 52px);
+  }
+
+  .pscroll__intro {
+    font-size: 1rem;
+    max-width: none;
+  }
+
+  .pscroll__viewport {
+    height: auto;
+    overflow: visible;
+    -webkit-mask-image: none;
+            mask-image: none;
+  }
+
+  .pscroll__track {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    transform: none !important;
+  }
+
+  .pscroll__chart {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    aspect-ratio: 5 / 2.6;
+    margin-bottom: clamp(32px, 6vw, 48px);
+  }
+
+  .pscroll__chart-line,
+  .pscroll__chart-line-danger {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .pscroll__chart-dot {
+    width: 9px;
+    height: 9px;
+    margin-left: -4.5px;
+    margin-top: -4.5px;
+    opacity: 0.55;
+  }
+
+  .pscroll__card {
+    flex: 0 0 auto;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0 14px 44px;
+    border-left: none;
+    border-bottom: 1px solid rgba(240, 237, 232, 0.07);
+    position: relative;
+  }
+
+  .pscroll__card:last-child {
+    border-right: none;
+  }
+
+  .pscroll__card-num {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+  }
+
+  .pscroll__card-rule {
+    display: none;
+  }
+
+  .pscroll__card-text {
+    font-size: clamp(17px, 4.6vw, 22px);
+    text-shadow: none;
+  }
+
+  .pscroll__final {
+    min-height: auto;
+    padding: clamp(64px, 14vw, 96px) 24px clamp(72px, 16vw, 108px);
+  }
+
+  .pscroll__final-text {
+    font-size: clamp(26px, 6.5vw, 36px);
+  }
+}

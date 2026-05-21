@@ -322,32 +322,84 @@
 .pscroll__final {
   display: grid;
   place-items: center;
-  min-height: clamp(360px, 56vh, 620px);
+  min-height: clamp(340px, 50vh, 520px);
   padding:
-    clamp(96px, 14vh, 164px)
+    clamp(56px, 8vh, 104px)
     clamp(48px, 6vw, 112px)
-    clamp(108px, 16vh, 180px);
+    clamp(56px, 8vh, 104px);
   background-color: var(--graphite);
   text-align: center;
 }
 
-.pscroll__final-rule {
-  display: block;
-  width: 56px;
+.pscroll__final-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(28px, 4vh, 48px);
+  max-width: 940px;
+  width: 100%;
+}
+
+/* Calm horizontal line — the chaotic chart's resolution. Drawn via
+   stroke-dashoffset; the same component is used above and below the
+   phrase, framing it like an editorial chapter break. */
+.pscroll__final-line {
+  width: clamp(160px, 28vw, 260px);
   height: 1px;
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 0 6px rgba(216, 185, 140, 0.32));
+}
+
+.pscroll__final-line-stroke {
+  opacity: 0.85;
+}
+
+/* Subtle X motif — two thin champagne arms crossing. Echoes the EXP
+   logo and signals the end of the diagnosis. */
+.pscroll__final-x {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 18px;
+  transform-origin: center center;
+}
+
+.pscroll__final-x::before,
+.pscroll__final-x::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 100%;
   background: var(--champagne);
-  margin: 0 auto clamp(28px, 3.4vw, 44px);
+}
+
+.pscroll__final-x::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.pscroll__final-x::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .pscroll__final-text {
   font-family: var(--font-display);
-  font-size: clamp(30px, 4.2vw, 64px);
+  font-size: clamp(30px, 4vw, 60px);
   font-weight: 300;
   line-height: 1.16;
   letter-spacing: -0.012em;
-  color: #f0ede8;
-  max-width: 940px;
-  margin: 0 auto;
+  color: #f5f3ef;
+  max-width: 880px;
+  margin: 0;
+}
+
+/* Each part of the phrase is its own inline-block so GSAP can stagger
+   them independently with opacity + translateY. */
+.pscroll__final-part {
+  display: inline-block;
+  will-change: opacity, transform;
 }
 
 .pscroll__final-accent {
@@ -447,9 +499,9 @@
 .pscroll--reduced .pscroll__final {
   min-height: auto;
   padding:
-    clamp(72px, 10vw, 112px)
+    clamp(48px, 7vw, 80px)
     clamp(40px, 6vw, 96px)
-    clamp(84px, 12vw, 128px);
+    clamp(48px, 7vw, 80px);
 }
 
 /* ───────── Mobile breakpoint ───────── */
@@ -553,7 +605,7 @@
 
   .pscroll__final {
     min-height: auto;
-    padding: clamp(64px, 14vw, 96px) 24px clamp(72px, 16vw, 108px);
+    padding: clamp(40px, 10vw, 64px) 24px clamp(40px, 10vw, 64px);
   }
 
   .pscroll__final-text {

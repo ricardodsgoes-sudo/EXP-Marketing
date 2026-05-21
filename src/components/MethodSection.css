@@ -15,9 +15,12 @@
   background-color: var(--graphite);
   color: rgba(247, 247, 245, 0.9);
   padding:
-    clamp(140px, 18vh, 220px)
+    clamp(72px, 9vh, 120px)
     clamp(40px, 6vw, 112px)
-    clamp(160px, 20vh, 240px);
+    clamp(96px, 12vh, 152px);
+  /* Sticky header is 104px tall — keep the title clear of it
+     during anchor scrolls. */
+  scroll-margin-top: 120px;
   overflow: hidden;
 }
 
@@ -45,8 +48,8 @@
 /* ───────── Header ───────── */
 
 .method__header {
-  max-width: 980px;
-  margin: 0 auto clamp(96px, 12vh, 160px);
+  max-width: 1000px;
+  margin: 0 auto clamp(56px, 7vh, 88px);
   text-align: center;
 }
 
@@ -60,7 +63,7 @@
   letter-spacing: 0.38em;
   text-transform: uppercase;
   color: var(--champagne);
-  margin-bottom: clamp(32px, 4vw, 48px);
+  margin-bottom: clamp(24px, 3vw, 36px);
 }
 
 .method__eyebrow::before,
@@ -74,21 +77,21 @@
 
 .method__title {
   font-family: var(--font-display);
-  font-size: clamp(42px, 5.4vw, 80px);
+  font-size: clamp(48px, 6vw, 88px);
   font-weight: 300;
-  line-height: 1.04;
+  line-height: 1.02;
   letter-spacing: -0.02em;
   color: #f5f3ef;
-  margin: 0 auto clamp(32px, 3.6vw, 44px);
-  max-width: 980px;
+  margin: 0 auto clamp(24px, 2.8vw, 36px);
+  max-width: 1000px;
 }
 
 .method__intro {
   font-family: var(--font-body);
   font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
   font-weight: 300;
-  line-height: 1.65;
-  color: rgba(240, 237, 232, 0.78);
+  line-height: 1.6;
+  color: rgba(240, 237, 232, 0.82);
   max-width: 760px;
   margin: 0 auto;
 }
@@ -97,7 +100,7 @@
 
 .method__rail {
   position: relative;
-  padding-top: clamp(96px, 12vh, 140px);
+  padding-top: clamp(56px, 7vh, 88px);
   --rail-progress: 0;
 }
 
@@ -172,7 +175,7 @@
 
 .method__pillar {
   position: relative;
-  padding-top: clamp(64px, 7vh, 96px);
+  padding-top: clamp(36px, 4.2vh, 56px);
   padding-right: clamp(12px, 1.4vw, 24px);
 }
 
@@ -184,13 +187,13 @@
   top: 0;
   left: 0;
   width: 1px;
-  height: clamp(40px, 4.8vh, 64px);
+  height: clamp(24px, 3vh, 36px);
   background: linear-gradient(
     to bottom,
     var(--champagne),
     rgba(216, 185, 140, 0)
   );
-  opacity: 0.55;
+  opacity: 0.6;
 }
 
 /* Node on the rail — slightly larger, sits exactly on the rail. */
@@ -219,41 +222,42 @@
 .method__pillar-num {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(28px, 2.6vw, 38px);
+  font-size: clamp(32px, 3vw, 44px);
   font-weight: 300;
   letter-spacing: 0.02em;
   color: var(--champagne);
-  margin-bottom: clamp(16px, 2vh, 22px);
+  margin-bottom: clamp(14px, 1.8vh, 20px);
   font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
 
 .method__pillar-title {
   font-family: var(--font-display);
-  font-size: clamp(26px, 2.4vw, 38px);
+  font-size: clamp(28px, 2.6vw, 40px);
   font-weight: 300;
-  line-height: 1.12;
-  letter-spacing: -0.012em;
+  line-height: 1.1;
+  letter-spacing: -0.014em;
   color: #f5f3ef;
-  margin: 0 0 clamp(18px, 2vh, 26px);
+  margin: 0 0 clamp(16px, 1.8vh, 22px);
 }
 
 .method__pillar-rule {
   display: block;
-  width: 28px;
+  width: 32px;
   height: 1px;
   background: var(--champagne);
-  opacity: 0.5;
-  margin-bottom: clamp(18px, 2vh, 26px);
+  opacity: 0.55;
+  margin-bottom: clamp(16px, 1.8vh, 22px);
 }
 
 .method__pillar-text {
   font-family: var(--font-body);
-  font-size: clamp(0.9375rem, 1vw, 1.0625rem);
+  font-size: clamp(1rem, 1.05vw, 1.125rem);
   font-weight: 300;
-  line-height: 1.7;
-  color: rgba(240, 237, 232, 0.78);
+  line-height: 1.65;
+  color: rgba(240, 237, 232, 0.86);
   margin: 0;
-  max-width: 320px;
+  max-width: 340px;
 }
 
 /* ───────── X motif (corner decoration, echoes EXP logo) ───────── */

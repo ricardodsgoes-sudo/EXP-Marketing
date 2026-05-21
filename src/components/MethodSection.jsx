@@ -127,22 +127,22 @@ export default function MethodSection() {
             >
               <path className="method__connector method__connector--one" d="M 92 156 H 218" />
               <path className="method__connector method__connector--two" d="M 222 66 V 148" />
-              <path className="method__connector method__connector--three" d="M 392 168 H 520 V 112" />
+              <path className="method__connector method__connector--three" d="M 392 168 H 560 V 112" />
               <path className="method__connector method__connector--four" d="M 322 386 V 448 H 118" />
               <path className="method__connector method__connector--cards" d="M 392 250 H 590" />
             </svg>
 
             <span className="method__orbit-label method__orbit-label--one">
-              DiagnÃ³stico profundo
+              Diagnóstico profundo
             </span>
             <span className="method__orbit-label method__orbit-label--two">
               Estrategia clara
             </span>
             <span className="method__orbit-label method__orbit-label--three">
-              EjecuciÃ³n profesional
+              Ejecución profesional
             </span>
             <span className="method__orbit-label method__orbit-label--four">
-              GestiÃ³n con datos
+              Gestión con datos
             </span>
 
             <div className="method__wheel">

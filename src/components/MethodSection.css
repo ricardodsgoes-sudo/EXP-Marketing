@@ -12,7 +12,7 @@
 
 .method {
   position: relative;
-  background-color: var(--graphite);
+  background-color: #000;
   color: rgba(247, 247, 245, 0.9);
   padding:
     clamp(88px, 11vh, 136px)

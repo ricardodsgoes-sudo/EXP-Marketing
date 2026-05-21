@@ -449,7 +449,11 @@ export default function ProblemScrollFX() {
                   <article
                     key={i}
                     ref={(el) => (cardsRef.current[i] = el)}
-                    className={`pscroll__card${i === activeIndex ? ' is-active' : ''}`}
+                    className={
+                      'pscroll__card' +
+                      (i <= activeIndex ? ' is-revealed' : '') +
+                      (i === activeIndex ? ' is-active' : '')
+                    }
                   >
                     <span className="pscroll__card-num">{num}</span>
                     <span className="pscroll__card-rule" aria-hidden="true" />

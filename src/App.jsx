@@ -7,6 +7,7 @@ import Header from './components/Header'
 import HeroScrollSequence from './components/HeroScrollSequence'
 import ProblemScrollFX from './components/ProblemScrollFX'
 import MethodSection from './components/MethodSection'
+import SolutionsPreview from './components/SolutionsPreview'
 
 export default function App() {
   useEffect(() => {
@@ -46,6 +47,7 @@ export default function App() {
         <HeroScrollSequence />
         <ProblemScrollFX />
         <MethodSection />
+        <SolutionsPreview />
       </main>
     </>
   )

@@ -28,7 +28,6 @@
   width: 100%;
   overflow: hidden;
   background-color: var(--graphite);
-  will-change: filter, opacity;
 }
 
 /* ───────── Diagnosis grid ───────── */
@@ -55,6 +54,7 @@
   justify-content: center;
   max-width: 560px;
   min-height: 0;
+  will-change: filter, opacity;
 }
 
 .pscroll__eyebrow {

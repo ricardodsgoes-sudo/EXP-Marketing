@@ -82,6 +82,7 @@ export default function ProblemScrollFX() {
   const sectionRef = useRef(null)
   const pinRef = useRef(null)
   const diagRef = useRef(null)
+  const anchorRef = useRef(null)
   const trackRef = useRef(null)
   const viewportRef = useRef(null)
   const cardsRef = useRef([])
@@ -109,10 +110,10 @@ export default function ProblemScrollFX() {
 
     gsap.registerPlugin(ScrollTrigger)
 
-    // Entrance blur — confined to the immediate handoff zone right
-    // before the pin engages, so the hero above is never affected.
-    // Starts only when the section's top is already 30% into the
-    // viewport, ends when it reaches the top (pin takes over).
+    // Entrance blur — applied ONLY to the editorial text column
+    // (.pscroll__anchor) so the eyebrow + title arrive a touch
+    // blurred and sharpen as the pin engages. The chart side and
+    // the section background stay clean.
     const entranceBlur = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: 'top 30%',
@@ -120,10 +121,10 @@ export default function ProblemScrollFX() {
       scrub: 0.5,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
-        if (!pinRef.current) return
+        if (!anchorRef.current) return
         const p = self.progress
-        pinRef.current.style.filter = `blur(${(1 - p) * 10}px)`
-        pinRef.current.style.opacity = String(0.7 + p * 0.3)
+        anchorRef.current.style.filter = `blur(${(1 - p) * 10}px)`
+        anchorRef.current.style.opacity = String(0.7 + p * 0.3)
       },
     })
 
@@ -274,9 +275,9 @@ export default function ProblemScrollFX() {
 
     return () => {
       entranceBlur.kill()
-      if (pinRef.current) {
-        pinRef.current.style.filter = ''
-        pinRef.current.style.opacity = ''
+      if (anchorRef.current) {
+        anchorRef.current.style.filter = ''
+        anchorRef.current.style.opacity = ''
       }
       mm.revert()
     }
@@ -291,7 +292,7 @@ export default function ProblemScrollFX() {
       <div ref={pinRef} className="pscroll__pin">
         <div ref={diagRef} className="pscroll__diag">
           {/* ── LEFT: editorial copy + live counter ── */}
-          <div className="pscroll__anchor">
+          <div ref={anchorRef} className="pscroll__anchor">
             <span className="pscroll__eyebrow">El diagnóstico</span>
             <h2 id="pscroll-title" className="pscroll__title">
               Los negocios beauty no se estancan por falta de talento.

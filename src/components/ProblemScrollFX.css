@@ -88,13 +88,14 @@
 }
 
 .pscroll__progress {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 10px;
+  position: relative;
+  display: inline-block;
+  min-height: 1em;
   font-family: var(--font-body);
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.3em;
+  line-height: 1;
   color: var(--champagne);
 }
 
@@ -319,39 +320,96 @@
 
 /* ───────── Final phrase ───────── */
 
-.pscroll__final {
+/* ───────── Resolution overlay (inside the pin) ─────────
+   Appears in the same pinned screen as the diagnosis. The diag dims,
+   the red crash softens, and this overlay rises on top with a calm
+   champagne line + the closing phrase in three editorial stages. */
+
+.pscroll__resolution {
+  position: absolute;
+  inset: 0;
   display: grid;
   place-items: center;
-  min-height: clamp(240px, 38vh, 400px);
-  padding:
-    clamp(48px, 6vh, 80px)
-    clamp(48px, 6vw, 112px)
-    clamp(48px, 6vh, 80px);
-  background-color: var(--graphite);
+  padding: 0 clamp(48px, 6vw, 112px);
+  z-index: 3;
+  pointer-events: none;
   text-align: center;
 }
 
-.pscroll__final-text {
+.pscroll__resolution-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(28px, 4vh, 44px);
+  max-width: 920px;
+  width: 100%;
+}
+
+.pscroll__resolution-line {
+  width: clamp(180px, 30vw, 280px);
+  height: 1px;
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 0 8px rgba(216, 185, 140, 0.4));
+}
+
+.pscroll__resolution-line-stroke {
+  opacity: 0.9;
+}
+
+.pscroll__resolution-text {
   font-family: var(--font-display);
-  font-size: clamp(32px, 4vw, 64px);
+  font-size: clamp(34px, 4.4vw, 68px);
   font-weight: 300;
-  line-height: 1.12;
-  letter-spacing: -0.012em;
+  line-height: 1.1;
+  letter-spacing: -0.014em;
   color: #f5f3ef;
-  max-width: 880px;
+  max-width: 900px;
   margin: 0;
 }
 
 /* Each part of the phrase is its own inline-block so GSAP can stagger
    them independently with opacity + translateY. */
-.pscroll__final-part {
+.pscroll__resolution-part {
   display: inline-block;
   will-change: opacity, transform;
 }
 
-.pscroll__final-accent {
+.pscroll__resolution-accent {
   color: var(--champagne);
   font-style: italic;
+}
+
+/* ───── Progress counter — swaps between pains and resolution ───── */
+
+.pscroll__progress-state {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  transition: opacity 480ms ease, transform 480ms cubic-bezier(0.22, 0.7, 0.2, 1);
+  white-space: nowrap;
+}
+
+.pscroll__progress-state--pains {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pscroll__progress-state--resolution {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.pscroll__progress.is-resolved .pscroll__progress-state--pains {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.pscroll__progress.is-resolved .pscroll__progress-state--resolution {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ============================================================
@@ -443,12 +501,26 @@
   text-shadow: none;
 }
 
-.pscroll--reduced .pscroll__final {
-  min-height: auto;
+/* Resolution overlay falls back to a static block below the
+   stacked diagnosis content, fully visible. */
+.pscroll--reduced .pscroll__resolution {
+  position: relative;
+  inset: auto;
   padding:
-    clamp(48px, 7vw, 80px)
+    clamp(40px, 6vw, 64px)
     clamp(40px, 6vw, 96px)
     clamp(48px, 7vw, 80px);
+}
+
+.pscroll--reduced .pscroll__resolution,
+.pscroll--reduced .pscroll__resolution-part {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.pscroll--reduced .pscroll__resolution-line-stroke {
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
 }
 
 /* ───────── Mobile breakpoint ───────── */
@@ -550,12 +622,26 @@
     text-shadow: none;
   }
 
-  .pscroll__final {
-    min-height: auto;
-    padding: clamp(40px, 10vw, 64px) 24px clamp(40px, 10vw, 64px);
+  /* Resolution overlay becomes a static block under the stacked
+     diagnosis on mobile — same content, no scroll-driven reveal. */
+  .pscroll__resolution {
+    position: relative;
+    inset: auto;
+    padding: clamp(40px, 10vw, 64px) 24px;
   }
 
-  .pscroll__final-text {
+  .pscroll__resolution,
+  .pscroll__resolution-part {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .pscroll__resolution-line-stroke {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .pscroll__resolution-text {
     font-size: clamp(26px, 6.5vw, 36px);
   }
 }

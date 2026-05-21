@@ -15,7 +15,7 @@
   background-color: var(--graphite);
   color: rgba(247, 247, 245, 0.9);
   padding:
-    clamp(104px, 13vh, 160px)
+    clamp(88px, 11vh, 136px)
     clamp(40px, 6vw, 112px)
     clamp(96px, 12vh, 152px);
   /* Sticky header is 104px tall — keep the title clear of it

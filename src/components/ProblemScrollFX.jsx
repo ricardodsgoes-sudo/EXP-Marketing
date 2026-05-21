@@ -89,9 +89,11 @@ export default function ProblemScrollFX() {
   const dangerRectRef = useRef(null)
   const dangerPathRef = useRef(null)
   const chartRef = useRef(null)
-  const finalRef = useRef(null)
-  const finalPartsRef = useRef([])
+  const resolutionRef = useRef(null)
+  const resolutionLineRef = useRef(null)
+  const resolutionPartsRef = useRef([])
   const [activeIndex, setActiveIndex] = useState(0)
+  const [showResolution, setShowResolution] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
 
   useEffect(() => {
@@ -133,25 +135,49 @@ export default function ProblemScrollFX() {
       const revealRect = revealRectRef.current
       const dangerRect = dangerRectRef.current
       const dangerPath = dangerPathRef.current
-      if (!track || !viewport || !revealRect || !dangerRect || !dangerPath) return
+      const diag = diagRef.current
+      const resolution = resolutionRef.current
+      const resolutionLine = resolutionLineRef.current
+      const resolutionParts = resolutionPartsRef.current.filter(Boolean)
+      if (
+        !track || !viewport || !revealRect || !dangerRect || !dangerPath ||
+        !diag || !resolution || !resolutionLine || resolutionParts.length === 0
+      ) return
 
       const getDistance = () =>
         Math.max(0, track.scrollWidth - viewport.clientWidth)
 
-      const finalRunwayPx = () => window.innerHeight * 0.35
+      // Resolution runway — extra scroll after horizontal completes
+      // where the chart settles and the closing phrase reveals.
+      const resolutionRunway = () => Math.round(window.innerHeight * 0.85)
 
-      // Initial state. Reveal with one horizontal clip instead of SVG dash
-      // drawing; dash patterns can repeat and create multiple visible chunks.
+      // Timeline phase boundary — fraction of total scroll covered by
+      // the horizontal phase. Computed at setup so timeline positions
+      // align with the actual scroll distances.
+      const distance = getDistance()
+      const runway = resolutionRunway()
+      const total = Math.max(1, distance + runway)
+      const H_END = distance / total            // ≈ 0.78 typically
+      const DANGER_DUR = 0.16
+      const DANGER_START = Math.max(0, H_END - DANGER_DUR)
+      const R_START = Math.min(0.999, H_END + 0.02)
+
+      // Initial state for everything that animates in.
       gsap.set(revealRect, { attr: { width: 0 } })
       gsap.set(dangerRect, { attr: { width: 0 } })
       gsap.set(dangerPath, { opacity: 0 })
+      gsap.set(resolution, { opacity: 0 })
+      gsap.set(resolutionLine, { strokeDasharray: 1, strokeDashoffset: 1 })
+      gsap.set(resolutionParts, { opacity: 0, y: 18 })
+
+      let lastInResolution = false
 
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${getDistance() + finalRunwayPx()}`,
+          end: () => `+=${getDistance() + resolutionRunway()}`,
           pin: pinRef.current,
           pinSpacing: true,
           scrub: true,
@@ -161,70 +187,85 @@ export default function ProblemScrollFX() {
             gsap.set(revealRect, { attr: { width: 0 } })
             gsap.set(dangerRect, { attr: { width: 0 } })
             gsap.set(dangerPath, { opacity: 0 })
+            gsap.set(resolution, { opacity: 0 })
+            gsap.set(resolutionLine, { strokeDasharray: 1, strokeDashoffset: 1 })
+            gsap.set(resolutionParts, { opacity: 0, y: 18 })
           },
           onUpdate: (self) => {
-            const chartProgress = Math.min(1, self.progress / CHART_SCROLL_DURATION)
-            const revealedX = chartProgress * VIEWBOX_W
+            const horizontalProgress = Math.min(1, self.progress / H_END)
+            const revealedX = horizontalProgress * VIEWBOX_W
             const idx = PAIN_POINTS.reduce(
               (latest, point, pointIndex) =>
                 revealedX >= point.x ? pointIndex : latest,
               0,
             )
             setActiveIndex(idx)
+
+            const inResolution = self.progress >= R_START - 0.01
+            if (inResolution !== lastInResolution) {
+              lastInResolution = inResolution
+              setShowResolution(inResolution)
+            }
           },
         },
       })
 
-      // Horizontal scrub and the active chart mask share the full
-      // ScrollTrigger progress. The clip creates exactly one reveal front.
-      tl.to(track, { x: () => -getDistance(), duration: CHART_SCROLL_DURATION }, 0)
-      tl.to(
-        revealRect,
-        { attr: { width: VIEWBOX_W }, duration: CHART_SCROLL_DURATION },
-        0,
-      )
+      // ── Phase A — Horizontal scrub + chart reveal
+      tl.to(track, { x: () => -getDistance(), duration: H_END }, 0)
+      tl.to(revealRect, { attr: { width: VIEWBOX_W }, duration: H_END }, 0)
+
+      // ── Phase B — Danger appears as we hit the last pain
       tl.to(
         dangerRect,
-        { attr: { width: VIEWBOX_W - PAIN_POINTS[5].x }, duration: 0.28 },
-        0.72,
+        { attr: { width: VIEWBOX_W - PAIN_POINTS[5].x }, duration: DANGER_DUR },
+        DANGER_START,
       )
       tl.to(
         dangerPath,
-        { opacity: 0.68, ease: 'power1.inOut', duration: 0.28 },
-        0.72,
+        { opacity: 0.7, ease: 'power1.inOut', duration: DANGER_DUR },
+        DANGER_START,
+      )
+
+      // ── Phase C — Settle: the crashed line softens, diag dims so
+      //               the resolution overlay can take the spotlight
+      tl.to(
+        dangerPath,
+        { opacity: 0.18, ease: 'power2.out', duration: 0.05 },
+        H_END + 0.005,
+      )
+      tl.to(
+        diag,
+        { opacity: 0.22, ease: 'power2.out', duration: 0.08 },
+        H_END,
+      )
+
+      // ── Phase D — Resolution: the closing phrase rises on a calm
+      //               champagne line, inside the same pinned screen
+      tl.to(
+        resolution,
+        { opacity: 1, ease: 'power2.out', duration: 0.05 },
+        R_START,
+      )
+      tl.to(
+        resolutionLine,
+        { strokeDashoffset: 0, ease: 'power2.inOut', duration: 0.22 },
+        R_START + 0.005,
+      )
+      tl.to(
+        resolutionParts,
+        {
+          opacity: 1,
+          y: 0,
+          ease: 'power2.out',
+          duration: 0.11,
+          stagger: 0.06,
+        },
+        R_START + 0.08,
       )
     })
 
-    // ── Final phrase bridge — a compact transition between the
-    // chaotic chart and the structured method below. The sentence
-    // reveals in three editorial stages (opacity + translateY only).
-    const finalEl = finalRef.current
-    let finalTl
-    if (finalEl) {
-      const parts = finalPartsRef.current.filter(Boolean)
-      gsap.set(parts, { opacity: 0, y: 14 })
-
-      finalTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: finalEl,
-          start: 'top 78%',
-          toggleActions: 'play none none reverse',
-        },
-      })
-
-      finalTl.to(parts, {
-        opacity: 1,
-        y: 0,
-        duration: 0.85,
-        ease: 'power2.out',
-        stagger: 0.28,
-      })
-    }
-
     return () => {
       entranceBlur.kill()
-      if (finalTl?.scrollTrigger) finalTl.scrollTrigger.kill()
-      finalTl?.kill()
       if (pinRef.current) {
         pinRef.current.style.filter = ''
         pinRef.current.style.opacity = ''
@@ -255,13 +296,26 @@ export default function ProblemScrollFX() {
               por debajo de lo que podrían porque no tienen una estructura clara
               de marketing, ventas y gestión.
             </p>
-            <div className="pscroll__progress" aria-hidden="true">
-              <span className="pscroll__progress-cur">
-                {String(activeIndex + 1).padStart(2, '0')}
+            <div
+              className={
+                'pscroll__progress' +
+                (showResolution ? ' is-resolved' : '')
+              }
+              aria-hidden="true"
+            >
+              <span className="pscroll__progress-state pscroll__progress-state--pains">
+                <span className="pscroll__progress-cur">
+                  {String(activeIndex + 1).padStart(2, '0')}
+                </span>
+                <span className="pscroll__progress-sep">/</span>
+                <span className="pscroll__progress-total">
+                  {String(PAINS.length).padStart(2, '0')}
+                </span>
               </span>
-              <span className="pscroll__progress-sep">/</span>
-              <span className="pscroll__progress-total">
-                {String(PAINS.length).padStart(2, '0')}
+              <span className="pscroll__progress-state pscroll__progress-state--resolution">
+                <span className="pscroll__progress-cur">08</span>
+                <span className="pscroll__progress-sep">·</span>
+                <span className="pscroll__progress-total">Resolución</span>
               </span>
             </div>
           </div>
@@ -398,37 +452,61 @@ export default function ProblemScrollFX() {
           </div>
         </div>
 
-        {/* ── Final centered phrase ── */}
-      </div>
-
-      {/* ── Final phrase — compact bridge between the chaotic diagnosis
-          and the structured method that follows. Three editorial stages,
-          opacity + translateY only. ── */}
-      <div ref={finalRef} className="pscroll__final">
-        <p className="pscroll__final-text">
-          <span
-            ref={(el) => (finalPartsRef.current[0] = el)}
-            className="pscroll__final-part"
-          >
-            EXP existe para transformar
-          </span>{' '}
-          <span
-            ref={(el) => (finalPartsRef.current[1] = el)}
-            className="pscroll__final-part"
-          >
-            esfuerzos sueltos
-          </span>{' '}
-          <span
-            ref={(el) => (finalPartsRef.current[2] = el)}
-            className="pscroll__final-part"
-          >
-            en{' '}
-            <span className="pscroll__final-accent">
-              crecimiento estructurado
-            </span>
-            .
-          </span>
-        </p>
+        {/* ── Resolution overlay — appears in the same pinned screen as
+            the closing beat of the diagnosis. The diag dims behind it,
+            the red crash line softens, and the closing phrase rises on
+            a calm champagne line. Part of the same section, not a new
+            block underneath. ── */}
+        <div
+          ref={resolutionRef}
+          className={
+            'pscroll__resolution' +
+            (showResolution ? ' is-visible' : '')
+          }
+          aria-hidden={!showResolution}
+        >
+          <div className="pscroll__resolution-frame">
+            <svg
+              className="pscroll__resolution-line"
+              viewBox="0 0 600 2"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <line
+                ref={resolutionLineRef}
+                x1="0" y1="1" x2="600" y2="1"
+                stroke="var(--champagne)" strokeWidth="1.5"
+                pathLength="1"
+                vectorEffect="non-scaling-stroke"
+                className="pscroll__resolution-line-stroke"
+              />
+            </svg>
+            <p className="pscroll__resolution-text">
+              <span
+                ref={(el) => (resolutionPartsRef.current[0] = el)}
+                className="pscroll__resolution-part"
+              >
+                EXP existe para transformar
+              </span>{' '}
+              <span
+                ref={(el) => (resolutionPartsRef.current[1] = el)}
+                className="pscroll__resolution-part"
+              >
+                esfuerzos sueltos
+              </span>{' '}
+              <span
+                ref={(el) => (resolutionPartsRef.current[2] = el)}
+                className="pscroll__resolution-part"
+              >
+                en{' '}
+                <span className="pscroll__resolution-accent">
+                  crecimiento estructurado
+                </span>
+                .
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   )

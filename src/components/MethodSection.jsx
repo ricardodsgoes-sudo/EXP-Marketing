@@ -29,6 +29,7 @@ const PILLARS = [
 
 export default function MethodSection() {
   const sectionRef = useRef(null)
+  const headerRef = useRef(null)
   const railRef = useRef(null)
   const pillarsRef = useRef([])
   const lastReachedRef = useRef(0)
@@ -63,6 +64,27 @@ export default function MethodSection() {
           },
         },
       )
+
+      // Header parallax — drifts slightly down as the section scrolls
+      // past, so it appears to linger while the strategic map below
+      // descends. Subtle differential, not a flight.
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current,
+          { y: -32 },
+          {
+            y: 32,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+            },
+          },
+        )
+      }
 
       // The map gets its own controlled scroll moment on desktop, so the
       // circular reveal can finish before the next section starts moving up.
@@ -147,7 +169,7 @@ export default function MethodSection() {
       aria-labelledby="method-title"
     >
       <div className="method__container">
-        <header className="method__header">
+        <header ref={headerRef} className="method__header">
           <span className="method__eyebrow">Cómo EXP acelera el crecimiento</span>
           <h2 id="method-title" className="method__title">
             Cómo aceleramos el{' '}

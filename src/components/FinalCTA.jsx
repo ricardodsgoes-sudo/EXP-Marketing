@@ -8,6 +8,7 @@ export default function FinalCTA() {
   const titleRef = useRef(null)
   const textRef = useRef(null)
   const buttonRef = useRef(null)
+  const xRefs = useRef([])
   const [reducedMotion, setReducedMotion] = useState(false)
 
   useEffect(() => {
@@ -56,6 +57,29 @@ export default function FinalCTA() {
           },
           '-=0.5',
         )
+
+      // Subtle parallax on the 4 corner X motifs — each runs at a
+      // slightly different speed so the section gains dimensional
+      // gravity without distracting from the headline.
+      const parallaxAmounts = [-44, -28, 36, 52]
+      xRefs.current.forEach((el, i) => {
+        if (!el) return
+        gsap.fromTo(
+          el,
+          { y: -parallaxAmounts[i] * 0.5 },
+          {
+            y: parallaxAmounts[i] * 0.5,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+            },
+          },
+        )
+      })
     }, sectionRef)
 
     return () => ctx.revert()
@@ -68,10 +92,26 @@ export default function FinalCTA() {
       className={`final-cta${reducedMotion ? ' final-cta--reduced' : ''}`}
       aria-labelledby="final-cta-title"
     >
-      <span className="final-cta__x final-cta__x--tl" aria-hidden="true" />
-      <span className="final-cta__x final-cta__x--tr" aria-hidden="true" />
-      <span className="final-cta__x final-cta__x--bl" aria-hidden="true" />
-      <span className="final-cta__x final-cta__x--br" aria-hidden="true" />
+      <span
+        ref={(el) => (xRefs.current[0] = el)}
+        className="final-cta__x final-cta__x--tl"
+        aria-hidden="true"
+      />
+      <span
+        ref={(el) => (xRefs.current[1] = el)}
+        className="final-cta__x final-cta__x--tr"
+        aria-hidden="true"
+      />
+      <span
+        ref={(el) => (xRefs.current[2] = el)}
+        className="final-cta__x final-cta__x--bl"
+        aria-hidden="true"
+      />
+      <span
+        ref={(el) => (xRefs.current[3] = el)}
+        className="final-cta__x final-cta__x--br"
+        aria-hidden="true"
+      />
 
       <div className="final-cta__container">
         <h2

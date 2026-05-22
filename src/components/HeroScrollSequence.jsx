@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // Resolve all frame URLs at build time via Vite's glob import
 const frameModules = import.meta.glob(
@@ -58,6 +60,7 @@ function drawCoverTop(ctx, img, w, h) {
 export default function HeroScrollSequence() {
   const sectionRef = useRef(null)
   const canvasRef  = useRef(null)
+  const contentRef = useRef(null)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -213,12 +216,39 @@ export default function HeroScrollSequence() {
     }
   }, [])
 
+  // Subtle content parallax — the editorial copy lifts a touch as the
+  // hero scrolls past, adding z-depth against the canvas without
+  // competing with the frame sequence. Skipped under reduced motion.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!sectionRef.current || !contentRef.current) return
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const tween = gsap.to(contentRef.current, {
+      yPercent: -10,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: '+=700',
+        scrub: 0.5,
+        invalidateOnRefresh: true,
+      },
+    })
+
+    return () => {
+      tween.scrollTrigger?.kill()
+      tween.kill()
+    }
+  }, [])
+
   return (
     <section ref={sectionRef} className="hss" aria-label="Hero">
       <div className="hss__sticky">
         <HssXDecor />
 
-        <div className="hss__content">
+        <div ref={contentRef} className="hss__content">
           <span className="hss__eyebrow">EXP Marketing</span>
 
           <h1 className="hss__headline">

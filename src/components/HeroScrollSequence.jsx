@@ -135,17 +135,50 @@ export default function HeroScrollSequence() {
       return () => ro.disconnect()
     }
 
-    // ── Desktop: preload all frames ────────────────────────────────
+    // ── Desktop: progressive frame loading ─────────────────────────
+    //
+    // Eagerly loading 240 frames in parallel was blocking LCP and
+    // saturating the network on cold loads. New strategy:
+    //   - Initial burst: first ~24 frames + last 1 (covers first paint
+    //     + immediate scroll + the reduced-motion-equivalent end state)
+    //   - Deferred bulk: the remaining frames load on requestIdleCallback
+    //     (or a short timeout fallback), so they never compete with
+    //     the critical path.
 
-    FRAME_URLS.forEach((url, i) => {
+    const PRIORITY_BATCH = 24
+    const loadedSet = new Set()
+
+    function loadFrame(i) {
+      if (i < 0 || i >= TOTAL_FRAMES) return
+      if (loadedSet.has(i)) return
+      loadedSet.add(i)
       const img = new Image()
+      img.decoding = 'async'
       img.onload = () => {
         state.images[i] = img
-        // Re-render when a frame near the current position loads
         if (Math.abs(i - state.currentFrame) <= 5) renderBest()
       }
-      img.src = url
-    })
+      img.src = FRAME_URLS[i]
+    }
+
+    // Priority frames first — eagerly loaded so the canvas paints
+    // immediately and the user can scroll through the opening beat
+    // without dropped frames.
+    for (let i = 0; i < PRIORITY_BATCH && i < TOTAL_FRAMES; i++) {
+      loadFrame(i)
+    }
+    loadFrame(END_FRAME_INDEX)
+
+    // Bulk load the remaining frames once the browser is idle.
+    const bulkLoad = () => {
+      for (let i = PRIORITY_BATCH; i < TOTAL_FRAMES; i++) loadFrame(i)
+    }
+    let bulkHandle
+    if ('requestIdleCallback' in window) {
+      bulkHandle = requestIdleCallback(bulkLoad, { timeout: 2500 })
+    } else {
+      bulkHandle = setTimeout(bulkLoad, 1200)
+    }
 
     // ── Scroll → frame computation ─────────────────────────────────
 
@@ -172,6 +205,11 @@ export default function HeroScrollSequence() {
       window.removeEventListener('scroll', onScroll)
       ro.disconnect()
       if (rafId) cancelAnimationFrame(rafId)
+      if (typeof bulkHandle === 'number') {
+        clearTimeout(bulkHandle)
+      } else if (bulkHandle && 'cancelIdleCallback' in window) {
+        cancelIdleCallback(bulkHandle)
+      }
     }
   }, [])
 
@@ -194,7 +232,20 @@ export default function HeroScrollSequence() {
           </p>
 
           <div className="hss__actions">
-            <a href="#cta" className="hss__btn hss__btn--primary">
+            <a
+              href="#cta"
+              className="hss__btn hss__btn--primary"
+              onClick={(e) => {
+                e.preventDefault()
+                const target = document.getElementById('cta')
+                if (!target) return
+                if (window.__lenis) {
+                  window.__lenis.scrollTo(target, { offset: -80 })
+                } else {
+                  target.scrollIntoView({ behavior: 'smooth' })
+                }
+              }}
+            >
               Solicitar diagnóstico estratégico
             </a>
             <a

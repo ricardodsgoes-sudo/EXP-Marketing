@@ -30,7 +30,14 @@ export default function Header() {
       <div className="header__inner">
 
         <a href="#" className="header__logo" aria-label="EXP Marketing">
-          <img src={logo} alt="EXP Marketing" />
+          <img
+            src={logo}
+            alt="EXP Marketing"
+            width="76"
+            height="76"
+            fetchpriority="high"
+            decoding="async"
+          />
         </a>
 
         <nav
@@ -56,7 +63,13 @@ export default function Header() {
         <div className="header__actions">
           <a href="#cta" className="header__cta" onClick={(e) => {
             e.preventDefault()
-            document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })
+            const target = document.getElementById('cta')
+            if (!target) return
+            if (window.__lenis) {
+              window.__lenis.scrollTo(target, { offset: -80 })
+            } else {
+              target.scrollIntoView({ behavior: 'smooth' })
+            }
           }}>
             Diagnóstico
           </a>

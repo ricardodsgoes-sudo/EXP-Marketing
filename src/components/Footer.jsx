@@ -83,7 +83,14 @@ export default function Footer() {
           {/* Col 1 — Brand */}
           <div className="footer__col footer__col--brand">
             <a href="#" className="footer__logo" aria-label="EXP Marketing">
-              <img src={logoBranca} alt="EXP Marketing" />
+              <img
+                src={logoBranca}
+                alt="EXP Marketing"
+                width="64"
+                height="64"
+                loading="lazy"
+                decoding="async"
+              />
             </a>
             <p className="footer__tagline">
               Marketing, ventas y gestión para negocios beauty.

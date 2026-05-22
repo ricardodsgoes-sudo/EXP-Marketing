@@ -13,8 +13,15 @@ import Footer from './components/Footer'
 
 export default function App() {
   useEffect(() => {
-    // Skip smooth scroll if the user prefers reduced motion
+    // Skip smooth scroll if the user prefers reduced motion.
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    // Skip Lenis on touch-only devices — native momentum is better and
+    // we save ~10KB of runtime + a permanent RAF loop. matchMedia
+    // '(hover: hover)' is the standard touch detection: true on
+    // mouse/trackpad devices, false on phones and most tablets.
+    const supportsHover = window.matchMedia('(hover: hover)').matches
+    if (!supportsHover) return
 
     gsap.registerPlugin(ScrollTrigger)
 
@@ -24,6 +31,10 @@ export default function App() {
       smoothWheel: true,
       // smoothTouch defaults to false — native momentum on mobile is better
     })
+
+    // Expose the lenis instance so other components (Header CTA, anchor
+    // links) can drive scroll-to consistently with the smooth wheel.
+    window.__lenis = lenis
 
     // Drive Lenis from GSAP's ticker so ScrollTrigger (used inside
     // ProblemScrollFX) reads the interpolated scroll position and the pin
@@ -39,6 +50,7 @@ export default function App() {
     return () => {
       gsap.ticker.remove(tickerCallback)
       lenis.destroy()
+      if (window.__lenis === lenis) delete window.__lenis
     }
   }, [])
 

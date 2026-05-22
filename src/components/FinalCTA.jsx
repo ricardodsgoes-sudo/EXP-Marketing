@@ -64,6 +64,7 @@ export default function FinalCTA() {
   return (
     <section
       ref={sectionRef}
+      id="cta"
       className={`final-cta${reducedMotion ? ' final-cta--reduced' : ''}`}
       aria-labelledby="final-cta-title"
     >

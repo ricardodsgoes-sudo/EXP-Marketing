@@ -110,20 +110,20 @@ export default function ProblemScrollFX() {
 
     gsap.registerPlugin(ScrollTrigger)
 
-    // Entrance — the whole section arrives a touch blurred and faded,
-    // sharpening into place during the immediate handoff zone right
-    // before the pin engages.
+    // Entrance — the whole section arrives slightly blurred and lifts
+    // into focus quickly. Narrow handoff window + small max blur keep
+    // it as a subtle polish, not a dramatic transition.
     const entranceBlur = ScrollTrigger.create({
       trigger: sectionRef.current,
-      start: 'top 40%',
-      end: 'top top',
-      scrub: 0.5,
+      start: 'top 22%',
+      end: 'top 4%',
+      scrub: 0.25,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         if (!pinRef.current) return
         const p = self.progress
-        pinRef.current.style.filter = `blur(${(1 - p) * 12}px)`
-        pinRef.current.style.opacity = String(0.35 + p * 0.65)
+        pinRef.current.style.filter = `blur(${(1 - p) * 5}px)`
+        pinRef.current.style.opacity = String(0.78 + p * 0.22)
       },
     })
 

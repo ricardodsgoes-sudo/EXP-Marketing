@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import RevealOnScroll from '../components/RevealOnScroll'
+import expWordmarkLight from '../assets/exp-wordmark-light.png'
+import expX from '../assets/exp-x-light.png'
 
 const PATHS = [
   {
     num: '01',
-    title: 'Mentoría EXP Beauty Growth',
+    title: 'Mentoría EXP\nBeauty Growth',
     description:
       'Para profesionales de la belleza que quieren aprender a estructurar su propio negocio, vender más, posicionarse en redes sociales, crear ofertas más fuertes y entender sus números con acompañamiento estratégico.',
     listLabel: 'Ideal para quien',
@@ -20,7 +22,7 @@ const PATHS = [
   },
   {
     num: '02',
-    title: 'Consultoría Estratégica EXP',
+    title: 'Consultoría\nEstratégica EXP',
     description:
       'Para negocios beauty que necesitan un diagnóstico profundo, un plan de crecimiento y una dirección estratégica personalizada para marketing, ventas, embudo y gestión.',
     listLabel: 'Ideal para quien',
@@ -36,7 +38,7 @@ const PATHS = [
   },
   {
     num: '03',
-    title: 'Servicios EXP Marketing Digital',
+    title: 'Servicios EXP\nMarketing Digital',
     description:
       'Para clínicas, marcas y profesionales que quieren contratar servicios individuales o combinados de marketing digital para acelerar su crecimiento con ejecución profesional.',
     listLabel: 'Servicios',
@@ -51,7 +53,6 @@ const PATHS = [
       'Planificación de contenido',
       'Análisis de métricas',
     ],
-    listColumns: 2,
     cta: 'Ver servicios',
     to: '/marketing-digital',
   },
@@ -60,27 +61,46 @@ const PATHS = [
 const COMPARISON_ROWS = [
   {
     label: 'Objetivo',
-    mentoria:
-      'Aprender a construir crecimiento con acompañamiento estratégico.',
+    mentoria: 'Aprender a estructurar tu negocio y mejorar tus resultados.',
     consultoria:
-      'Recibir diagnóstico, dirección y prioridades para tomar mejores decisiones.',
-    md: 'Delegar la ejecución a un equipo especializado.',
+      'Recibir dirección estratégica y un plan de crecimiento.',
+    md: 'Delegar la ejecución de marketing digital para crecer más rápido.',
   },
   {
     label: 'Ideal para',
     mentoria:
-      'Profesionales que quieren aprender y estructurar su propio crecimiento.',
+      'Profesionales que quieren aprender y tomar el control de su negocio.',
     consultoria:
-      'Negocios que necesitan claridad estratégica antes de seguir invirtiendo.',
-    md: 'Marcas, clínicas y profesionales que quieren ejecución profesional.',
+      'Negocios que necesitan claridad, estrategia y optimizar resultados.',
+    md: 'Clínicas, marcas y profesionales que quieren delegar la ejecución y enfocarse en su negocio.',
   },
   {
     label: 'Enfoque',
-    mentoria: 'Formación, acompañamiento y visión empresarial.',
-    consultoria: 'Diagnóstico, estrategia, embudo, ventas y gestión.',
-    md: 'Contenido, tráfico, páginas, embudos, copy y métricas.',
+    mentoria:
+      'Educación + acompañamiento para desarrollar habilidades y tomar mejores decisiones.',
+    consultoria:
+      'Análisis profundo + estrategia personalizada + plan de acción con dirección.',
+    md: 'Ejecución profesional de acciones de marketing digital con foco en resultados.',
   },
 ]
+
+function CheckIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="m8 12 3 3 5-6" />
+    </svg>
+  )
+}
 
 function scrollToAnchor(id) {
   const target = document.getElementById(id)
@@ -102,87 +122,90 @@ export default function Soluciones() {
     <>
       {/* ── 1. HERO ─────────────────────────────────────────── */}
       <section className="sol-hero" aria-labelledby="sol-hero-title">
-        <span className="sol-hero__x" aria-hidden="true">
-          <svg viewBox="0 0 200 200" fill="none">
-            <path
-              d="M30 30 L170 170"
-              stroke="var(--champagne)"
-              strokeWidth="1"
-            />
-            <path
-              d="M170 30 L30 170"
-              stroke="var(--champagne)"
-              strokeWidth="1"
-            />
-          </svg>
-        </span>
+        <img
+          src={expX}
+          alt=""
+          className="sol-hero__x-mark"
+          aria-hidden="true"
+          draggable="false"
+        />
 
         <div className="sol-hero__inner">
-          <RevealOnScroll as="span" className="sol-hero__eyebrow" delay={0}>
-            Soluciones EXP
-          </RevealOnScroll>
+          <div className="sol-hero__content">
+            <RevealOnScroll as="span" className="sol-hero__eyebrow" delay={0}>
+              Soluciones EXP
+            </RevealOnScroll>
 
-          <RevealOnScroll
-            as="h1"
-            id="sol-hero-title"
-            className="sol-hero__title"
-            delay={140}
-          >
-            Soluciones EXP para cada fase de tu negocio beauty
-          </RevealOnScroll>
-
-          <RevealOnScroll as="p" className="sol-hero__subtitle" delay={280}>
-            Puedes aprender, recibir dirección estratégica o contratar a nuestro
-            equipo para ejecutar.
-          </RevealOnScroll>
-
-          <RevealOnScroll as="p" className="sol-hero__support" delay={380}>
-            Cada negocio beauty vive un momento diferente. Por eso, EXP organiza
-            sus soluciones en tres caminos: mentoría, consultoría estratégica y
-            servicios de marketing digital.
-          </RevealOnScroll>
-
-          <RevealOnScroll as="div" className="sol-hero__actions" delay={480}>
-            <Link to="/#cta" className="sol-btn sol-btn--primary">
-              Solicitar diagnóstico estratégico
-            </Link>
-            <a
-              href="#comparar-soluciones"
-              className="sol-btn sol-btn--ghost"
-              onClick={handleCompareClick}
+            <RevealOnScroll
+              as="h1"
+              id="sol-hero-title"
+              className="sol-hero__title"
+              delay={140}
             >
-              Comparar soluciones
-            </a>
-          </RevealOnScroll>
+              Soluciones EXP para cada fase de tu negocio beauty
+            </RevealOnScroll>
 
-          <span className="sol-hero__rule" aria-hidden="true" />
+            <RevealOnScroll as="p" className="sol-hero__subtitle" delay={260}>
+              Puedes aprender, recibir dirección estratégica o contratar a
+              nuestro equipo para ejecutar.
+            </RevealOnScroll>
+
+            <RevealOnScroll as="p" className="sol-hero__support" delay={360}>
+              Cada negocio beauty vive un momento diferente. Por eso, EXP
+              organiza sus soluciones en tres caminos: mentoría, consultoría
+              estratégica y servicios de marketing digital.
+            </RevealOnScroll>
+
+            <RevealOnScroll as="div" className="sol-hero__actions" delay={460}>
+              <Link to="/#cta" className="sol-btn sol-btn--primary">
+                Solicitar diagnóstico estratégico
+              </Link>
+              <a
+                href="#comparar-soluciones"
+                className="sol-btn sol-btn--ghost-light"
+                onClick={handleCompareClick}
+              >
+                Comparar soluciones
+              </a>
+            </RevealOnScroll>
+          </div>
+
+          <div className="sol-hero__visual" aria-hidden="true">
+            <div className="sol-hero__placeholder">
+              <img
+                src={expWordmarkLight}
+                alt=""
+                className="sol-hero__placeholder-mark"
+                draggable="false"
+              />
+              <span className="sol-hero__placeholder-label">
+                Imagen pendiente
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── 2. PATHS ────────────────────────────────────────── */}
       <section className="sol-paths" aria-labelledby="sol-paths-title">
-        <div className="sol-paths__intro">
-          <RevealOnScroll as="span" className="sol-paths__eyebrow">
-            Tres caminos
-          </RevealOnScroll>
+        <div className="sol-paths__head">
           <RevealOnScroll
             as="h2"
             id="sol-paths-title"
             className="sol-paths__title"
-            delay={120}
           >
             Elige el camino más adecuado para tu momento
           </RevealOnScroll>
-          <RevealOnScroll as="p" className="sol-paths__body" delay={240}>
+          <RevealOnScroll as="p" className="sol-paths__body" delay={140}>
             No todas las soluciones sirven para la misma etapa. La clave es
             entender si tu negocio necesita aprender, recibir dirección o
             delegar la ejecución.
           </RevealOnScroll>
         </div>
 
-        <div className="sol-paths__list">
+        <div className="sol-paths__grid">
           {PATHS.map((path, i) => (
-            <PathBlock key={path.num} {...path} index={i} />
+            <PathCard key={path.num} {...path} index={i} />
           ))}
         </div>
       </section>
@@ -195,20 +218,20 @@ export default function Soluciones() {
       >
         <div className="sol-compare__inner">
           <RevealOnScroll as="div" className="sol-compare__head">
-            <span className="sol-compare__eyebrow">Comparar</span>
             <h2 id="sol-compare-title" className="sol-compare__title">
               No todas las soluciones sirven para el mismo momento.
             </h2>
+            <span className="sol-compare__rule" aria-hidden="true" />
             <p className="sol-compare__intro">
-              Antes de elegir una solución, es importante entender si tu negocio
-              necesita conocimiento, dirección o ejecución.
+              Antes de elegir una solución, es importante entender si tu
+              negocio necesita conocimiento, dirección o ejecución.
             </p>
           </RevealOnScroll>
 
           <RevealOnScroll
             as="div"
             className="compare-table"
-            delay={200}
+            delay={160}
             role="table"
             aria-label="Comparación entre las tres soluciones EXP"
           >
@@ -227,10 +250,7 @@ export default function Soluciones() {
 
             {COMPARISON_ROWS.map((row) => (
               <div className="compare-table__row" role="row" key={row.label}>
-                <div
-                  className="compare-table__row-label"
-                  role="rowheader"
-                >
+                <div className="compare-table__row-label" role="rowheader">
                   {row.label}
                 </div>
                 <div className="compare-table__cell" role="cell">
@@ -257,28 +277,42 @@ export default function Soluciones() {
 
       {/* ── 4. DIAGNÓSTICO CTA ──────────────────────────────── */}
       <section className="sol-diag" aria-labelledby="sol-diag-title">
+        <img
+          src={expX}
+          alt=""
+          className="sol-diag__x sol-diag__x--left"
+          aria-hidden="true"
+          draggable="false"
+        />
+        <img
+          src={expX}
+          alt=""
+          className="sol-diag__x sol-diag__x--right"
+          aria-hidden="true"
+          draggable="false"
+        />
         <div className="sol-diag__inner">
-          <RevealOnScroll as="span" className="sol-diag__eyebrow">
-            Diagnóstico estratégico
-          </RevealOnScroll>
-          <RevealOnScroll
-            as="h2"
-            id="sol-diag-title"
-            className="sol-diag__title"
-            delay={140}
-          >
-            Si no sabes qué solución elegir, empieza por el diagnóstico.
-          </RevealOnScroll>
-          <RevealOnScroll as="p" className="sol-diag__text" delay={260}>
-            El diagnóstico estratégico ayuda a entender qué está frenando tu
-            crecimiento y cuál es el camino más adecuado para tu momento actual:
-            aprender, recibir dirección o delegar la ejecución.
-          </RevealOnScroll>
-          <RevealOnScroll
-            as="div"
-            className="sol-diag__action"
-            delay={380}
-          >
+          <div className="sol-diag__text">
+            <RevealOnScroll as="span" className="sol-diag__eyebrow">
+              Diagnóstico estratégico
+            </RevealOnScroll>
+            <RevealOnScroll
+              as="h2"
+              id="sol-diag-title"
+              className="sol-diag__title"
+              delay={140}
+            >
+              Si no sabes qué solución elegir,
+              <br />
+              empieza por el diagnóstico.
+            </RevealOnScroll>
+            <RevealOnScroll as="p" className="sol-diag__body" delay={260}>
+              El diagnóstico estratégico ayuda a entender qué está frenando tu
+              crecimiento y cuál es el camino más adecuado para tu momento
+              actual: aprender, recibir dirección o delegar la ejecución.
+            </RevealOnScroll>
+          </div>
+          <RevealOnScroll as="div" className="sol-diag__action" delay={380}>
             <Link to="/#cta" className="sol-btn sol-btn--primary sol-btn--lg">
               Solicitar diagnóstico estratégico
             </Link>
@@ -289,60 +323,46 @@ export default function Soluciones() {
   )
 }
 
-function PathBlock({
-  num,
-  title,
-  description,
-  listLabel,
-  list,
-  listColumns = 1,
-  cta,
-  to,
-  index,
-}) {
-  const variant = index % 2 === 0 ? 'a' : 'b'
+function PathCard({ num, title, description, listLabel, list, cta, to }) {
   return (
-    <article className={`path-block path-block--${variant}`}>
-      <div className="path-block__inner">
-        <RevealOnScroll as="span" className="path-block__num">
-          {num}
-        </RevealOnScroll>
+    <article className="path-card">
+      <RevealOnScroll as="span" className="path-card__num">
+        <span className="path-card__num-text">{num}</span>
+        <span className="path-card__num-dash" aria-hidden="true" />
+      </RevealOnScroll>
 
-        <div className="path-block__body">
-          <RevealOnScroll as="h3" className="path-block__title" delay={80}>
-            {title}
-          </RevealOnScroll>
+      <RevealOnScroll as="h3" className="path-card__title" delay={80}>
+        {title.split('\n').map((line, i, arr) => (
+          <span key={i}>
+            {line}
+            {i < arr.length - 1 && <br />}
+          </span>
+        ))}
+      </RevealOnScroll>
 
-          <RevealOnScroll as="p" className="path-block__text" delay={160}>
-            {description}
-          </RevealOnScroll>
+      <RevealOnScroll as="p" className="path-card__text" delay={160}>
+        {description}
+      </RevealOnScroll>
 
-          <RevealOnScroll as="div" className="path-block__list-wrap" delay={240}>
-            <span className="path-block__list-label">{listLabel}</span>
-            <ul
-              className={
-                'path-block__list' +
-                (listColumns === 2 ? ' path-block__list--2col' : '')
-              }
-            >
-              {list.map((item) => (
-                <li key={item} className="path-block__list-item">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </RevealOnScroll>
-
-          <RevealOnScroll as="div" className="path-block__cta-wrap" delay={320}>
-            <Link to={to} className="path-block__cta">
-              <span>{cta}</span>
-              <span className="path-block__cta-mark" aria-hidden="true">
-                →
+      <RevealOnScroll as="div" className="path-card__list-wrap" delay={240}>
+        <span className="path-card__list-label">{listLabel}</span>
+        <ul className="path-card__list">
+          {list.map((item) => (
+            <li key={item} className="path-card__list-item">
+              <span className="path-card__list-icon" aria-hidden="true">
+                <CheckIcon />
               </span>
-            </Link>
-          </RevealOnScroll>
-        </div>
-      </div>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </RevealOnScroll>
+
+      <RevealOnScroll as="div" className="path-card__cta-wrap" delay={320}>
+        <Link to={to} className="path-card__cta">
+          {cta}
+        </Link>
+      </RevealOnScroll>
     </article>
   )
 }

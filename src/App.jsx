@@ -9,6 +9,7 @@ import ProblemScrollFX from './components/ProblemScrollFX'
 import MethodSection from './components/MethodSection'
 import SolutionsPreview from './components/SolutionsPreview'
 import FinalCTA from './components/FinalCTA'
+import Footer from './components/Footer'
 
 export default function App() {
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function App() {
         <SolutionsPreview />
         <FinalCTA />
       </main>
+      <Footer />
     </>
   )
 }

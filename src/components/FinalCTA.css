@@ -1,0 +1,231 @@
+/* ============================================================
+   FINAL CTA — the closing conversion beat.
+   Black/graphite backdrop, centered editorial composition, single
+   champagne action. Thin X-inspired strokes echo the EXP wordmark.
+   ============================================================ */
+
+.final-cta {
+  position: relative;
+  background-color: #000;
+  color: rgba(247, 247, 245, 0.86);
+  padding:
+    clamp(120px, 16vh, 200px)
+    clamp(32px, 6vw, 112px)
+    clamp(120px, 16vh, 200px);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Soft champagne pool at the center to anchor the eye on the CTA
+   without breaking the palette. */
+.final-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 60%,
+    rgba(216, 185, 140, 0.05),
+    transparent 70%
+  );
+}
+
+.final-cta__container {
+  position: relative;
+  z-index: 1;
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.final-cta__title {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5vw, 72px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  color: #f5f3ef;
+  margin: 0 0 clamp(28px, 3.4vw, 44px);
+  max-width: 880px;
+}
+
+/* Champagne italic accent on "crecimiento" — same editorial thread as
+   the ProblemSection bridge and the MethodSection title. */
+.final-cta__title-accent {
+  color: var(--champagne);
+  font-style: italic;
+}
+
+.final-cta__text {
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(240, 237, 232, 0.76);
+  max-width: 680px;
+  margin: 0 0 clamp(44px, 5.4vw, 64px);
+}
+
+/* ───────── Button ───────── */
+
+.final-cta__button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(18px, 2vw, 22px) clamp(38px, 4.4vw, 56px);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  background-color: var(--champagne);
+  border: 1px solid var(--champagne);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    color 360ms ease,
+    background-color 360ms ease,
+    transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1),
+    box-shadow 360ms ease;
+  box-shadow: 0 0 0 0 rgba(216, 185, 140, 0);
+}
+
+.final-cta__button-label {
+  position: relative;
+  z-index: 1;
+}
+
+/* Slow wash-over hover — keeps it premium, not button-y. */
+.final-cta__button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #1a1a1a;
+  transform: translateY(101%);
+  transition: transform 480ms cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+.final-cta__button:hover,
+.final-cta__button:focus-visible {
+  color: var(--champagne);
+  transform: translateY(-2px);
+  box-shadow: 0 0 36px rgba(216, 185, 140, 0.28);
+}
+
+.final-cta__button:hover::before,
+.final-cta__button:focus-visible::before {
+  transform: translateY(0);
+}
+
+.final-cta__button:focus-visible {
+  outline: 2px solid var(--champagne);
+  outline-offset: 4px;
+}
+
+/* ───────── X motif — thin EXP-logo-inspired corner strokes ───────── */
+
+.final-cta__x {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  pointer-events: none;
+  opacity: 0.08;
+  z-index: 0;
+}
+
+.final-cta__x::before,
+.final-cta__x::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  background: var(--champagne);
+}
+
+.final-cta__x::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.final-cta__x::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.final-cta__x--tl {
+  top: clamp(48px, 6vw, 88px);
+  left: clamp(28px, 4vw, 72px);
+}
+
+.final-cta__x--tr {
+  top: clamp(48px, 6vw, 88px);
+  right: clamp(28px, 4vw, 72px);
+}
+
+.final-cta__x--bl {
+  bottom: clamp(48px, 6vw, 88px);
+  left: clamp(28px, 4vw, 72px);
+}
+
+.final-cta__x--br {
+  bottom: clamp(48px, 6vw, 88px);
+  right: clamp(28px, 4vw, 72px);
+}
+
+/* ───────── Mobile breakpoint ───────── */
+
+@media (max-width: 860px) {
+  .final-cta {
+    padding:
+      clamp(80px, 16vw, 112px)
+      24px
+      clamp(80px, 16vw, 112px);
+  }
+
+  .final-cta__title {
+    font-size: clamp(28px, 8vw, 40px);
+  }
+
+  .final-cta__text {
+    font-size: 1rem;
+    max-width: none;
+  }
+
+  .final-cta__button {
+    padding: 16px 28px;
+    font-size: 0.75rem;
+    letter-spacing: 0.28em;
+  }
+
+  .final-cta__x {
+    width: 36px;
+    height: 36px;
+    opacity: 0.06;
+  }
+
+  .final-cta__x--tl,
+  .final-cta__x--tr {
+    top: 24px;
+  }
+
+  .final-cta__x--bl,
+  .final-cta__x--br {
+    bottom: 24px;
+  }
+
+  .final-cta__x--tl,
+  .final-cta__x--bl {
+    left: 16px;
+  }
+
+  .final-cta__x--tr,
+  .final-cta__x--br {
+    right: 16px;
+  }
+}

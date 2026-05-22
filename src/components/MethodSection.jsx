@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import expLogo from '../assets/logo.jpeg'
+import expLogo from '../assets/exp-x-light.png'
 import './MethodSection.css'
 
 const PILLARS = [

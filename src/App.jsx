@@ -1,15 +1,19 @@
 import { useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './styles.css'
 import Header from './components/Header'
-import HeroScrollSequence from './components/HeroScrollSequence'
-import ProblemScrollFX from './components/ProblemScrollFX'
-import MethodSection from './components/MethodSection'
-import SolutionsPreview from './components/SolutionsPreview'
-import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
+import ScrollToTop from './components/ScrollToTop'
+import Home from './pages/Home'
+import Soluciones from './pages/Soluciones'
+import Mentoria from './pages/Mentoria'
+import Consultoria from './pages/Consultoria'
+import MarketingDigital from './pages/MarketingDigital'
+import Casos from './pages/Casos'
+import SobreEXP from './pages/SobreEXP'
 
 export default function App() {
   useEffect(() => {
@@ -29,16 +33,10 @@ export default function App() {
       duration: 1.15,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      // smoothTouch defaults to false — native momentum on mobile is better
     })
 
-    // Expose the lenis instance so other components (Header CTA, anchor
-    // links) can drive scroll-to consistently with the smooth wheel.
     window.__lenis = lenis
 
-    // Drive Lenis from GSAP's ticker so ScrollTrigger (used inside
-    // ProblemScrollFX) reads the interpolated scroll position and the pin
-    // stays in lockstep with the smooth wheel.
     lenis.on('scroll', ScrollTrigger.update)
 
     const tickerCallback = (time) => {
@@ -56,13 +54,19 @@ export default function App() {
 
   return (
     <>
+      <ScrollToTop />
       <Header />
       <main>
-        <HeroScrollSequence />
-        <ProblemScrollFX />
-        <MethodSection />
-        <SolutionsPreview />
-        <FinalCTA />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/soluciones" element={<Soluciones />} />
+          <Route path="/mentoria" element={<Mentoria />} />
+          <Route path="/consultoria" element={<Consultoria />} />
+          <Route path="/marketing-digital" element={<MarketingDigital />} />
+          <Route path="/casos" element={<Casos />} />
+          <Route path="/sobre" element={<SobreEXP />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
       </main>
       <Footer />
     </>

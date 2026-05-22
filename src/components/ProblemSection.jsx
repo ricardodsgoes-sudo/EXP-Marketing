@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import RevealOnScroll from './RevealOnScroll'
+import SocialIcon from './SocialIcon'
 
 /* Editorial line icons — thin stroke, currentColor, no fills.
    Each one is sized via CSS (.timeline-card__icon) to ~36px. */
@@ -191,7 +192,9 @@ export default function ProblemSection() {
                 className={`timeline-card${isActive ? ' is-active' : ''}`}
                 aria-current={isActive ? 'true' : undefined}
               >
-                <span className="timeline-card__marker" aria-hidden="true" />
+                <span className="timeline-card__marker" aria-hidden="true">
+                  <SocialIcon name="instagram" size={18} />
+                </span>
 
                 <article className="timeline-card__panel">
                   <span className="timeline-card__icon" aria-hidden="true">

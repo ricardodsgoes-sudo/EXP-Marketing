@@ -186,6 +186,21 @@
   will-change: transform;
 }
 
+/* ───────── Chart watermark logo ───────── */
+
+.pscroll__chart-logo {
+  position: absolute;
+  left: 50%;
+  top: 74%;
+  transform: translate(-50%, -50%);
+  width: clamp(56px, 7vw, 88px);
+  height: auto;
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
 /* ───────── Chart background (behind cards) ───────── */
 
 .pscroll__chart {
@@ -256,54 +271,50 @@
    the chart line. */
 .pscroll__chart-dot {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  margin-left: -5px;
-  margin-top: -5px;
-  border-radius: 50%;
-  border: 1px solid var(--champagne);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  margin-top: -9px;
+  color: var(--champagne);
   background: var(--graphite);
+  border-radius: 4px;
   opacity: 0;
   transition:
     transform 420ms cubic-bezier(0.22, 0.7, 0.2, 1),
-    background-color 420ms ease,
     opacity 420ms ease,
-    box-shadow 420ms ease;
+    filter 420ms ease,
+    color 420ms ease;
+}
+
+.pscroll__chart-dot svg {
+  display: block;
 }
 
 .pscroll__chart-dot.is-past {
-  opacity: 0.4;
+  opacity: 0.45;
 }
 
 .pscroll__chart-dot.is-active {
-  background-color: var(--champagne);
-  opacity: 0.95;
-  transform: scale(1.4);
-  box-shadow:
-    0 0 0 6px rgba(216, 185, 140, 0.1),
-    0 0 16px rgba(216, 185, 140, 0.5);
+  opacity: 1;
+  transform: scale(1.25);
+  filter: drop-shadow(0 0 10px rgba(216, 185, 140, 0.45));
 }
 
 .pscroll__chart-dot.is-failure {
-  border-color: #ff4b3e;
-  background-color: #ff4b3e;
-  opacity: 0.98;
-  transform: scale(1.45);
-  box-shadow:
-    0 0 0 7px rgba(255, 75, 62, 0.12),
-    0 0 18px rgba(255, 75, 62, 0.58),
-    0 0 36px rgba(255, 75, 62, 0.2);
+  color: #ff4b3e;
+  opacity: 1;
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 12px rgba(255, 75, 62, 0.55));
 }
 
 .pscroll__chart-dot.is-warning {
-  border-color: #ff9f2e;
-  background-color: #ff9f2e;
-  opacity: 0.96;
-  transform: scale(1.42);
-  box-shadow:
-    0 0 0 7px rgba(255, 159, 46, 0.12),
-    0 0 18px rgba(255, 159, 46, 0.55),
-    0 0 34px rgba(255, 159, 46, 0.18);
+  color: #ff9f2e;
+  opacity: 1;
+  transform: scale(1.28);
+  filter: drop-shadow(0 0 12px rgba(255, 159, 46, 0.5));
 }
 
 /* ───────── Cards (flex children of the track, on top of the chart) ───────── */
@@ -625,11 +636,11 @@
   }
 
   .pscroll__chart-dot {
-    width: 9px;
-    height: 9px;
-    margin-left: -4.5px;
-    margin-top: -4.5px;
-    opacity: 0.55;
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    margin-top: -8px;
+    opacity: 0.7;
   }
 
   .pscroll__card {

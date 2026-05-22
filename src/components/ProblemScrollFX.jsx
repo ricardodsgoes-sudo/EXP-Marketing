@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import SocialIcon from './SocialIcon'
+import expX from '../assets/exp-x-light.png'
 import './ProblemScrollFX.css'
 
 const PAINS = [
@@ -371,6 +373,13 @@ export default function ProblemScrollFX() {
 
           {/* ── RIGHT: horizontal track of cards over the chart ── */}
           <div ref={viewportRef} className="pscroll__viewport">
+            <img
+              src={expX}
+              alt=""
+              className="pscroll__chart-logo"
+              aria-hidden="true"
+              draggable="false"
+            />
             <div ref={trackRef} className="pscroll__track">
               {/* Chart layer — absolute, spans the full track width behind
                   the cards. Stretches via preserveAspectRatio="none" so
@@ -478,7 +487,9 @@ export default function ProblemScrollFX() {
                       left: `${(p.x / VIEWBOX_W) * 100}%`,
                       top: `${(p.y / VIEWBOX_H) * 100}%`,
                     }}
-                  />
+                  >
+                    <SocialIcon name="instagram" size={18} />
+                  </span>
                 ))}
               </div>
 

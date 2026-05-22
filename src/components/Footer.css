@@ -9,6 +9,19 @@
   background-color: #000;
   color: rgba(247, 247, 245, 0.78);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.footer__x-mark {
+  position: absolute;
+  right: -4%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(220px, 30vw, 420px);
+  height: auto;
+  opacity: 0.04;
+  pointer-events: none;
+  user-select: none;
 }
 
 .footer__inner {
@@ -49,11 +62,9 @@
 }
 
 .footer__logo img {
-  height: 64px;
+  height: 36px;
   width: auto;
   display: block;
-  filter: invert(1);
-  mix-blend-mode: lighten;
   user-select: none;
 }
 
@@ -279,7 +290,7 @@
   }
 
   .footer__logo img {
-    height: 56px;
+    height: 30px;
   }
 
   .footer__bottom {

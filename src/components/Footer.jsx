@@ -1,18 +1,20 @@
-import logoBranca from '../assets/logo-branca.jpeg'
+import { Link } from 'react-router-dom'
+import logoBranca from '../assets/exp-wordmark-light.png'
+import expX from '../assets/exp-x-light.png'
 import './Footer.css'
 
 const SOLUTIONS = [
-  { label: 'Mentoría', href: '#' },
-  { label: 'Consultoría', href: '#' },
-  { label: 'Marketing Digital', href: '#' },
-  { label: 'Diagnóstico', href: '#' },
+  { label: 'Mentoría', to: '/mentoria' },
+  { label: 'Consultoría', to: '/consultoria' },
+  { label: 'Marketing Digital', to: '/marketing-digital' },
+  { label: 'Diagnóstico', to: '/#cta' },
 ]
 
 const EXP_LINKS = [
-  { label: 'Sobre EXP', href: '#' },
-  { label: 'Casos', href: '#' },
-  { label: 'Recursos', href: '#' },
-  { label: 'Contacto', href: '#' },
+  { label: 'Sobre EXP', to: '/sobre' },
+  { label: 'Casos', to: '/casos' },
+  { label: 'Recursos', to: '#' },
+  { label: 'Contacto', to: '/#cta' },
 ]
 
 const LEGAL_LINKS = [
@@ -78,20 +80,21 @@ export default function Footer() {
 
   return (
     <footer className="footer" role="contentinfo">
+      <img src={expX} alt="" className="footer__x-mark" aria-hidden="true" draggable="false" />
       <div className="footer__inner">
         <div className="footer__cols">
           {/* Col 1 — Brand */}
           <div className="footer__col footer__col--brand">
-            <a href="#" className="footer__logo" aria-label="EXP Marketing">
+            <Link to="/" className="footer__logo" aria-label="EXP Marketing">
               <img
                 src={logoBranca}
                 alt="EXP Marketing"
-                width="64"
-                height="64"
+                width="567"
+                height="255"
                 loading="lazy"
                 decoding="async"
               />
-            </a>
+            </Link>
             <p className="footer__tagline">
               Marketing, ventas y gestión para negocios beauty.
             </p>
@@ -103,13 +106,9 @@ export default function Footer() {
             <ul className="footer__list">
               {SOLUTIONS.map((item) => (
                 <li key={item.label}>
-                  <a
-                    className="footer__link"
-                    href={item.href}
-                    aria-disabled="true"
-                  >
+                  <Link className="footer__link" to={item.to}>
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -121,13 +120,15 @@ export default function Footer() {
             <ul className="footer__list">
               {EXP_LINKS.map((item) => (
                 <li key={item.label}>
-                  <a
-                    className="footer__link"
-                    href={item.href}
-                    aria-disabled="true"
-                  >
-                    {item.label}
-                  </a>
+                  {item.to.startsWith('#') ? (
+                    <a className="footer__link" href={item.to} aria-disabled="true">
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link className="footer__link" to={item.to}>
+                      {item.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

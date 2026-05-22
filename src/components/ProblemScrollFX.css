@@ -99,6 +99,27 @@
   margin: 0 0 clamp(28px, 3.2vw, 44px);
 }
 
+/* Each word is its own inline-block so GSAP can stagger their opacity
+   tied to the horizontal scroll. Dim baseline (0.18) reveals to full
+   one word at a time as the user scrolls through the pains. */
+.pscroll__title-word {
+  display: inline-block;
+  opacity: 0.18;
+  will-change: opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pscroll__title-word {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 860px) {
+  .pscroll__title-word {
+    opacity: 1;
+  }
+}
+
 .pscroll__intro {
   font-family: var(--font-body);
   font-size: clamp(0.95rem, 1.05vw, 1.05rem);

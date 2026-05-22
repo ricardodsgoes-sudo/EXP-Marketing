@@ -216,6 +216,27 @@ export default function ProblemScrollFX() {
       tl.to(track, { x: () => -getDistance(), duration: H_END }, 0)
       tl.to(revealRect, { attr: { width: VIEWBOX_W }, duration: H_END }, 0)
 
+      // Word-by-word title reveal — each word lifts from dim 0.18 to
+      // full 1.0 as the user scrolls through the cards. Distributed
+      // over the first ~60% of horizontal phase so the closing line
+      // ("por falta de estrategia") lands before the danger appears.
+      const titleWords = sectionRef.current.querySelectorAll(
+        '.pscroll__title-word',
+      )
+      if (titleWords.length > 0) {
+        gsap.set(titleWords, { opacity: 0.18 })
+        tl.to(
+          titleWords,
+          {
+            opacity: 1,
+            ease: 'none',
+            duration: 0.08,
+            stagger: (0.6 * H_END) / titleWords.length,
+          },
+          0,
+        )
+      }
+
       // ── Phase B — Danger appears as we hit the last pain
       tl.to(
         dangerRect,
@@ -294,9 +315,29 @@ export default function ProblemScrollFX() {
           <div ref={anchorRef} className="pscroll__anchor">
             <span className="pscroll__eyebrow">El diagnóstico</span>
             <h2 id="pscroll-title" className="pscroll__title">
-              Los negocios beauty no se estancan por falta de talento.
+              {'Los negocios beauty no se estancan por falta de talento.'
+                .split(' ')
+                .map((word, i) => (
+                  <span
+                    key={`l1-${i}`}
+                    className="pscroll__title-word"
+                  >
+                    {word}
+                    {' '}
+                  </span>
+                ))}
               <br />
-              Se estancan por falta de estrategia.
+              {'Se estancan por falta de estrategia.'
+                .split(' ')
+                .map((word, i) => (
+                  <span
+                    key={`l2-${i}`}
+                    className="pscroll__title-word"
+                  >
+                    {word}
+                    {' '}
+                  </span>
+                ))}
             </h2>
             <p className="pscroll__intro">
               Muchas profesionales, clínicas y marcas del mercado beauty tienen

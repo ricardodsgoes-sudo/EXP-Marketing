@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import expLogo from '../assets/logo.jpeg'
 import './MethodSection.css'
 
 const PILLARS = [
@@ -63,15 +64,15 @@ export default function MethodSection() {
         },
       )
 
-      // Strategic rail draws progressively. The active line's transform
-      // reads from the CSS custom property --rail-progress which GSAP
-      // animates 0 → 1 in sync with scroll. The onUpdate also reveals
-      // each pillar at the exact moment the rail crosses its node —
-      // 0.00, 0.25, 0.50, 0.75 of the line.
+      // The map gets its own controlled scroll moment on desktop, so the
+      // circular reveal can finish before the next section starts moving up.
       if (railRef.current) {
+        const methodMedia = gsap.matchMedia()
         const PILLAR_THRESHOLDS = [0.06, 0.26, 0.5, 0.72]
         const updateReached = (self) => {
           const p = self.progress
+          const finish = gsap.utils.clamp(0, 1, (p - 0.82) / 0.18)
+          railRef.current?.style.setProperty('--method-finish', finish.toFixed(3))
           const reached = PILLAR_THRESHOLDS.filter((t) => p >= t).length
           if (reached !== lastReachedRef.current) {
             lastReachedRef.current = reached
@@ -79,18 +80,60 @@ export default function MethodSection() {
           }
         }
 
-        gsap.to(railRef.current, {
-          '--method-progress': 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 72%',
-            end: 'bottom 72%',
-            scrub: 1.25,
-            invalidateOnRefresh: true,
-            onUpdate: updateReached,
-          },
+        methodMedia.add('(min-width: 1101px)', () => {
+          const tween = gsap.to(railRef.current, {
+            '--method-progress': 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: railRef.current,
+              start: 'top 106px',
+              end: '+=760',
+              scrub: 1.2,
+              pin: true,
+              pinSpacing: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onUpdate: updateReached,
+              onLeave: () => {
+                railRef.current?.style.setProperty('--method-finish', '1')
+                lastReachedRef.current = PILLARS.length
+                setReachedCount(PILLARS.length)
+              },
+              onLeaveBack: () => {
+                railRef.current?.style.setProperty('--method-finish', '0')
+                lastReachedRef.current = 0
+                setReachedCount(0)
+              },
+            },
+          })
+
+          return () => tween.scrollTrigger?.kill()
         })
+
+        methodMedia.add('(max-width: 1100px)', () => {
+          const tween = gsap.to(railRef.current, {
+            '--method-progress': 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 72%',
+              end: 'bottom 72%',
+              scrub: 1.25,
+              invalidateOnRefresh: true,
+              onUpdate: updateReached,
+              onLeave: () => {
+                railRef.current?.style.setProperty('--method-finish', '1')
+              },
+              onLeaveBack: () => {
+                railRef.current?.style.setProperty('--method-finish', '0')
+              },
+            },
+          })
+
+          return () => tween.scrollTrigger?.kill()
+        })
+
+        return () => methodMedia.revert()
       }
     }, sectionRef)
 
@@ -162,7 +205,7 @@ export default function MethodSection() {
                 ))}
               </div>
               <div className="method__wheel-core">
-                <span>EXP</span>
+                <img src={expLogo} alt="" />
               </div>
             </div>
           </div>

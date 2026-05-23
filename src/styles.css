@@ -970,7 +970,8 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
 .page-hero {
   background: var(--off-white);
   color: var(--graphite);
-  padding: clamp(140px, 18vw, 220px) var(--gutter) clamp(72px, 9vw, 120px);
+  margin-top: -104px; /* slide under the sticky header so its glass blurs over the section */
+  padding: clamp(244px, 26vw, 324px) var(--gutter) clamp(72px, 9vw, 120px);
   position: relative;
 }
 
@@ -1460,7 +1461,8 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
 
 @media (max-width: 860px) {
   .page-hero {
-    padding-top: clamp(120px, 28vw, 160px);
+    margin-top: -80px; /* matches mobile header height */
+    padding-top: clamp(200px, 36vw, 240px);
     padding-bottom: clamp(56px, 12vw, 80px);
   }
 
@@ -1563,29 +1565,93 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   font-size: 0.8rem;
 }
 
-/* ───────── 1. Hero (dark, two-column) ───────── */
+/* ───────── 1. Hero (cinematic dark, two-column) ───────── */
 
 .sol-hero {
   position: relative;
-  background: #0b0b0b;
+  isolation: isolate;
   color: #f7f5f0;
+  margin-top: -104px; /* slide under the sticky header so its glass blurs over the dark hero */
   padding:
-    clamp(128px, 14vw, 180px)
+    clamp(208px, 18vw, 240px)
     var(--gutter)
-    clamp(72px, 9vw, 120px);
+    clamp(80px, 10vw, 128px);
+  min-height: calc(88vh + 104px); /* visible portion ~88vh after header offset */
+  display: flex;
+  align-items: center;
   overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse 80% 70% at 76% 50%,
+      rgba(216, 185, 140, 0.07) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 80% at 18% 30%,
+      rgba(20, 20, 20, 0.6) 0%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #0c0c0c 0%, #050505 100%);
 }
 
+/* Soft warm spotlight behind the mockup — adds cinematic depth */
+.sol-hero__glow {
+  position: absolute;
+  right: -8%;
+  top: 50%;
+  width: clamp(520px, 56vw, 880px);
+  height: clamp(520px, 56vw, 880px);
+  transform: translateY(-50%);
+  background: radial-gradient(
+    circle,
+    rgba(216, 185, 140, 0.09) 0%,
+    rgba(216, 185, 140, 0.04) 30%,
+    transparent 65%
+  );
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Champagne X watermark — behind the text block, low presence */
 .sol-hero__x-mark {
   position: absolute;
-  left: -3%;
-  bottom: -10%;
-  width: clamp(280px, 36vw, 520px);
+  left: -10%;
+  top: 50%;
+  width: clamp(420px, 48vw, 700px);
   height: auto;
-  opacity: 0.05;
+  transform: translateY(-50%);
+  opacity: 0;
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  animation: solHeroXIn 1.6s cubic-bezier(0.22, 0.7, 0.2, 1) 0.2s forwards;
+}
+
+/* Fine champagne diagonals — echo the X motif, very subtle */
+.sol-hero__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  animation: solHeroLinesIn 1.6s cubic-bezier(0.22, 0.7, 0.2, 1) 0.35s forwards;
+}
+
+.sol-hero__lines line {
+  stroke: var(--champagne);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+@keyframes solHeroXIn {
+  to { opacity: 0.05; }
+}
+
+@keyframes solHeroLinesIn {
+  to { opacity: 0.045; }
 }
 
 .sol-hero__inner {
@@ -1593,15 +1659,15 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   z-index: 1;
   max-width: var(--sol-container);
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  gap: clamp(40px, 6vw, 88px);
-  align-items: center;
+  width: 100%;
+  display: block;
 }
 
 .sol-hero__content {
   display: block;
   max-width: 560px;
+  position: relative;
+  z-index: 2;
 }
 
 .sol-hero__eyebrow {
@@ -1609,18 +1675,30 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   font-family: var(--font-body);
   font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.38em;
+  letter-spacing: 0.4em;
   text-transform: uppercase;
   color: var(--champagne);
+  position: relative;
+  padding-left: 52px;
+}
+
+.sol-hero__eyebrow::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 36px;
+  height: 1px;
+  background: var(--champagne);
 }
 
 .sol-hero__title {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(40px, 4.6vw, 68px);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
-  margin: clamp(20px, 2vw, 28px) 0 0;
+  font-size: clamp(40px, 4.8vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -0.018em;
+  margin: clamp(24px, 2.4vw, 36px) 0 0;
   max-width: 14ch;
   color: #f7f5f0;
 }
@@ -1630,7 +1708,7 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   font-weight: 300;
   font-size: clamp(17px, 1.3vw, 20px);
   line-height: 1.55;
-  margin: clamp(20px, 2.4vw, 32px) 0 0;
+  margin: clamp(24px, 2.6vw, 36px) 0 0;
   max-width: 44ch;
   color: rgba(247, 245, 240, 0.82);
 }
@@ -1641,89 +1719,113 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   line-height: 1.7;
   margin: clamp(20px, 2.2vw, 30px) 0 0;
   max-width: 46ch;
-  color: rgba(247, 245, 240, 0.6);
+  color: rgba(247, 245, 240, 0.58);
 }
 
 .sol-hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: clamp(32px, 3.6vw, 48px);
+  margin-top: clamp(40px, 4.6vw, 60px);
 }
 
-/* Image placeholder — replaces the future hero photograph */
+/* ─── Visual — mockup as full-bleed atmospheric layer ─── */
+
 .sol-hero__visual {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sol-hero__placeholder {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background:
-    radial-gradient(
-      circle at 60% 40%,
-      rgba(216, 185, 140, 0.08),
-      transparent 60%
-    ),
-    linear-gradient(180deg, #131313 0%, #0a0a0a 100%);
-  border: 1px solid rgba(247, 245, 240, 0.08);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  overflow: hidden;
-}
-
-.sol-hero__placeholder::before,
-.sol-hero__placeholder::after {
-  content: '';
   position: absolute;
-  width: 28px;
-  height: 28px;
-  border-color: rgba(216, 185, 140, 0.4);
-  border-style: solid;
-}
-
-.sol-hero__placeholder::before {
-  top: 18px;
-  left: 18px;
-  border-width: 1px 0 0 1px;
-}
-
-.sol-hero__placeholder::after {
-  bottom: 18px;
-  right: 18px;
-  border-width: 0 1px 1px 0;
-}
-
-.sol-hero__placeholder-mark {
-  width: clamp(120px, 18vw, 200px);
-  height: auto;
-  opacity: 0.4;
-  user-select: none;
+  inset: 0;
+  z-index: 0;
+  display: block;
   pointer-events: none;
 }
 
-.sol-hero__placeholder-label {
-  font-family: var(--font-body);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: rgba(216, 185, 140, 0.5);
+.sol-hero__image-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sol-hero__image {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  /* Anchor the mockup toward the right so the three cadernos
+     (Mentoría · Consultoría · Marketing Digital) stay visible. */
+  object-position: right center;
+  /* Full-hero coverage: image fades out completely on the left so
+     the headline column reads cleanly against the dark background. */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.08) 18%,
+    rgba(0, 0, 0, 0.55) 38%,
+    #000 60%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.08) 18%,
+    rgba(0, 0, 0, 0.55) 38%,
+    #000 60%,
+    #000 100%
+  );
+  user-select: none;
+}
+
+/* Integration overlay — deepens the left side into the dark hero
+   atmosphere and adds a soft champagne glow at the center. */
+.sol-hero__image-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.98) 0%,
+      rgba(0, 0, 0, 0.85) 18%,
+      rgba(0, 0, 0, 0.45) 40%,
+      rgba(0, 0, 0, 0.12) 65%,
+      rgba(0, 0, 0, 0) 85%
+    ),
+    radial-gradient(
+      ellipse 70% 80% at 78% 50%,
+      rgba(216, 185, 140, 0.08),
+      transparent 60%
+    );
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sol-hero__x-mark {
+    opacity: 0.05;
+    animation: none;
+  }
+  .sol-hero__lines {
+    opacity: 0.045;
+    animation: none;
+  }
 }
 
 /* ───────── 2. Paths section (3 cards) ───────── */
 
 .sol-paths {
+  position: relative;
+  z-index: 2;
   background: var(--off-white);
   color: var(--graphite);
   padding: clamp(80px, 10vw, 140px) var(--gutter);
+  /* Rises over the hero — straight top edge + overlap + soft shadow
+     give the impression the off-white sheet is lifting up from below. */
+  margin-top: clamp(-112px, -9vh, -56px);
+  box-shadow: 0 -28px 60px -24px rgba(0, 0, 0, 0.55);
+  will-change: transform;
 }
 
 .sol-paths__head {
@@ -2126,13 +2228,17 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
 
 @media (max-width: 860px) {
   .sol-hero {
-    padding-top: clamp(112px, 24vw, 152px);
-    padding-bottom: clamp(56px, 12vw, 88px);
+    margin-top: -80px; /* matches mobile header height */
+    padding-top: clamp(168px, 28vw, 208px);
+    padding-bottom: clamp(64px, 12vw, 96px);
+    min-height: 0;
+    align-items: stretch;
   }
 
   .sol-hero__inner {
-    grid-template-columns: 1fr;
-    gap: clamp(36px, 8vw, 56px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 9vw, 60px);
   }
 
   .sol-hero__title { font-size: clamp(36px, 9.5vw, 56px); }
@@ -2141,7 +2247,64 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   .sol-hero__actions { flex-direction: column; align-items: stretch; }
   .sol-btn { width: 100%; }
 
-  .sol-hero__placeholder { aspect-ratio: 4 / 3.2; }
+  /* On mobile the mockup returns to the document flow below the text. */
+  .sol-hero__visual {
+    position: relative;
+    inset: auto;
+    margin: 0;
+  }
+
+  /* Looser ratio + soft top fade so the mockup blends down into the
+     dark section rather than into the text. */
+  .sol-hero__image-wrap {
+    position: relative;
+    inset: auto;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .sol-hero__image {
+    object-position: center center;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 8%,
+      #000 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 8%,
+      #000 100%
+    );
+  }
+
+  .sol-hero__image-wrap::after {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0) 30%
+      ),
+      radial-gradient(
+        circle at center,
+        rgba(216, 185, 140, 0.06),
+        transparent 60%
+      );
+  }
+
+  .sol-hero__x-mark {
+    left: -25%;
+    width: 480px;
+  }
+
+  .sol-hero__glow {
+    right: -30%;
+    top: 70%;
+    width: 520px;
+    height: 520px;
+  }
+
 
   .sol-paths { padding: clamp(64px, 14vw, 96px) var(--gutter); }
   .sol-paths__title { font-size: clamp(28px, 7.4vw, 38px); }
@@ -2187,5 +2350,3 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   .sol-diag__action .sol-btn { width: 100%; }
   .sol-diag__x { width: 180px; opacity: 0.03; }
 }
-
-

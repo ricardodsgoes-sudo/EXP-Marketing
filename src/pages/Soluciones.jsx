@@ -1,7 +1,10 @@
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import RevealOnScroll from '../components/RevealOnScroll'
-import expWordmarkLight from '../assets/exp-wordmark-light.png'
 import expX from '../assets/exp-x-light.png'
+import solucionesHero from '../assets/soluciones-hero.png'
 
 const PATHS = [
   {
@@ -113,15 +116,74 @@ function scrollToAnchor(id) {
 }
 
 export default function Soluciones() {
+  const heroRef = useRef(null)
+  const heroContentRef = useRef(null)
+  const pathsRef = useRef(null)
+
   const handleCompareClick = (e) => {
     e.preventDefault()
     scrollToAnchor('comparar-soluciones')
   }
 
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (mq.matches) return
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const ctx = gsap.context(() => {
+      // Paths section rises over the hero — scrubbed translate so the
+      // off-white sheet lifts up while the hero stays anchored. Combined
+      // with the negative margin + rounded top edge in CSS, this reads
+      // as a true parallax cover-up.
+      if (pathsRef.current && heroRef.current) {
+        gsap.fromTo(
+          pathsRef.current,
+          { y: 140 },
+          {
+            y: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: pathsRef.current,
+              start: 'top bottom',
+              end: 'top 30%',
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+            },
+          },
+        )
+      }
+
+      // Hero content drifts up slightly slower than the page scroll, so
+      // it appears to linger as the paths section rises over it.
+      if (heroContentRef.current && heroRef.current) {
+        gsap.to(heroContentRef.current, {
+          y: -48,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        })
+      }
+
+    })
+
+    return () => ctx.revert()
+  }, [])
+
   return (
     <>
       {/* ── 1. HERO ─────────────────────────────────────────── */}
-      <section className="sol-hero" aria-labelledby="sol-hero-title">
+      <section
+        className="sol-hero"
+        aria-labelledby="sol-hero-title"
+        ref={heroRef}
+      >
+        {/* Background layers: champagne X watermark + subtle diagonal accents */}
         <img
           src={expX}
           alt=""
@@ -129,9 +191,31 @@ export default function Soluciones() {
           aria-hidden="true"
           draggable="false"
         />
+        <svg
+          className="sol-hero__lines"
+          viewBox="0 0 1000 1000"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <line x1="0" y1="0" x2="1000" y2="1000" />
+          <line x1="1000" y1="0" x2="0" y2="1000" />
+        </svg>
+        <span className="sol-hero__glow" aria-hidden="true" />
+
+        <RevealOnScroll as="div" className="sol-hero__visual" delay={580}>
+          <div className="sol-hero__image-wrap">
+            <img
+              src={solucionesHero}
+              alt=""
+              className="sol-hero__image"
+              draggable="false"
+            />
+          </div>
+        </RevealOnScroll>
 
         <div className="sol-hero__inner">
-          <div className="sol-hero__content">
+          <div className="sol-hero__content" ref={heroContentRef}>
             <RevealOnScroll as="span" className="sol-hero__eyebrow" delay={0}>
               Soluciones EXP
             </RevealOnScroll>
@@ -156,7 +240,7 @@ export default function Soluciones() {
               estratégica y servicios de marketing digital.
             </RevealOnScroll>
 
-            <RevealOnScroll as="div" className="sol-hero__actions" delay={460}>
+            <RevealOnScroll as="div" className="sol-hero__actions" delay={480}>
               <Link to="/#cta" className="sol-btn sol-btn--primary">
                 Solicitar diagnóstico estratégico
               </Link>
@@ -169,25 +253,15 @@ export default function Soluciones() {
               </a>
             </RevealOnScroll>
           </div>
-
-          <div className="sol-hero__visual" aria-hidden="true">
-            <div className="sol-hero__placeholder">
-              <img
-                src={expWordmarkLight}
-                alt=""
-                className="sol-hero__placeholder-mark"
-                draggable="false"
-              />
-              <span className="sol-hero__placeholder-label">
-                Imagen pendiente
-              </span>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* ── 2. PATHS ────────────────────────────────────────── */}
-      <section className="sol-paths" aria-labelledby="sol-paths-title">
+      <section
+        className="sol-paths"
+        aria-labelledby="sol-paths-title"
+        ref={pathsRef}
+      >
         <div className="sol-paths__head">
           <RevealOnScroll
             as="h2"

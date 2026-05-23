@@ -2350,3 +2350,726 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   .sol-diag__action .sol-btn { width: 100%; }
   .sol-diag__x { width: 180px; opacity: 0.03; }
 }
+
+/* ============================================================
+   MENTORÍA — editorial single-page layout
+   Sections: hero · pain/gain · for-whom · how (timeline) · outcomes · CTA
+   ============================================================ */
+
+.mentoria-hero,
+.mentoria-pg,
+.mentoria-forwhom,
+.mentoria-how,
+.mentoria-outcomes {
+  --mentoria-container: 1360px;
+}
+
+/* ───────── Buttons (page-scoped) ───────── */
+
+.mentoria-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 320ms ease,
+    color 320ms ease,
+    transform 320ms ease,
+    gap 320ms ease;
+}
+
+.mentoria-btn--primary {
+  height: 54px;
+  padding: 0 clamp(24px, 2vw, 34px);
+  background: var(--champagne);
+  color: var(--graphite);
+  border: 1px solid var(--champagne);
+}
+
+.mentoria-btn--primary:hover {
+  background: #c5a679;
+  border-color: #c5a679;
+  transform: translateY(-1px);
+}
+
+.mentoria-btn--link {
+  color: #f3ebdc;
+  padding: 0 4px;
+}
+
+.mentoria-btn--link svg {
+  width: 18px;
+  height: 18px;
+  /* inherit color from the link — defaults to off-white, becomes
+     champagne on hover via the parent rule. */
+  transition: transform 320ms ease;
+}
+
+.mentoria-btn--link:hover { color: var(--champagne); gap: 16px; }
+.mentoria-btn--link:hover svg { transform: translateX(4px); }
+
+/* ───────── 1. Hero ───────── */
+
+.mentoria-hero {
+  position: relative;
+  isolation: isolate;
+  color: #f3ebdc;
+  margin-top: -104px;
+  padding:
+    clamp(180px, 16vw, 224px)
+    var(--gutter)
+    clamp(80px, 10vw, 128px);
+  background:
+    radial-gradient(
+      ellipse 60% 80% at 16% 30%,
+      rgba(20, 20, 20, 0.55) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 80% at 86% 50%,
+      rgba(216, 185, 140, 0.06) 0%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #0c0c0c 0%, #050505 100%);
+  overflow: hidden;
+}
+
+.mentoria-hero__inner {
+  max-width: var(--mentoria-container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(40px, 5vw, 80px);
+  align-items: center;
+}
+
+.mentoria-hero__content {
+  max-width: 600px;
+  position: relative;
+  z-index: 2;
+}
+
+.mentoria-hero__eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(247, 245, 240, 0.62);
+  position: relative;
+  padding-left: 52px;
+}
+
+.mentoria-hero__eyebrow::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 36px;
+  height: 1px;
+  background: rgba(247, 245, 240, 0.4);
+}
+
+.mentoria-hero__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(38px, 4.4vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.018em;
+  margin: clamp(24px, 2.4vw, 36px) 0 0;
+  color: #f7f5f0;
+}
+
+.mentoria-hero__lead {
+  font-family: var(--font-body);
+  font-size: clamp(15.5px, 1.1vw, 18px);
+  line-height: 1.65;
+  margin: clamp(24px, 2.6vw, 36px) 0 0;
+  max-width: 50ch;
+  color: rgba(247, 245, 240, 0.82);
+}
+
+.mentoria-hero__support {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1vw, 16px);
+  line-height: 1.7;
+  margin: clamp(16px, 1.8vw, 24px) 0 0;
+  max-width: 52ch;
+  color: rgba(247, 245, 240, 0.55);
+}
+
+.mentoria-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(20px, 2vw, 36px);
+  margin-top: clamp(36px, 4vw, 56px);
+}
+
+.mentoria-hero__visual {
+  position: relative;
+  align-self: stretch;
+  min-height: clamp(420px, 56vh, 620px);
+  margin-right: clamp(-48px, -3.2vw, -16px);
+}
+
+.mentoria-hero__photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #0e0e0e;
+  background-image:
+    radial-gradient(
+      circle at 30% 35%,
+      rgba(216, 185, 140, 0.12) 0%,
+      transparent 55%
+    ),
+    linear-gradient(180deg, #1a1814 0%, #0c0a08 100%);
+  will-change: transform;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.6);
+}
+
+.mentoria-photo-placeholder__label {
+  position: absolute;
+  bottom: 16px;
+  right: 18px;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(216, 185, 140, 0.45);
+  padding: 8px 12px;
+  border: 1px dashed rgba(216, 185, 140, 0.3);
+}
+
+/* ───────── 2. Pain / Gain ───────── */
+
+.mentoria-pg {
+  position: relative;
+  background: var(--off-white);
+  color: var(--graphite);
+  padding: clamp(80px, 10vw, 128px) var(--gutter);
+}
+
+.mentoria-pg__inner {
+  max-width: var(--mentoria-container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: clamp(40px, 5vw, 80px);
+  align-items: start;
+}
+
+.mentoria-pg__divider {
+  display: block;
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(23, 23, 23, 0.12) 20%,
+    rgba(23, 23, 23, 0.12) 80%,
+    transparent 100%
+  );
+}
+
+.mentoria-pg__eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.55);
+}
+
+.mentoria-pg__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(28px, 2.8vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  margin: clamp(20px, 2vw, 28px) 0 0;
+  color: var(--graphite);
+}
+
+.mentoria-pg__body {
+  font-family: var(--font-body);
+  font-size: clamp(14.5px, 1vw, 16px);
+  line-height: 1.7;
+  margin: clamp(20px, 2vw, 28px) 0 clamp(28px, 3vw, 40px);
+  color: rgba(23, 23, 23, 0.65);
+  max-width: 48ch;
+}
+
+.mentoria-pg__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mentoria-pg__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  font-family: var(--font-body);
+  font-size: clamp(14.5px, 1vw, 16px);
+  line-height: 1.55;
+  color: rgba(23, 23, 23, 0.78);
+  transition: transform 240ms ease, color 240ms ease;
+}
+
+.mentoria-pg__item:hover {
+  color: var(--graphite);
+  transform: translateX(2px);
+}
+
+.mentoria-pg__icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+}
+
+.mentoria-pg__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Pain X = quiet graphite (problem, not solution).
+   Gain ✓ = champagne — the ONE place ✓ icons earn the accent. */
+.mentoria-pg__item--pain .mentoria-pg__icon { color: rgba(23, 23, 23, 0.38); }
+.mentoria-pg__item--gain .mentoria-pg__icon { color: var(--champagne); }
+
+/* ───────── 3. Para quién es ───────── */
+
+.mentoria-forwhom {
+  position: relative;
+  background:
+    radial-gradient(
+      ellipse 50% 70% at 20% 20%,
+      rgba(216, 185, 140, 0.04) 0%,
+      transparent 60%
+    ),
+    linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+  color: #f3ebdc;
+  padding: clamp(80px, 10vw, 128px) var(--gutter);
+}
+
+.mentoria-forwhom__inner {
+  max-width: var(--mentoria-container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  gap: clamp(40px, 5vw, 96px);
+  align-items: start;
+}
+
+.mentoria-forwhom__lead { max-width: 440px; }
+
+.mentoria-forwhom__eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(247, 245, 240, 0.55);
+}
+
+.mentoria-forwhom__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(30px, 3.4vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -0.014em;
+  margin: clamp(20px, 2vw, 28px) 0 0;
+  color: #f7f5f0;
+}
+
+.mentoria-forwhom__body {
+  font-family: var(--font-body);
+  font-size: clamp(14.5px, 1vw, 16px);
+  line-height: 1.7;
+  margin: clamp(20px, 2vw, 28px) 0 0;
+  color: rgba(247, 245, 240, 0.58);
+}
+
+.mentoria-forwhom__list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.6vw, 24px);
+}
+
+.mentoria-forwhom__item {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 2.6vw, 36px);
+  font-family: var(--font-body);
+  font-size: clamp(16px, 1.2vw, 19px);
+  font-weight: 300;
+  line-height: 1.4;
+  color: rgba(247, 245, 240, 0.92);
+  padding: clamp(8px, 1vw, 14px) 0;
+}
+
+.mentoria-forwhom__rule {
+  flex-shrink: 0;
+  display: block;
+  width: clamp(36px, 4vw, 56px);
+  height: 1px;
+  background: rgba(247, 245, 240, 0.4);
+}
+
+.mentoria-forwhom__text { flex: 1; }
+
+/* ───────── 4. Cómo funciona (4-step timeline) ───────── */
+
+.mentoria-how {
+  position: relative;
+  background: #f1ede5;
+  color: var(--graphite);
+  padding: clamp(80px, 10vw, 128px) var(--gutter);
+}
+
+.mentoria-how__inner {
+  max-width: var(--mentoria-container);
+  margin: 0 auto;
+}
+
+.mentoria-how__eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.6);
+  margin-bottom: clamp(48px, 5vw, 80px);
+}
+
+.mentoria-how__timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(20px, 2.4vw, 40px);
+}
+
+.mentoria-how__line {
+  position: absolute;
+  /* aligns with the vertical center of the numbered circle, which sits
+     below the 96px icon + its 28px bottom margin (96 + 28 + 28 = 152). */
+  top: 152px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--champagne) 12%,
+    var(--champagne) 88%,
+    transparent 100%
+  );
+  transform-origin: left center;
+  z-index: 0;
+}
+
+.mentoria-step {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 clamp(6px, 1vw, 14px);
+}
+
+/* ───── Editorial step icon (above the numbered circle) ─────
+   Each icon is a layered composition:
+     · ambient — sparse grid dots / time-axis ticks (opacity ≈ 0.12)
+     · faint   — structural reference rings / brackets (opacity ≈ 0.30)
+     · hint    — annotations, crosshairs, dashed predictions (opacity ≈ 0.22)
+     · main    — primary lines, default color (opacity ≈ 0.82)
+     · accent  — single champagne focal element with halo
+   GSAP draws strokes in via stroke-dashoffset and stages the layers
+   in sequence (ambient → faint → main → accent) for cinematic reveal. */
+
+.mentoria-step__icon-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 96px;
+  margin-bottom: 28px;
+}
+
+.step-icon {
+  display: block;
+  width: 96px;
+  height: 96px;
+  color: rgba(23, 23, 23, 0.82);
+  overflow: visible;
+}
+
+/* Default stroke treatment for ALL stroked elements */
+.step-icon path,
+.step-icon line,
+.step-icon circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.step-icon [pathLength] {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+/* ── Weight tier: ambient (background grid / axis ticks) ── */
+.step-icon__ambient {
+  opacity: 0.14;
+}
+.step-icon__ambient circle {
+  fill: currentColor;
+  stroke: none;
+}
+.step-icon__ambient line {
+  stroke: currentColor;
+  stroke-width: 0.8;
+}
+
+/* ── Weight tier: faint (structural references) ── */
+.step-icon__faint {
+  stroke: rgba(23, 23, 23, 0.34) !important;
+}
+
+/* ── Weight tier: hint (annotations, crosshairs, dashed) ── */
+.step-icon__hint {
+  stroke: rgba(23, 23, 23, 0.22) !important;
+}
+
+.step-icon__hint-dashed {
+  stroke: rgba(23, 23, 23, 0.32) !important;
+  stroke-dasharray: 3 3;
+}
+/* Override pathLength dasharray for the dashed hint after draw-in */
+.step-icon__hint-dashed[pathLength] {
+  stroke-dasharray: 3 3;
+}
+
+/* ── Solid dots and hollow nodes ── */
+.step-icon__dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.step-icon__node {
+  fill: #f1ede5; /* matches the section background — looks "punched out" */
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+
+/* ── Champagne focal accents ── */
+.step-icon__accent {
+  fill: var(--champagne);
+  stroke: none;
+}
+
+.step-icon__accent-line {
+  stroke: var(--champagne) !important;
+  stroke-width: 1.2;
+}
+
+.step-icon__accent-ring {
+  stroke: var(--champagne) !important;
+  stroke-width: 1;
+  opacity: 0.55;
+}
+
+.mentoria-step__num {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  /* Graphite circles sitting on the champagne thread — the line is the
+     accent; the numbers themselves are quiet, editorial. */
+  border: 1px solid rgba(23, 23, 23, 0.7);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 1.05rem;
+  color: var(--graphite);
+  background: #f1ede5;
+}
+
+.mentoria-step__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(20px, 1.6vw, 26px);
+  line-height: 1.2;
+  margin: clamp(22px, 2vw, 30px) 0 clamp(12px, 1.2vw, 18px);
+  color: var(--graphite);
+}
+
+.mentoria-step__text {
+  font-family: var(--font-body);
+  font-size: clamp(13.5px, 0.95vw, 15px);
+  line-height: 1.65;
+  color: rgba(23, 23, 23, 0.65);
+  max-width: 30ch;
+  margin: 0 auto;
+}
+
+/* ───────── 5. Outcomes ───────── */
+
+.mentoria-outcomes {
+  background: #ebe6db;
+  color: var(--graphite);
+  padding: clamp(64px, 8vw, 96px) var(--gutter);
+}
+
+.mentoria-outcomes__inner {
+  max-width: var(--mentoria-container);
+  margin: 0 auto;
+}
+
+.mentoria-outcomes__eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.6);
+  margin-bottom: clamp(28px, 3vw, 40px);
+}
+
+.mentoria-outcomes__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: clamp(40px, 6vw, 96px);
+  row-gap: clamp(12px, 1.4vw, 20px);
+}
+
+.mentoria-outcomes__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-body);
+  font-size: clamp(14.5px, 1vw, 16.5px);
+  line-height: 1.45;
+  color: rgba(23, 23, 23, 0.85);
+  padding: clamp(8px, 1vw, 14px) 0;
+}
+
+.mentoria-outcomes__icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: rgba(23, 23, 23, 0.7);
+}
+
+.mentoria-outcomes__icon svg { width: 100%; height: 100%; }
+
+/* ───────── Reduced motion ───────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .mentoria-hero__photo {
+    transform: none !important;
+  }
+  .mentoria-how__line {
+    transform: scaleX(1) !important;
+  }
+  /* SVG icons remain fully drawn (CSS default) — no scrub or stagger
+     when motion is disabled. */
+  .step-icon [pathLength] {
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* ───────── Mobile (≤860px) ───────── */
+
+@media (max-width: 860px) {
+  .mentoria-hero {
+    margin-top: -80px;
+    padding-top: clamp(140px, 26vw, 184px);
+    padding-bottom: clamp(56px, 12vw, 96px);
+  }
+  .mentoria-hero__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 9vw, 56px);
+  }
+  .mentoria-hero__visual {
+    min-height: clamp(280px, 60vw, 380px);
+    margin-right: 0;
+  }
+  .mentoria-hero__actions { flex-direction: column; align-items: stretch; }
+  .mentoria-btn--primary { width: 100%; }
+  .mentoria-btn--link { justify-content: flex-start; padding: 0; }
+
+  .mentoria-pg { padding: clamp(64px, 14vw, 96px) var(--gutter); }
+  .mentoria-pg__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(48px, 9vw, 64px);
+  }
+  .mentoria-pg__divider {
+    width: auto;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(23, 23, 23, 0.16) 20%,
+      rgba(23, 23, 23, 0.16) 80%,
+      transparent 100%
+    );
+  }
+
+  .mentoria-forwhom { padding: clamp(64px, 14vw, 96px) var(--gutter); }
+  .mentoria-forwhom__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(36px, 7vw, 48px);
+  }
+
+  .mentoria-how { padding: clamp(64px, 14vw, 96px) var(--gutter); }
+  .mentoria-how__timeline {
+    grid-template-columns: 1fr;
+    gap: clamp(32px, 6vw, 48px);
+  }
+  .mentoria-how__line {
+    top: 28px;
+    bottom: 28px;
+    left: 50%;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--champagne) 12%,
+      var(--champagne) 88%,
+      transparent 100%
+    );
+    transform-origin: top center;
+  }
+  .mentoria-step { text-align: center; padding: 0; }
+
+  .mentoria-outcomes { padding: clamp(48px, 12vw, 80px) var(--gutter); }
+  .mentoria-outcomes__grid { grid-template-columns: 1fr; }
+}

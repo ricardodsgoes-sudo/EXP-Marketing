@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import logoBranca from '../assets/exp-wordmark-light.png'
-import expX from '../assets/exp-x-light.png'
 import './Footer.css'
 
 const SOLUTIONS = [
@@ -80,7 +79,6 @@ export default function Footer() {
 
   return (
     <footer className="footer" role="contentinfo">
-      <img src={expX} alt="" className="footer__x-mark" aria-hidden="true" draggable="false" />
       <div className="footer__inner">
         <div className="footer__cols">
           {/* Col 1 — Brand */}

@@ -2709,32 +2709,84 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
 }
 
 .mentoria-forwhom__list {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(14px, 1.6vw, 24px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid rgba(247, 245, 240, 0.16);
+  border-left: 1px solid rgba(247, 245, 240, 0.16);
 }
 
 .mentoria-forwhom__item {
-  display: flex;
-  align-items: center;
-  gap: clamp(20px, 2.6vw, 36px);
+  position: relative;
+  min-height: clamp(132px, 12vw, 176px);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-content: space-between;
+  gap: clamp(24px, 3vw, 42px);
+  padding: clamp(22px, 2.3vw, 34px);
+  border-right: 1px solid rgba(247, 245, 240, 0.16);
+  border-bottom: 1px solid rgba(247, 245, 240, 0.16);
+  outline: none;
+  overflow: hidden;
   font-family: var(--font-body);
-  font-size: clamp(16px, 1.2vw, 19px);
+  font-size: clamp(15px, 1.05vw, 18px);
   font-weight: 300;
   line-height: 1.4;
   color: rgba(247, 245, 240, 0.92);
-  padding: clamp(8px, 1vw, 14px) 0;
+  background: rgba(247, 245, 240, 0.018);
+  cursor: default;
+  transition:
+    color 260ms ease,
+    border-color 260ms ease,
+    background 260ms ease;
 }
 
-.mentoria-forwhom__rule {
-  flex-shrink: 0;
-  display: block;
-  width: clamp(36px, 4vw, 56px);
-  height: 1px;
-  background: rgba(247, 245, 240, 0.4);
+.mentoria-forwhom__item:nth-child(3) {
+  grid-column: span 2;
 }
 
-.mentoria-forwhom__text { flex: 1; }
+.mentoria-forwhom__item:hover,
+.mentoria-forwhom__item:focus-visible {
+  color: var(--graphite);
+  border-color: rgba(216, 185, 140, 0.42);
+}
+
+.mentoria-forwhom__item:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(216, 185, 140, 0.72);
+}
+
+.mentoria-forwhom__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(135deg, var(--champagne) 0%, #e5cfac 100%);
+  clip-path: polygon(0 0, 100% 0, 0 0, 0% 100%);
+  pointer-events: none;
+}
+
+.mentoria-forwhom__num,
+.mentoria-forwhom__text {
+  position: relative;
+  z-index: 1;
+}
+
+.mentoria-forwhom__num {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 3.4vw, 52px);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: rgba(216, 185, 140, 0.84);
+  transition: color 260ms ease;
+}
+
+.mentoria-forwhom__item:hover .mentoria-forwhom__num,
+.mentoria-forwhom__item:focus-visible .mentoria-forwhom__num {
+  color: rgba(23, 23, 23, 0.42);
+}
+
+.mentoria-forwhom__text {
+  max-width: 24ch;
+}
 
 /* ───────── 4. Cómo funciona (4-step timeline) ───────── */
 
@@ -2743,22 +2795,136 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   background: #f1ede5;
   color: var(--graphite);
   padding: clamp(80px, 10vw, 128px) var(--gutter);
+  overflow: visible;
+  isolation: isolate;
+}
+
+/* Giant EXP X-mark watermark, fixed in place so it stays visible
+   as the user scrolls through the entire stacking section.
+   Sits behind everything via z-index: -2. */
+.mentoria-how::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--mentoria-mark-url);
+  background-repeat: no-repeat;
+  background-position: center 38%;
+  background-size: auto min(72vh, 720px);
+  background-attachment: fixed;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Paper grain — an inline SVG turbulence filter as a tiled
+   background. Very low opacity so it reads as a tactile noise,
+   not as a pattern. */
+.mentoria-how::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.09  0 0 0 0 0.09  0 0 0 0 0.09  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .mentoria-how__inner {
   max-width: var(--mentoria-container);
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.mentoria-how__header {
+  max-width: 1080px;
+  margin: 0 auto clamp(42px, 6vw, 76px);
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.55fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: end;
 }
 
 .mentoria-how__eyebrow {
-  display: block;
+  display: inline-flex;
   font-family: var(--font-body);
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(23, 23, 23, 0.6);
-  margin-bottom: clamp(48px, 5vw, 80px);
+  color: rgba(23, 23, 23, 0.58);
+  margin-bottom: clamp(18px, 2vw, 26px);
+  grid-column: 1 / -1;
+}
+
+.mentoria-how__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(42px, 5vw, 74px);
+  line-height: 0.98;
+  letter-spacing: 0;
+  color: var(--graphite);
+  margin: 0;
+  max-width: 760px;
+}
+
+.mentoria-how__lead {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.72;
+  color: rgba(23, 23, 23, 0.68);
+  margin: 0;
+  max-width: 430px;
+}
+
+.mentoria-how__track {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid rgba(23, 23, 23, 0.14);
+  border-bottom: 1px solid rgba(23, 23, 23, 0.14);
+}
+
+.mentoria-how__track-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 16px clamp(12px, 1.8vw, 22px);
+  font-family: var(--font-body);
+  font-size: clamp(11px, 0.82vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.58);
+}
+
+.mentoria-how__track-step + .mentoria-how__track-step {
+  border-left: 1px solid rgba(23, 23, 23, 0.12);
+}
+
+.mentoria-how__track-step::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: calc((var(--i, 0) + 1) * 18px);
+  height: 1px;
+  background: var(--champagne);
+}
+
+.mentoria-how__track-step span {
+  font-family: var(--font-display);
+  font-size: clamp(21px, 2vw, 30px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--champagne);
 }
 
 /* ───── Stacking cards (Cómo funciona)
@@ -2775,29 +2941,54 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   position: relative;
   /* No fixed height — total height = sum of card heights + per-card
      100vh runway gaps (set via margin-top on the cards themselves). */
-  padding-bottom: clamp(40px, 8vh, 96px);
+  padding-bottom: clamp(80px, 12vh, 140px);
 }
 
 .mentoria-stack__card {
   position: sticky;
   /* Sticky offset grows per card so cards fan out as they stack. */
-  top: calc(clamp(80px, 12vh, 120px) + var(--stack-offset, 0px));
+  top: calc(clamp(88px, 12vh, 118px) + var(--stack-offset, 0px));
   width: 100%;
-  max-width: 1080px;
+  max-width: 1120px;
   margin-left: auto;
   margin-right: auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-  gap: clamp(32px, 4vw, 56px);
+  gap: clamp(28px, 4vw, 56px);
   align-items: stretch;
-  background: var(--off-white);
+  /* ── Glass surface ── translucent off-white tinted with a soft
+     vertical highlight; backdrop-filter blurs whatever sits behind
+     (watermark, paper grain, previous stacked cards) for a frosted
+     glass effect. The fallback background (no backdrop-filter) is
+     opaque enough to stay legible on older browsers. */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(247, 247, 245, 0.58) 100%
+    );
+  -webkit-backdrop-filter: blur(22px) saturate(1.15);
+  backdrop-filter: blur(22px) saturate(1.15);
   border: 1px solid rgba(23, 23, 23, 0.08);
   border-radius: 4px;
   padding: clamp(32px, 3.6vw, 56px);
-  box-shadow: 0 32px 64px -28px rgba(23, 23, 23, 0.22);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 -1px 0 rgba(23, 23, 23, 0.04) inset,
+    0 30px 60px -28px rgba(23, 23, 23, 0.28),
+    0 6px 18px -10px rgba(23, 23, 23, 0.12);
   transform-origin: top center;
   will-change: transform;
   overflow: hidden;
+  backface-visibility: hidden;
+}
+
+/* Solid fallback when backdrop-filter isn't supported (older
+   Firefox, Safari quirks) — keeps text fully legible. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .mentoria-stack__card {
+    background: rgba(247, 247, 245, 0.94);
+  }
 }
 
 .mentoria-stack__body {
@@ -2817,6 +3008,17 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   will-change: transform;
 }
 
+.mentoria-stack__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 42%),
+    linear-gradient(90deg, rgba(23, 23, 23, 0.08), transparent 34%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
 .mentoria-stack__img {
   position: absolute;
   inset: 0;
@@ -2832,7 +3034,7 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
    travelling up from below the fold toward its sticky top, and the
    previous (already-pinned) card is being scaled down by GSAP. */
 .mentoria-stack__card + .mentoria-stack__card {
-  margin-top: 100vh;
+  margin-top: 64vh;
 }
 
 .mentoria-stack__card::before {
@@ -2955,6 +3157,9 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   .mentoria-hero__photo {
     transform: none !important;
   }
+  .mentoria-forwhom__overlay {
+    transition: none;
+  }
   /* Stacking cards collapse to a normal flow when motion is disabled */
   .mentoria-stack__card {
     position: relative;
@@ -3008,8 +3213,53 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
     grid-template-columns: 1fr;
     gap: clamp(36px, 7vw, 48px);
   }
+  .mentoria-forwhom__list {
+    grid-template-columns: 1fr;
+  }
+  .mentoria-forwhom__item,
+  .mentoria-forwhom__item:nth-child(3) {
+    grid-column: auto;
+  }
+  .mentoria-forwhom__item {
+    min-height: 118px;
+    padding: clamp(20px, 5vw, 28px);
+  }
+  .mentoria-forwhom__text {
+    max-width: none;
+  }
 
   .mentoria-how { padding: clamp(64px, 14vw, 96px) var(--gutter); }
+  .mentoria-how__header {
+    grid-template-columns: 1fr;
+    gap: clamp(18px, 5vw, 28px);
+    margin-bottom: clamp(32px, 9vw, 48px);
+  }
+  .mentoria-how__eyebrow {
+    margin-bottom: 0;
+    letter-spacing: 0.24em;
+  }
+  .mentoria-how__title {
+    font-size: clamp(36px, 10vw, 48px);
+    line-height: 1.02;
+  }
+  .mentoria-how__lead {
+    max-width: none;
+    font-size: 15px;
+  }
+  .mentoria-how__track {
+    grid-template-columns: 1fr 1fr;
+  }
+  .mentoria-how__track-step {
+    min-height: 64px;
+    padding: 14px;
+    letter-spacing: 0.12em;
+  }
+  .mentoria-how__track-step:nth-child(3) {
+    border-left: 0;
+  }
+  .mentoria-how__track-step:nth-child(n + 3) {
+    border-top: 1px solid rgba(23, 23, 23, 0.12);
+  }
   /* On mobile we drop the sticky-stack trick — cards just flow
      one after the other, which is calmer on small screens. */
   .mentoria-stack__card {
@@ -3036,6 +3286,12 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   }
   .mentoria-stack__img {
     transform: none !important; /* GSAP scale off on mobile */
+  }
+  /* Fixed background attachment is janky on iOS — let it scroll. */
+  .mentoria-how::before {
+    background-attachment: scroll;
+    background-position: center 16%;
+    background-size: auto min(48vh, 420px);
   }
 
   .mentoria-outcomes { padding: clamp(48px, 12vw, 80px) var(--gutter); }

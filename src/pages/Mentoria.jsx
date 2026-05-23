@@ -8,6 +8,7 @@ import stepImageDiagnostico from '../assets/mentoria/diagnostico.webp'
 import stepImagePlan from '../assets/mentoria/plan.webp'
 import stepImageAcompanamiento from '../assets/mentoria/acompanamiento.webp'
 import stepImageEvolucion from '../assets/mentoria/evolucion.webp'
+import expMark from '../assets/mentoria/exp-mark.webp'
 
 /* ────────────────────────────────────────────────────────────────
    Content data — kept here so the JSX below stays a layout file.
@@ -137,6 +138,68 @@ function ArrowIcon() {
 
 /* ────────────────────────────────────────────────────────────── */
 
+const NO_CLIP = 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)'
+const BOTTOM_RIGHT_CLIP = 'polygon(0 0, 100% 0, 0 0, 0% 100%)'
+const TOP_RIGHT_CLIP = 'polygon(0 0, 0 100%, 100% 100%, 0% 100%)'
+const BOTTOM_LEFT_CLIP = 'polygon(100% 100%, 100% 0, 100% 100%, 0 100%)'
+const TOP_LEFT_CLIP = 'polygon(0 0, 100% 0, 100% 100%, 100% 0)'
+
+const FOR_WHOM_ENTRANCE_CLIPS = {
+  left: [BOTTOM_RIGHT_CLIP, NO_CLIP],
+  bottom: [BOTTOM_RIGHT_CLIP, NO_CLIP],
+  top: [BOTTOM_RIGHT_CLIP, NO_CLIP],
+  right: [TOP_LEFT_CLIP, NO_CLIP],
+}
+
+const FOR_WHOM_EXIT_CLIPS = {
+  left: [NO_CLIP, TOP_RIGHT_CLIP],
+  bottom: [NO_CLIP, TOP_RIGHT_CLIP],
+  top: [NO_CLIP, TOP_RIGHT_CLIP],
+  right: [NO_CLIP, BOTTOM_LEFT_CLIP],
+}
+
+function getNearestSide(e) {
+  const box = e.currentTarget.getBoundingClientRect()
+  const sides = [
+    { side: 'left', proximity: Math.abs(box.left - e.clientX) },
+    { side: 'right', proximity: Math.abs(box.right - e.clientX) },
+    { side: 'top', proximity: Math.abs(box.top - e.clientY) },
+    { side: 'bottom', proximity: Math.abs(box.bottom - e.clientY) },
+  ]
+
+  return sides.sort((a, b) => a.proximity - b.proximity)[0].side
+}
+
+function animateForWhomCard(e, entering) {
+  const overlay = e.currentTarget.querySelector('.mentoria-forwhom__overlay')
+  if (!overlay) return
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const side = e.clientX ? getNearestSide(e) : 'left'
+  const clips = entering ? FOR_WHOM_ENTRANCE_CLIPS[side] : FOR_WHOM_EXIT_CLIPS[side]
+  const finalClip = clips[clips.length - 1]
+
+  overlay.getAnimations().forEach((animation) => animation.cancel())
+
+  if (reduceMotion) {
+    overlay.style.clipPath = finalClip
+    return
+  }
+
+  const animation = overlay.animate(
+    { clipPath: clips },
+    {
+      duration: 360,
+      easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+      fill: 'forwards',
+    },
+  )
+
+  animation.onfinish = () => {
+    overlay.style.clipPath = finalClip
+  }
+}
+
 export default function Mentoria() {
   const heroRef = useRef(null)
   const heroPhotoRef = useRef(null)
@@ -219,6 +282,11 @@ export default function Mentoria() {
       const isMobile = window.matchMedia('(max-width: 860px)').matches
       if (cards.length && !isMobile) {
         cards.forEach((card, i) => {
+          gsap.set(card, {
+            zIndex: i + 1,
+            y: i * 8,
+          })
+
           // Image zoom-out: as each card travels from below the fold
           // up to its sticky top, its image scales from 1.5 → 1.
           // Mirrors the `imageScale = useTransform(scrollYProgress,
@@ -233,25 +301,27 @@ export default function Mentoria() {
                 ease: 'none',
                 scrollTrigger: {
                   trigger: card,
-                  start: 'top bottom',
-                  end: 'top top',
-                  scrub: 0.4,
+                  start: 'top 92%',
+                  end: 'top 34%',
+                  scrub: 0.35,
                 },
               },
             )
           }
 
           if (i === cards.length - 1) return
-          const targetScale = 1 - (cards.length - i) * 0.05
+          const targetScale = 1 - (cards.length - i) * 0.035
           const nextCard = cards[i + 1]
           gsap.to(card, {
             scale: targetScale,
+            y: i * 8 - 18,
+            opacity: 0.92,
             ease: 'none',
             scrollTrigger: {
               trigger: nextCard,
-              start: 'top bottom',
-              end: 'top top',
-              scrub: 0.4,
+              start: 'top 88%',
+              end: 'top 32%',
+              scrub: 0.35,
             },
           })
         })
@@ -497,11 +567,16 @@ export default function Mentoria() {
                 as="li"
                 className="mentoria-forwhom__item"
                 delay={i * 80}
+                tabIndex={0}
+                onMouseEnter={(e) => animateForWhomCard(e, true)}
+                onMouseLeave={(e) => animateForWhomCard(e, false)}
+                onFocus={(e) => animateForWhomCard(e, true)}
+                onBlur={(e) => animateForWhomCard(e, false)}
               >
-                <span
-                  className="mentoria-forwhom__rule"
-                  aria-hidden="true"
-                />
+                <span className="mentoria-forwhom__overlay" aria-hidden="true" />
+                <span className="mentoria-forwhom__num">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
                 <span className="mentoria-forwhom__text">{item}</span>
               </RevealOnScroll>
             ))}
@@ -515,19 +590,55 @@ export default function Mentoria() {
         id="mentoria-how"
         aria-labelledby="mentoria-how-title"
         ref={howRef}
+        style={{ '--mentoria-mark-url': `url(${expMark})` }}
       >
         <div className="mentoria-how__inner">
-          <RevealOnScroll
-            as="span"
-            className="mentoria-how__eyebrow"
-            delay={0}
-          >
-            Cómo funciona la Mentoría EXP
-          </RevealOnScroll>
+          <header className="mentoria-how__header">
+            <RevealOnScroll
+              as="span"
+              className="mentoria-how__eyebrow"
+              delay={0}
+            >
+              Método de acompañamiento
+            </RevealOnScroll>
 
-          <h2 id="mentoria-how-title" className="visually-hidden">
-            Los cuatro pasos del acompañamiento
-          </h2>
+            <RevealOnScroll
+              as="h2"
+              id="mentoria-how-title"
+              className="mentoria-how__title"
+              delay={80}
+            >
+              Cómo funciona la Mentoría EXP
+            </RevealOnScroll>
+
+            <RevealOnScroll
+              as="p"
+              className="mentoria-how__lead"
+              delay={140}
+            >
+              Avanzamos por etapas claras: primero leemos tu negocio, después
+              ordenamos prioridades y acompañamos las decisiones que sostienen
+              el crecimiento.
+            </RevealOnScroll>
+
+            <RevealOnScroll
+              as="div"
+              className="mentoria-how__track"
+              aria-label="Secuencia de cuatro pasos de la mentoría"
+              delay={200}
+            >
+              {STEPS.map((step, i) => (
+                <span
+                  key={step.num}
+                  className="mentoria-how__track-step"
+                  style={{ '--i': i }}
+                >
+                  <span>{step.num}</span>
+                  {step.title}
+                </span>
+              ))}
+            </RevealOnScroll>
+          </header>
 
           <div className="mentoria-stack" role="list">
             {STEPS.map((step, i) => (
@@ -536,7 +647,7 @@ export default function Mentoria() {
                 className="mentoria-stack__card"
                 role="listitem"
                 ref={(el) => (stepRefs.current[i] = el)}
-                style={{ '--stack-offset': `${i * 18}px`, '--i': i }}
+                style={{ '--stack-offset': `${i * 28}px`, '--i': i }}
               >
                 <div className="mentoria-stack__body">
                   <header className="mentoria-stack__head">

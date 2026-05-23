@@ -2761,177 +2761,138 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   margin-bottom: clamp(48px, 5vw, 80px);
 }
 
-.mentoria-how__timeline {
+/* ───── Stacking cards (Cómo funciona)
+   All cards are siblings inside one `.mentoria-stack` container.
+   Each card is `position: sticky` with a top that grows per card
+   (so they fan out like a deck once stacked). The `margin-top:
+   100vh` between cards creates the scroll runway: the next card
+   slides up from below and physically overlaps the previous one,
+   which is still pinned higher. GSAP scrubs the previous card's
+   `scale` down during that arrival window so older cards visibly
+   recede behind the newest one. */
+
+.mentoria-stack {
   position: relative;
+  /* No fixed height — total height = sum of card heights + per-card
+     100vh runway gaps (set via margin-top on the cards themselves). */
+  padding-bottom: clamp(40px, 8vh, 96px);
+}
+
+.mentoria-stack__card {
+  position: sticky;
+  /* Sticky offset grows per card so cards fan out as they stack. */
+  top: calc(clamp(80px, 12vh, 120px) + var(--stack-offset, 0px));
+  width: 100%;
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(20px, 2.4vw, 40px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(32px, 4vw, 56px);
+  align-items: stretch;
+  background: var(--off-white);
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 4px;
+  padding: clamp(32px, 3.6vw, 56px);
+  box-shadow: 0 32px 64px -28px rgba(23, 23, 23, 0.22);
+  transform-origin: top center;
+  will-change: transform;
+  overflow: hidden;
 }
 
-.mentoria-how__line {
-  position: absolute;
-  /* aligns with the vertical center of the numbered circle, which sits
-     below the 96px icon + its 28px bottom margin (96 + 28 + 28 = 152). */
-  top: 152px;
-  left: 12.5%;
-  right: 12.5%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--champagne) 12%,
-    var(--champagne) 88%,
-    transparent 100%
-  );
-  transform-origin: left center;
-  z-index: 0;
-}
-
-.mentoria-step {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 0 clamp(6px, 1vw, 14px);
-}
-
-/* ───── Editorial step icon (above the numbered circle) ─────
-   Each icon is a layered composition:
-     · ambient — sparse grid dots / time-axis ticks (opacity ≈ 0.12)
-     · faint   — structural reference rings / brackets (opacity ≈ 0.30)
-     · hint    — annotations, crosshairs, dashed predictions (opacity ≈ 0.22)
-     · main    — primary lines, default color (opacity ≈ 0.82)
-     · accent  — single champagne focal element with halo
-   GSAP draws strokes in via stroke-dashoffset and stages the layers
-   in sequence (ambient → faint → main → accent) for cinematic reveal. */
-
-.mentoria-step__icon-wrap {
+.mentoria-stack__body {
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  height: 96px;
-  margin-bottom: 28px;
+  flex-direction: column;
+  padding: clamp(8px, 1.6vw, 24px) 0;
 }
 
-.step-icon {
-  display: block;
-  width: 96px;
-  height: 96px;
-  color: rgba(23, 23, 23, 0.82);
-  overflow: visible;
-}
-
-/* Default stroke treatment for ALL stroked elements */
-.step-icon path,
-.step-icon line,
-.step-icon circle {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-}
-
-.step-icon [pathLength] {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
-
-/* ── Weight tier: ambient (background grid / axis ticks) ── */
-.step-icon__ambient {
-  opacity: 0.14;
-}
-.step-icon__ambient circle {
-  fill: currentColor;
-  stroke: none;
-}
-.step-icon__ambient line {
-  stroke: currentColor;
-  stroke-width: 0.8;
-}
-
-/* ── Weight tier: faint (structural references) ── */
-.step-icon__faint {
-  stroke: rgba(23, 23, 23, 0.34) !important;
-}
-
-/* ── Weight tier: hint (annotations, crosshairs, dashed) ── */
-.step-icon__hint {
-  stroke: rgba(23, 23, 23, 0.22) !important;
-}
-
-.step-icon__hint-dashed {
-  stroke: rgba(23, 23, 23, 0.32) !important;
-  stroke-dasharray: 3 3;
-}
-/* Override pathLength dasharray for the dashed hint after draw-in */
-.step-icon__hint-dashed[pathLength] {
-  stroke-dasharray: 3 3;
-}
-
-/* ── Solid dots and hollow nodes ── */
-.step-icon__dot {
-  fill: currentColor;
-  stroke: none;
-}
-
-.step-icon__node {
-  fill: #f1ede5; /* matches the section background — looks "punched out" */
-  stroke: currentColor;
-  stroke-width: 1.2;
-}
-
-/* ── Champagne focal accents ── */
-.step-icon__accent {
-  fill: var(--champagne);
-  stroke: none;
-}
-
-.step-icon__accent-line {
-  stroke: var(--champagne) !important;
-  stroke-width: 1.2;
-}
-
-.step-icon__accent-ring {
-  stroke: var(--champagne) !important;
-  stroke-width: 1;
-  opacity: 0.55;
-}
-
-.mentoria-step__num {
+.mentoria-stack__media {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #ebe6db;
+  min-height: clamp(280px, 36vh, 420px);
+  /* will-change isolates the image scale to the GPU and prevents
+     it from inheriting the card's own scale transform jitter. */
+  will-change: transform;
+}
+
+.mentoria-stack__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: center center;
+}
+
+/* Each card after the first gets a viewport-height of scroll runway
+   above it. While the user scrolls through that runway, the card is
+   travelling up from below the fold toward its sticky top, and the
+   previous (already-pinned) card is being scaled down by GSAP. */
+.mentoria-stack__card + .mentoria-stack__card {
+  margin-top: 100vh;
+}
+
+.mentoria-stack__card::before {
+  /* Champagne hairline at the top of every card */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: clamp(40px, 5vw, 80px);
   width: 56px;
-  height: 56px;
-  /* Graphite circles sitting on the champagne thread — the line is the
-     accent; the numbers themselves are quiet, editorial. */
-  border: 1px solid rgba(23, 23, 23, 0.7);
-  border-radius: 50%;
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: 1.05rem;
-  color: var(--graphite);
-  background: #f1ede5;
+  height: 1px;
+  background: var(--champagne);
 }
 
-.mentoria-step__title {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(20px, 1.6vw, 26px);
-  line-height: 1.2;
-  margin: clamp(22px, 2vw, 30px) 0 clamp(12px, 1.2vw, 18px);
-  color: var(--graphite);
+.mentoria-stack__head {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 24px);
+  margin-bottom: clamp(28px, 3vw, 40px);
 }
 
-.mentoria-step__text {
+.mentoria-stack__num {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(40px, 4.5vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--champagne);
+}
+
+.mentoria-stack__rule {
+  flex: 0 0 56px;
+  height: 1px;
+  background: rgba(23, 23, 23, 0.2);
+}
+
+.mentoria-stack__kicker {
   font-family: var(--font-body);
-  font-size: clamp(13.5px, 0.95vw, 15px);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.55);
+}
+
+.mentoria-stack__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(30px, 2.8vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0 0 clamp(16px, 1.6vw, 24px);
+  color: var(--graphite);
+}
+
+.mentoria-stack__text {
+  font-family: var(--font-body);
+  font-size: clamp(14.5px, 0.95vw, 16px);
   line-height: 1.65;
-  color: rgba(23, 23, 23, 0.65);
-  max-width: 30ch;
-  margin: 0 auto;
+  color: rgba(23, 23, 23, 0.7);
+  margin: 0;
 }
 
 /* ───────── 5. Outcomes ───────── */
@@ -2994,13 +2955,14 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   .mentoria-hero__photo {
     transform: none !important;
   }
-  .mentoria-how__line {
-    transform: scaleX(1) !important;
+  /* Stacking cards collapse to a normal flow when motion is disabled */
+  .mentoria-stack__card {
+    position: relative;
+    top: auto !important;
+    transform: none !important;
   }
-  /* SVG icons remain fully drawn (CSS default) — no scrub or stagger
-     when motion is disabled. */
-  .step-icon [pathLength] {
-    stroke-dashoffset: 0 !important;
+  .mentoria-stack__card + .mentoria-stack__card {
+    margin-top: clamp(24px, 4vw, 40px);
   }
 }
 
@@ -3048,27 +3010,33 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   }
 
   .mentoria-how { padding: clamp(64px, 14vw, 96px) var(--gutter); }
-  .mentoria-how__timeline {
+  /* On mobile we drop the sticky-stack trick — cards just flow
+     one after the other, which is calmer on small screens. */
+  .mentoria-stack__card {
+    position: relative;
+    top: auto !important;
+    transform: none !important;
+    max-width: 100%;
     grid-template-columns: 1fr;
-    gap: clamp(32px, 6vw, 48px);
+    gap: clamp(24px, 5vw, 32px);
+    padding: clamp(24px, 6vw, 36px);
+    box-shadow: 0 18px 36px -16px rgba(23, 23, 23, 0.14);
   }
-  .mentoria-how__line {
-    top: 28px;
-    bottom: 28px;
-    left: 50%;
-    right: auto;
-    width: 1px;
-    height: auto;
-    background: linear-gradient(
-      180deg,
-      transparent 0%,
-      var(--champagne) 12%,
-      var(--champagne) 88%,
-      transparent 100%
-    );
-    transform-origin: top center;
+  .mentoria-stack__card + .mentoria-stack__card {
+    margin-top: clamp(20px, 5vw, 32px);
   }
-  .mentoria-step { text-align: center; padding: 0; }
+  .mentoria-stack__body { padding: 0; }
+  .mentoria-stack__head {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .mentoria-stack__title { font-size: clamp(26px, 6vw, 34px); }
+  .mentoria-stack__media {
+    min-height: clamp(220px, 56vw, 320px);
+  }
+  .mentoria-stack__img {
+    transform: none !important; /* GSAP scale off on mobile */
+  }
 
   .mentoria-outcomes { padding: clamp(48px, 12vw, 80px) var(--gutter); }
   .mentoria-outcomes__grid { grid-template-columns: 1fr; }

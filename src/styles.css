@@ -2747,11 +2747,11 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
 .mentoria-forwhom__item:hover,
 .mentoria-forwhom__item:focus-visible {
   color: var(--graphite);
-  border-color: rgba(216, 185, 140, 0.42);
+  border-color: rgba(247, 245, 240, 0.42);
 }
 
 .mentoria-forwhom__item:focus-visible {
-  box-shadow: inset 0 0 0 1px rgba(216, 185, 140, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(247, 245, 240, 0.72);
 }
 
 .mentoria-forwhom__overlay {
@@ -2759,7 +2759,7 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   inset: 0;
   z-index: 0;
   background:
-    linear-gradient(135deg, var(--champagne) 0%, #e5cfac 100%);
+    linear-gradient(135deg, #f7f5f0 0%, #d9d9d6 100%);
   clip-path: polygon(0 0, 100% 0, 0 0, 0% 100%);
   pointer-events: none;
 }
@@ -2775,7 +2775,7 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   font-size: clamp(32px, 3.4vw, 52px);
   line-height: 0.9;
   letter-spacing: -0.02em;
-  color: rgba(216, 185, 140, 0.84);
+  color: rgba(247, 245, 240, 0.42);
   transition: color 260ms ease;
 }
 
@@ -3097,17 +3097,26 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   margin: 0;
 }
 
-/* ───────── 5. Outcomes ───────── */
+/* ───────── 5. Outcomes ─────────
+   Three thematic columns (Estrategia / Ejecución / Visión), each
+   with two numbered items. Numbers run 01→06 across the whole
+   list so the eye reads a single progression. Editorial header
+   above (eyebrow + serif title) anchors the section. */
 
 .mentoria-outcomes {
-  background: #ebe6db;
+  background: var(--off-white);
   color: var(--graphite);
-  padding: clamp(64px, 8vw, 96px) var(--gutter);
+  padding: clamp(72px, 10vw, 128px) var(--gutter);
 }
 
 .mentoria-outcomes__inner {
   max-width: var(--mentoria-container);
   margin: 0 auto;
+}
+
+.mentoria-outcomes__header {
+  max-width: 880px;
+  margin-bottom: clamp(56px, 7vw, 96px);
 }
 
 .mentoria-outcomes__eyebrow {
@@ -3118,38 +3127,78 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: rgba(23, 23, 23, 0.6);
-  margin-bottom: clamp(28px, 3vw, 40px);
+  margin-bottom: clamp(20px, 2.2vw, 32px);
+}
+
+.mentoria-outcomes__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(34px, 4vw, 60px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--graphite);
+  margin: 0;
 }
 
 .mentoria-outcomes__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: clamp(40px, 6vw, 96px);
-  row-gap: clamp(12px, 1.4vw, 20px);
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: clamp(32px, 4.5vw, 80px);
+  row-gap: clamp(40px, 5vw, 64px);
+}
+
+.mentoria-outcomes__theme {
+  display: flex;
+  flex-direction: column;
+  /* Champagne hairline above the theme label — a quiet structural
+     marker that ties the three columns together visually. */
+  padding-top: clamp(20px, 2.2vw, 28px);
+  border-top: 1px solid var(--champagne);
+}
+
+.mentoria-outcomes__theme-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.72);
+  margin: 0 0 clamp(20px, 2.4vw, 32px);
+}
+
+.mentoria-outcomes__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.2vw, 32px);
 }
 
 .mentoria-outcomes__item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: clamp(16px, 1.6vw, 24px);
+  align-items: baseline;
+}
+
+.mentoria-outcomes__num {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(28px, 2.6vw, 40px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--champagne);
+  /* Tabular alignment so 01..06 sit on a perfect vertical column */
+  font-variant-numeric: tabular-nums;
+}
+
+.mentoria-outcomes__text {
   font-family: var(--font-body);
   font-size: clamp(14.5px, 1vw, 16.5px);
-  line-height: 1.45;
-  color: rgba(23, 23, 23, 0.85);
-  padding: clamp(8px, 1vw, 14px) 0;
+  line-height: 1.55;
+  color: rgba(23, 23, 23, 0.82);
 }
-
-.mentoria-outcomes__icon {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  color: rgba(23, 23, 23, 0.7);
-}
-
-.mentoria-outcomes__icon svg { width: 100%; height: 100%; }
 
 /* ───────── Reduced motion ───────── */
 
@@ -3294,6 +3343,10 @@ button { font-family: var(--font-body); cursor: pointer; border: none; backgroun
     background-size: auto min(48vh, 420px);
   }
 
-  .mentoria-outcomes { padding: clamp(48px, 12vw, 80px) var(--gutter); }
-  .mentoria-outcomes__grid { grid-template-columns: 1fr; }
+  .mentoria-outcomes { padding: clamp(56px, 14vw, 88px) var(--gutter); }
+  .mentoria-outcomes__title { font-size: clamp(28px, 8vw, 38px); }
+  .mentoria-outcomes__grid {
+    grid-template-columns: 1fr;
+    row-gap: clamp(32px, 7vw, 48px);
+  }
 }

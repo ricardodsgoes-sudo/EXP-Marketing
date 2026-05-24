@@ -73,13 +73,32 @@ const STEPS = [
   },
 ]
 
-const OUTCOMES = [
-  'Posicionamiento más claro.',
-  'Oferta más estratégica.',
-  'Contenido con intención.',
-  'Proceso comercial más organizado.',
-  'Lectura de métricas esenciales.',
-  'Visión empresarial para crecer con más seguridad.',
+/* Outcomes regrouped into three thematic blocks. Items keep their
+   original copy; the numbering runs 01→06 across the whole list so
+   the reader sees a single progression even though the layout
+   splits into three columns. */
+const OUTCOME_THEMES = [
+  {
+    label: 'Estrategia',
+    items: [
+      { n: '01', text: 'Posicionamiento más claro.' },
+      { n: '02', text: 'Oferta más estratégica.' },
+    ],
+  },
+  {
+    label: 'Ejecución',
+    items: [
+      { n: '03', text: 'Contenido con intención.' },
+      { n: '04', text: 'Proceso comercial más organizado.' },
+    ],
+  },
+  {
+    label: 'Visión',
+    items: [
+      { n: '05', text: 'Lectura de métricas esenciales.' },
+      { n: '06', text: 'Visión empresarial para crecer con más seguridad.' },
+    ],
+  },
 ]
 
 /* ──────────────────────────── Icons ──────────────────────────── */
@@ -216,6 +235,9 @@ export default function Mentoria() {
 
     gsap.registerPlugin(ScrollTrigger)
 
+    const refreshScrollTriggers = () => ScrollTrigger.refresh()
+    let loadRefreshAdded = false
+
     const ctx = gsap.context(() => {
       /* ── Hero: editorial photo slow parallax (translate + scale) ── */
       if (heroPhotoRef.current && heroRef.current) {
@@ -295,15 +317,20 @@ export default function Mentoria() {
           if (img) {
             gsap.fromTo(
               img,
-              { scale: 1.5 },
+              {
+                scale: 1.18,
+                transformOrigin: 'center center',
+                willChange: 'transform',
+              },
               {
                 scale: 1,
                 ease: 'none',
                 scrollTrigger: {
                   trigger: card,
-                  start: 'top 92%',
-                  end: 'top 34%',
-                  scrub: 0.35,
+                  start: 'top 105%',
+                  end: 'top 16%',
+                  scrub: 0.75,
+                  invalidateOnRefresh: true,
                 },
               },
             )
@@ -325,29 +352,58 @@ export default function Mentoria() {
             },
           })
         })
+
+        requestAnimationFrame(refreshScrollTriggers)
+        window.addEventListener('load', refreshScrollTriggers, { once: true })
+        loadRefreshAdded = true
       }
 
-      /* ── Outcomes: simple stagger fade-up ── */
+      /* ── Outcomes: themes scaffold in first, then numbered items
+         fill them in — "structure appears, then content lands". ── */
       if (outcomesRef.current) {
-        gsap.from(
-          outcomesRef.current.querySelectorAll('.mentoria-outcomes__item'),
-          {
+        const trigger = {
+          trigger: outcomesRef.current,
+          start: 'top 78%',
+        }
+
+        const labels = outcomesRef.current.querySelectorAll(
+          '.mentoria-outcomes__theme-label',
+        )
+        if (labels.length) {
+          gsap.from(labels, {
+            y: 14,
+            opacity: 0,
+            duration: 0.55,
+            ease: 'power3.out',
+            stagger: 0.12,
+            scrollTrigger: trigger,
+          })
+        }
+
+        const items = outcomesRef.current.querySelectorAll(
+          '.mentoria-outcomes__item',
+        )
+        if (items.length) {
+          gsap.from(items, {
             y: 18,
             opacity: 0,
             duration: 0.6,
             ease: 'power3.out',
-            stagger: 0.08,
-            scrollTrigger: {
-              trigger: outcomesRef.current,
-              start: 'top 78%',
-            },
-          },
-        )
+            stagger: 0.07,
+            delay: 0.22,
+            scrollTrigger: trigger,
+          })
+        }
       }
 
     })
 
-    return () => ctx.revert()
+    return () => {
+      if (loadRefreshAdded) {
+        window.removeEventListener('load', refreshScrollTriggers)
+      }
+      ctx.revert()
+    }
   }, [])
 
   return (
@@ -685,31 +741,57 @@ export default function Mentoria() {
         ref={outcomesRef}
       >
         <div className="mentoria-outcomes__inner">
-          <RevealOnScroll
-            as="span"
-            className="mentoria-outcomes__eyebrow"
-            delay={0}
-          >
-            Lo que vas a desarrollar durante la mentoría
-          </RevealOnScroll>
+          <header className="mentoria-outcomes__header">
+            <RevealOnScroll
+              as="span"
+              className="mentoria-outcomes__eyebrow"
+              delay={0}
+            >
+              Lo que vas a desarrollar durante la mentoría
+            </RevealOnScroll>
 
-          <h2 id="mentoria-outcomes-title" className="visually-hidden">
-            Resultados que vas a desarrollar
-          </h2>
+            <RevealOnScroll
+              as="h2"
+              id="mentoria-outcomes-title"
+              className="mentoria-outcomes__title"
+              delay={140}
+            >
+              Vas a salir con dirección,
+              <br />
+              no con más tácticas.
+            </RevealOnScroll>
+          </header>
 
-          <ul className="mentoria-outcomes__grid">
-            {OUTCOMES.map((item) => (
-              <li key={item} className="mentoria-outcomes__item">
-                <span
-                  className="mentoria-outcomes__icon"
-                  aria-hidden="true"
-                >
-                  <ArrowIcon />
-                </span>
-                <span>{item}</span>
-              </li>
+          <div className="mentoria-outcomes__grid">
+            {OUTCOME_THEMES.map((theme) => (
+              <article
+                key={theme.label}
+                className="mentoria-outcomes__theme"
+              >
+                <h3 className="mentoria-outcomes__theme-label">
+                  {theme.label}
+                </h3>
+                <ul className="mentoria-outcomes__list">
+                  {theme.items.map((item) => (
+                    <li
+                      key={item.n}
+                      className="mentoria-outcomes__item"
+                    >
+                      <span
+                        className="mentoria-outcomes__num"
+                        aria-hidden="true"
+                      >
+                        {item.n}
+                      </span>
+                      <span className="mentoria-outcomes__text">
+                        {item.text}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 

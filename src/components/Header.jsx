@@ -132,7 +132,12 @@ export default function Header() {
         <ul className="mobile-menu__list">
           {navLinks.map(({ label, to }) => (
             <li key={label}>
-              <NavLink to={to} className="mobile-menu__link">
+              <NavLink
+                to={to}
+                className={({ isActive }) =>
+                  'mobile-menu__link' + (isActive ? ' mobile-menu__link--active' : '')
+                }
+              >
                 {label}
               </NavLink>
             </li>

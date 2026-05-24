@@ -1,100 +1,173 @@
 import RevealOnScroll from '../components/RevealOnScroll'
-import PageHero from '../components/PageHero'
 import FinalCTA from '../components/FinalCTA'
+import heroPortrait from '../assets/hero.png'
+import institutionalPhoto from '../assets/mentoria/evolucion.webp'
+import expWordmark from '../assets/exp-wordmark-light.png'
+import './SobreEXP.css'
 
-const PILLARS = [
-  {
-    num: '01',
-    title: 'Estrategia antes que ejecución',
-    text: 'No hay táctica que sostenga un negocio sin dirección. Toda entrega empieza por entender el momento real.',
-  },
-  {
-    num: '02',
-    title: 'Números como brújula',
-    text: 'Decidimos con datos del propio negocio. Métricas claras, leídas con frecuencia, son lo que separa crecimiento de suerte.',
-  },
-  {
-    num: '03',
-    title: 'Posicionamiento como activo',
-    text: 'Marca, narrativa y autoridad son inversión, no decoración. Se construyen con consistencia, no con tendencias.',
-  },
-  {
-    num: '04',
-    title: 'Método sobre intuición',
-    text: 'Procesos repetibles para marketing, ventas y gestión. Lo que se puede medir, se puede mejorar.',
-  },
+const SCOPE = [
+  'Posicionamiento',
+  'Oferta',
+  'Comunicación',
+  'Embudo',
+  'Atención comercial',
+  'Métricas',
+  'Oportunidades reales de crecimiento',
 ]
 
 export default function SobreEXP() {
   return (
     <>
-      <PageHero
-        eyebrow="Sobre EXP"
-        title={
-          <>
-            Una agencia para
-            <br />
-            negocios beauty con ambición.
-          </>
-        }
-        intro="EXP nace para llenar un vacío del mercado: estrategia real, lectura de números y dirección estructurada para profesionales y marcas del universo beauty."
-      />
+      {/* Custom dark editorial hero — 2-column magazine spread: text on
+          the left, portrait on the right. Replaces the default light
+          PageHero so Sobre EXP keeps the dark-first brand voice. */}
+      <section className="about-hero" aria-labelledby="about-hero-title">
+        <div className="about-hero__inner">
+          <div className="about-hero__copy">
+            <RevealOnScroll as="span" className="about-hero__eyebrow" delay={0}>
+              Sobre EXP
+            </RevealOnScroll>
 
-      <section className="page-section" aria-labelledby="about-manifesto">
-        <div className="page-section__inner page-section__inner--narrow">
-          <RevealOnScroll as="span" className="page-section__eyebrow">
-            Manifiesto
-          </RevealOnScroll>
-          <RevealOnScroll
-            as="h2"
-            id="about-manifesto"
-            className="page-section__title page-section__title--display"
-            delay={120}
-          >
-            Creemos que el mercado beauty no necesita más ruido. Necesita
-            <span className="page-section__title-accent"> claridad</span>.
-          </RevealOnScroll>
-          <RevealOnScroll as="p" className="page-section__body" delay={260}>
-            La mayoría de los negocios beauty no se estancan por falta de talento.
-            Se estancan por falta de estrategia. Nosotros existimos para
-            transformar técnica y esfuerzo suelto en crecimiento estructurado,
-            con marca fuerte, embudo claro y números bajo control.
-          </RevealOnScroll>
-          <RevealOnScroll as="p" className="page-section__body" delay={360}>
-            Trabajamos con profesionales que quieren aprender, con negocios que
-            necesitan dirección y con marcas que buscan ejecución profesional.
-            Tres puntos de entrada, una misma manera de pensar: estrategia
-            primero, números después, estética siempre.
+            <RevealOnScroll
+              as="h1"
+              id="about-hero-title"
+              className="about-hero__title"
+              delay={140}
+            >
+              EXP Marketing: crecimiento
+              <br />
+              estratégico para{' '}
+              <span className="about-hero__title-accent">negocios beauty</span>.
+            </RevealOnScroll>
+
+            <RevealOnScroll as="p" className="about-hero__intro" delay={300}>
+              Nacimos para ayudar a profesionales, clínicas y marcas del mercado
+              beauty a dejar de crecer en el improviso y construir operaciones
+              más lucrativas, organizadas y previsibles.
+            </RevealOnScroll>
+
+            <RevealOnScroll as="span" className="about-hero__rule" delay={460} aria-hidden="true" />
+          </div>
+
+          <RevealOnScroll as="div" className="about-hero__visual" delay={220}>
+            <img
+              src={heroPortrait}
+              alt=""
+              className="about-hero__photo"
+              loading="eager"
+              decoding="async"
+              aria-hidden="true"
+            />
+            <span className="about-hero__photo-frame" aria-hidden="true" />
           </RevealOnScroll>
         </div>
       </section>
 
-      <section
-        className="page-section page-section--alt"
-        aria-labelledby="about-pillars"
-      >
-        <div className="page-section__inner">
-          <RevealOnScroll as="div" className="page-section__lead page-section__lead--center">
-            <span className="page-section__eyebrow">Pilares</span>
-            <h2 id="about-pillars" className="page-section__title">
-              Lo que sostiene nuestra forma de trabajar.
-            </h2>
+      {/* Institutional copy — asymmetric editorial spread: photo on the
+          left (smaller, magazine-style), text on the right. */}
+      <section className="about-institutional" aria-labelledby="about-vision">
+        <div className="about-institutional__inner">
+          <RevealOnScroll as="div" className="about-institutional__visual">
+            <img
+              src={institutionalPhoto}
+              alt=""
+              className="about-institutional__photo"
+              loading="lazy"
+              decoding="async"
+              aria-hidden="true"
+            />
+            <img
+              src={expWordmark}
+              alt=""
+              className="about-institutional__wordmark"
+              aria-hidden="true"
+            />
           </RevealOnScroll>
 
-          <ol className="module-grid module-grid--2col">
-            {PILLARS.map((p, i) => (
+          <div className="about-institutional__copy">
+            <RevealOnScroll as="span" className="about-institutional__eyebrow">
+              Quiénes somos
+            </RevealOnScroll>
+            <RevealOnScroll
+              as="h2"
+              id="about-vision"
+              className="about-institutional__title"
+              delay={120}
+            >
+              Marketing, ventas, gestión y datos
+              <br />
+              uniéndose en un mismo método.
+            </RevealOnScroll>
+            <RevealOnScroll as="p" className="about-institutional__body" delay={240}>
+              EXP Marketing une marketing digital, ventas, gestión y análisis de
+              datos para crear soluciones de crecimiento para el mercado beauty.
+            </RevealOnScroll>
+            <RevealOnScroll as="p" className="about-institutional__body" delay={360}>
+              Trabajamos con una visión completa del negocio: no miramos solo
+              publicaciones, anuncios o páginas. Miramos posicionamiento, oferta,
+              comunicación, embudo, atención comercial, métricas y oportunidades
+              reales de crecimiento.
+            </RevealOnScroll>
+          </div>
+        </div>
+      </section>
+
+      {/* Scope — the seven angles, inline editorial list */}
+      <section className="about-scope" aria-labelledby="about-scope-title">
+        <div className="about-scope__inner">
+          <RevealOnScroll as="span" className="about-scope__eyebrow">
+            Visión completa
+          </RevealOnScroll>
+          <RevealOnScroll as="h2" id="about-scope-title" className="about-scope__title" delay={120}>
+            Siete ángulos. Una misma lectura del negocio.
+          </RevealOnScroll>
+          <ul className="about-scope__list" aria-label="Ángulos de análisis">
+            {SCOPE.map((item, i) => (
               <RevealOnScroll
-                key={p.num}
+                key={item}
                 as="li"
-                className="module-card"
-                delay={i * 100}
+                className="about-scope__item"
+                delay={i * 70}
               >
-                <span className="module-card__num">{p.num}</span>
-                <h3 className="module-card__title">{p.title}</h3>
-                <p className="module-card__text">{p.text}</p>
+                <span className="about-scope__num">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="about-scope__label">{item}</span>
               </RevealOnScroll>
             ))}
-          </ol>
+          </ul>
+        </div>
+      </section>
+
+      {/* Positioning phrase — the climactic editorial statement */}
+      <section className="about-positioning" aria-labelledby="about-positioning-title">
+        <div className="about-positioning__inner">
+          <RevealOnScroll as="span" className="about-positioning__eyebrow">
+            Posicionamiento
+          </RevealOnScroll>
+
+          <h2 id="about-positioning-title" className="visually-hidden">
+            Marketing sin gestión genera movimiento. Marketing con estrategia
+            genera crecimiento.
+          </h2>
+
+          <RevealOnScroll as="p" className="about-positioning__line about-positioning__line--muted">
+            Marketing <em>sin gestión</em>
+            <br />
+            genera <span className="about-positioning__word">movimiento</span>.
+          </RevealOnScroll>
+
+          <RevealOnScroll as="span" className="about-positioning__divider" delay={240} aria-hidden="true" />
+
+          <RevealOnScroll as="p" className="about-positioning__line about-positioning__line--bright" delay={380}>
+            Marketing <em>con estrategia</em>
+            <br />
+            genera{' '}
+            <span className="about-positioning__word about-positioning__word--accent">
+              crecimiento
+            </span>
+            .
+          </RevealOnScroll>
         </div>
       </section>
 

@@ -1,9 +1,11 @@
 /**
- * Inline SVG icon for a social platform. Uses currentColor for both
- * stroke and the small filled accents — color is fully controlled via CSS.
+ * Inline SVG icon for a social platform / brand. Uses currentColor for
+ * both stroke and the small filled accents — color is fully controlled
+ * via CSS.
  *
  * Props:
  *   name  – 'instagram' | 'whatsapp' | 'youtube' | 'linkedin'
+ *           | 'meta' | 'google' | 'facebook' | 'tiktok'
  *   size  – px (default 20)
  */
 const PATHS = {
@@ -29,6 +31,31 @@ const PATHS = {
       <rect x="2" y="9" width="4" height="12" />
       <circle cx="4" cy="4" r="2" />
     </>
+  ),
+  /* Meta — simplified infinity-twist mark using two overlapping arcs.
+     Mono-stroke version, recognizable as the Meta loop without being
+     a literal copy of the official logo. */
+  meta: (
+    <path d="M3 14c0-3 1.7-5 4-5 1.7 0 3 1 4 3l2 3c1 2 2.3 3 4 3 2.3 0 4-2 4-5s-1.7-5-4-5c-1.7 0-3 1-4 3l-2 3c-1 2-2.3 3-4 3-2.3 0-4-2-4-5z" />
+  ),
+  /* Google — a G-shaped mark: open circle with the inner stroke that
+     suggests the wordmark. */
+  google: (
+    <>
+      <path d="M21 12a9 9 0 1 1-3.3-7" />
+      <path d="M21 12h-9" />
+    </>
+  ),
+  /* Facebook — the 'f' inside a rounded square. */
+  facebook: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <path d="M14 9h2V6h-2.5a2.5 2.5 0 0 0-2.5 2.5V11H9v3h2v6h3v-6h2l.5-3H14V9.5a.5.5 0 0 1 .5-.5z" fill="currentColor" stroke="none" />
+    </>
+  ),
+  /* TikTok — musical note merged with a square shape. */
+  tiktok: (
+    <path d="M16 4v8.5a3.5 3.5 0 1 1-3.5-3.5h.5V12a1 1 0 1 0 1 1V4h2c.3 1.5 1.5 2.7 3 3v2c-1.4-.1-2.6-.7-3.5-1.7" />
   ),
 }
 

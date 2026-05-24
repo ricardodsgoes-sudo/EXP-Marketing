@@ -1,106 +1,286 @@
+import { Link } from 'react-router-dom'
 import RevealOnScroll from '../components/RevealOnScroll'
-import PageHero from '../components/PageHero'
-import FinalCTA from '../components/FinalCTA'
+import heroPortrait from '../assets/mentoria/diagnostico.webp'
+import detailPhoto from '../assets/mentoria/plan.webp'
+import expWordmark from '../assets/exp-wordmark-light.png'
+import './Consultoria.css'
 
 const FOR_WHOM = [
-  'Clínicas y marcas beauty que ya facturan y quieren un próximo nivel.',
-  'Negocios con equipo y operación, pero sin método claro de crecimiento.',
-  'Quien necesita un diagnóstico técnico antes de invertir en tráfico o branding.',
-  'Profesionales que quieren un plan estratégico para los próximos 6–12 meses.',
+  'Ya tienen una operación funcionando.',
+  'Quieren entender dónde están perdiendo dinero.',
+  'Necesitan claridad sobre qué hacer primero.',
+  'Quieren mejorar marketing, ventas y gestión.',
+  'Necesitan revisar oferta, posicionamiento y embudo.',
+  'Quieren tomar decisiones basadas en datos.',
+  'Buscan una mirada estratégica externa.',
 ]
 
-const PROCESS = [
-  {
-    num: '01',
-    title: 'Diagnóstico',
-    text: 'Inmersión en marca, embudo, ofertas, números y posicionamiento. Lectura del momento real del negocio.',
-  },
-  {
-    num: '02',
-    title: 'Plan estratégico',
-    text: 'Direccionamientos concretos para marketing, ventas, embudo y gestión. Prioridades, no listas infinitas.',
-  },
-  {
-    num: '03',
-    title: 'Roadmap',
-    text: 'Calendario de implementación por trimestres, con métricas y puntos de revisión claros.',
-  },
-  {
-    num: '04',
-    title: 'Acompañamiento',
-    text: 'Sesiones de seguimiento para ajustar el plan según los datos del propio negocio.',
-  },
+const ANALYSIS = [
+  'Posicionamiento',
+  'Oferta',
+  'Comunicación',
+  'Instagram',
+  'Tráfico pago',
+  'Embudo de ventas',
+  'Página o landing page',
+  'Proceso comercial',
+  'Métricas',
+  'Costes, margen y facturación',
+  'Oportunidades de crecimiento',
+]
+
+const DELIVERABLES = [
+  'Diagnóstico estratégico',
+  'Mapa de bloqueos',
+  'Plan de acción',
+  'Prioridades de ejecución',
+  'Recomendaciones de marketing',
+  'Recomendaciones de gestión',
+  'Próximos pasos comerciales',
 ]
 
 export default function Consultoria() {
   return (
     <>
-      <PageHero
-        eyebrow="Consultoría Estratégica EXP"
-        title={
-          <>
-            Diagnóstico, dirección
-            <br />
-            y plan de crecimiento.
-          </>
-        }
-        intro="Una mirada estratégica profunda sobre tu negocio beauty. No es una lista de tareas: es una dirección clara para los próximos meses, basada en tus números, tu mercado y tu fase."
-      />
+      {/* ───── Hero — dark editorial spread ───── */}
+      <section className="consult-hero" aria-labelledby="consult-hero-title">
+        <div className="consult-hero__inner">
+          <div className="consult-hero__copy">
+            <RevealOnScroll as="span" className="consult-hero__eyebrow" delay={0}>
+              Consultoría EXP
+            </RevealOnScroll>
 
-      <section className="page-section" aria-labelledby="consult-for-whom">
-        <div className="page-section__inner page-section__inner--split">
-          <RevealOnScroll as="div" className="page-section__lead">
-            <span className="page-section__eyebrow">Para quién</span>
-            <h2 id="consult-for-whom" className="page-section__title">
-              Para negocios beauty que necesitan dirección, no más ejecución suelta.
-            </h2>
+            <RevealOnScroll
+              as="h1"
+              id="consult-hero-title"
+              className="consult-hero__title"
+              delay={140}
+            >
+              Para negocios beauty que
+              <br />
+              necesitan{' '}
+              <span className="consult-hero__title-accent">
+                dirección estratégica
+              </span>{' '}
+              personalizada.
+            </RevealOnScroll>
+
+            <RevealOnScroll as="p" className="consult-hero__lead" delay={280}>
+              La consultoría es ideal para negocios que necesitan un plan claro
+              de crecimiento, análisis de bloqueos y dirección estratégica para
+              marketing, ventas y gestión.
+            </RevealOnScroll>
+
+            <RevealOnScroll as="p" className="consult-hero__support" delay={400}>
+              Analizamos tu negocio en profundidad y entregamos un plan de acción
+              objetivo para acelerar el crecimiento, mejorar decisiones y
+              corregir los puntos que están limitando tus resultados.
+            </RevealOnScroll>
+
+            <RevealOnScroll as="div" className="consult-hero__actions" delay={540}>
+              <Link to="/#cta" className="consult-btn consult-btn--primary">
+                Solicitar consultoría
+              </Link>
+              <Link to="/#cta" className="consult-btn consult-btn--link">
+                Hablar con EXP
+                <span aria-hidden="true">→</span>
+              </Link>
+            </RevealOnScroll>
+          </div>
+
+          <RevealOnScroll as="div" className="consult-hero__visual" delay={220}>
+            <img
+              src={heroPortrait}
+              alt=""
+              className="consult-hero__photo"
+              loading="eager"
+              decoding="async"
+              aria-hidden="true"
+            />
+            <span className="consult-hero__photo-frame" aria-hidden="true" />
+            <span className="consult-hero__photo-tag" aria-hidden="true">
+              Estrategia · Diagnóstico · Plan
+            </span>
           </RevealOnScroll>
-
-          <ul className="bullet-list" aria-label="Perfil ideal">
-            {FOR_WHOM.map((item) => (
-              <RevealOnScroll
-                key={item}
-                as="li"
-                className="bullet-list__item"
-                delay={80}
-              >
-                {item}
-              </RevealOnScroll>
-            ))}
-          </ul>
         </div>
       </section>
 
-      <section
-        className="page-section page-section--alt"
-        aria-labelledby="consult-process"
-      >
-        <div className="page-section__inner">
-          <RevealOnScroll as="div" className="page-section__lead page-section__lead--center">
-            <span className="page-section__eyebrow">Cómo trabajamos</span>
-            <h2 id="consult-process" className="page-section__title">
-              Cuatro fases para salir del diagnóstico con un plan.
-            </h2>
-          </RevealOnScroll>
+      {/* ───── Para quién es — 7 bullets, numbered editorial list ───── */}
+      <section className="consult-for-whom" aria-labelledby="consult-fw-title">
+        <div className="consult-for-whom__inner">
+          <div className="consult-for-whom__lead">
+            <RevealOnScroll as="span" className="consult-eyebrow">
+              Para quién es
+            </RevealOnScroll>
+            <RevealOnScroll
+              as="h2"
+              id="consult-fw-title"
+              className="consult-section-title"
+              delay={120}
+            >
+              La Consultoría EXP es ideal
+              <br />
+              para negocios que…
+            </RevealOnScroll>
+          </div>
 
-          <ol className="process-line">
-            {PROCESS.map((p, i) => (
+          <ol className="consult-for-whom__list">
+            {FOR_WHOM.map((item, i) => (
               <RevealOnScroll
-                key={p.num}
+                key={item}
                 as="li"
-                className="process-line__item"
-                delay={i * 100}
+                className="consult-for-whom__item"
+                delay={i * 70}
               >
-                <span className="process-line__num">{p.num}</span>
-                <h3 className="process-line__title">{p.title}</h3>
-                <p className="process-line__text">{p.text}</p>
+                <span className="consult-for-whom__num">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="consult-for-whom__text">{item}</span>
               </RevealOnScroll>
             ))}
           </ol>
         </div>
       </section>
 
-      <FinalCTA />
+      {/* ───── Qué analizamos — 11 areas in a grid ───── */}
+      <section className="consult-analysis" aria-labelledby="consult-an-title">
+        <div className="consult-analysis__inner">
+          <div className="consult-analysis__lead">
+            <RevealOnScroll as="span" className="consult-eyebrow">
+              Qué incluye
+            </RevealOnScroll>
+            <RevealOnScroll
+              as="h2"
+              id="consult-an-title"
+              className="consult-section-title"
+              delay={120}
+            >
+              Qué analizamos
+              <br />
+              en la consultoría.
+            </RevealOnScroll>
+            <RevealOnScroll as="p" className="consult-analysis__intro" delay={240}>
+              Once áreas cruzadas para mapear bloqueos y oportunidades reales
+              de crecimiento.
+            </RevealOnScroll>
+          </div>
+
+          <ul className="consult-analysis__grid" aria-label="Áreas analizadas">
+            {ANALYSIS.map((item, i) => (
+              <RevealOnScroll
+                key={item}
+                as="li"
+                className="consult-analysis__cell"
+                delay={i * 40}
+              >
+                <span className="consult-analysis__num">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="consult-analysis__label">{item}</span>
+              </RevealOnScroll>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ───── Entrega final — climax + deliverables ───── */}
+      <section className="consult-delivery" aria-labelledby="consult-del-title">
+        <div className="consult-delivery__inner">
+          <RevealOnScroll as="div" className="consult-delivery__visual">
+            <img
+              src={detailPhoto}
+              alt=""
+              className="consult-delivery__photo"
+              loading="lazy"
+              decoding="async"
+              aria-hidden="true"
+            />
+            <span className="consult-delivery__photo-frame" aria-hidden="true" />
+            <img
+              src={expWordmark}
+              alt=""
+              className="consult-delivery__wordmark"
+              aria-hidden="true"
+            />
+          </RevealOnScroll>
+
+          <div className="consult-delivery__copy">
+            <RevealOnScroll as="span" className="consult-eyebrow">
+              Entrega final
+            </RevealOnScroll>
+            <RevealOnScroll
+              as="h2"
+              id="consult-del-title"
+              className="consult-delivery__title"
+              delay={120}
+            >
+              Al final de la consultoría,
+              <br />
+              tendrás un{' '}
+              <span className="consult-accent">plan claro de acción</span>.
+            </RevealOnScroll>
+            <RevealOnScroll as="p" className="consult-delivery__body" delay={240}>
+              No se trata solo de una reunión de ideas. La consultoría entrega
+              dirección, prioridades y un plan práctico para saber qué ajustar,
+              qué ejecutar y qué medir.
+            </RevealOnScroll>
+
+            <ul className="consult-delivery__list" aria-label="Entregables">
+              {DELIVERABLES.map((item, i) => (
+                <RevealOnScroll
+                  key={item}
+                  as="li"
+                  className="consult-delivery__item"
+                  delay={360 + i * 60}
+                >
+                  <span className="consult-delivery__check" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <path
+                        d="M2 7.5L5.5 11L12 3"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span>{item}</span>
+                </RevealOnScroll>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ───── CTA final — consultoria specific ───── */}
+      <section className="consult-cta" aria-labelledby="consult-cta-title">
+        <div className="consult-cta__inner">
+          <RevealOnScroll as="span" className="consult-cta__eyebrow">
+            Diagnóstico estratégico
+          </RevealOnScroll>
+          <RevealOnScroll
+            as="h2"
+            id="consult-cta-title"
+            className="consult-cta__title"
+            delay={120}
+          >
+            ¿Tu negocio necesita{' '}
+            <span className="consult-accent">claridad</span>
+            <br />
+            antes de invertir más en marketing?
+          </RevealOnScroll>
+          <RevealOnScroll as="p" className="consult-cta__body" delay={240}>
+            Solicita una consultoría estratégica y entiende qué está frenando
+            tu crecimiento antes de seguir invirtiendo sin dirección.
+          </RevealOnScroll>
+          <RevealOnScroll as="div" className="consult-cta__actions" delay={360}>
+            <Link to="/#cta" className="consult-btn consult-btn--primary">
+              Solicitar consultoría EXP
+            </Link>
+          </RevealOnScroll>
+        </div>
+      </section>
     </>
   )
 }
+

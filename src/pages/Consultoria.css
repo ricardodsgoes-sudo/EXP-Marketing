@@ -1,0 +1,651 @@
+/* ============================================================
+   CONSULTORÍA — editorial dark-first page.
+   1. consult-hero       — magazine spread (text + portrait)
+   2. consult-for-whom   — numbered editorial list (7 items)
+   3. consult-analysis   — 11-cell grid of analyzed areas
+   4. consult-delivery   — asymmetric spread + deliverables checklist
+   5. consult-cta        — closing call with consultoría-specific copy
+   ============================================================ */
+
+/* Shared section tokens */
+.consult-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  margin-bottom: clamp(20px, 2.8vw, 32px);
+}
+
+.consult-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--champagne);
+}
+
+.consult-section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4.4vw, 60px);
+  font-weight: 300;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: #f5f3ef;
+  margin: 0 0 clamp(28px, 3.6vw, 48px);
+}
+
+.consult-accent {
+  color: var(--champagne);
+  font-style: italic;
+}
+
+/* Shared buttons */
+.consult-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  min-height: 52px;
+  transition:
+    background-color var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.consult-btn--primary {
+  background: var(--champagne);
+  color: #0a0a0a;
+}
+
+.consult-btn--primary:hover {
+  background: #c4a57a;
+  transform: translateY(-1px);
+}
+
+.consult-btn--link {
+  background: transparent;
+  border: none;
+  padding: 16px 0;
+  color: rgba(240, 237, 232, 0.82);
+}
+
+.consult-btn--link:hover {
+  color: var(--champagne);
+}
+
+.consult-btn--link span {
+  transition: transform var(--transition);
+}
+
+.consult-btn--link:hover span {
+  transform: translateX(4px);
+}
+
+/* ───────── Hero ───────── */
+
+.consult-hero {
+  background: #060606;
+  color: #f0ede8;
+  margin-top: -104px;
+  padding:
+    clamp(200px, 24vw, 300px)
+    var(--gutter)
+    clamp(96px, 12vw, 152px);
+  position: relative;
+  overflow: hidden;
+}
+
+.consult-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(48px, 6vw, 96px);
+  align-items: center;
+}
+
+.consult-hero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.consult-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  margin-bottom: clamp(32px, 4vw, 48px);
+}
+
+.consult-hero__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--champagne);
+}
+
+.consult-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5.8vw, 88px);
+  font-weight: 300;
+  line-height: 1.04;
+  letter-spacing: -0.022em;
+  color: #f5f3ef;
+  margin: 0 0 clamp(28px, 4vw, 44px);
+  max-width: 720px;
+}
+
+.consult-hero__title-accent {
+  color: var(--champagne);
+  font-style: italic;
+}
+
+.consult-hero__lead {
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.18vw, 1.18rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(240, 237, 232, 0.82);
+  margin: 0 0 clamp(20px, 2.4vw, 28px);
+  max-width: 600px;
+}
+
+.consult-hero__support {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(240, 237, 232, 0.6);
+  margin: 0 0 clamp(36px, 5vw, 56px);
+  max-width: 580px;
+}
+
+.consult-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(16px, 2vw, 28px);
+  align-items: center;
+}
+
+/* Hero visual — portrait with a champagne hairline + bottom tag */
+.consult-hero__visual {
+  position: relative;
+  aspect-ratio: 3 / 4.2;
+  width: 100%;
+  max-width: 540px;
+  justify-self: end;
+}
+
+.consult-hero__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: contrast(1.04) saturate(0.88);
+}
+
+.consult-hero__photo-frame {
+  position: absolute;
+  inset: clamp(14px, 1.8vw, 22px);
+  border: 1px solid rgba(216, 185, 140, 0.45);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.consult-hero__photo-tag {
+  position: absolute;
+  left: clamp(20px, 2.4vw, 30px);
+  bottom: clamp(20px, 2.4vw, 30px);
+  z-index: 2;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  background: rgba(6, 6, 6, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 10px 14px;
+  border: 1px solid rgba(216, 185, 140, 0.32);
+}
+
+/* ───────── Para quién es ───────── */
+
+.consult-for-whom {
+  background: var(--graphite);
+  color: #f0ede8;
+  padding: clamp(96px, 14vw, 168px) 0;
+}
+
+.consult-for-whom__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(48px, 6vw, 96px);
+  align-items: start;
+}
+
+.consult-for-whom__lead {
+  position: sticky;
+  top: 120px;
+}
+
+.consult-for-whom__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.consult-for-whom__item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: clamp(16px, 2vw, 28px);
+  align-items: baseline;
+  padding: clamp(18px, 2.4vw, 28px) 0;
+  border-top: 1px solid rgba(247, 247, 245, 0.08);
+}
+
+.consult-for-whom__item:last-child {
+  border-bottom: 1px solid rgba(247, 247, 245, 0.08);
+}
+
+.consult-for-whom__num {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--champagne);
+  font-variant-numeric: tabular-nums;
+}
+
+.consult-for-whom__text {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 300;
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  color: #f0ede8;
+}
+
+/* ───────── Qué analizamos — 11 cells ───────── */
+
+.consult-analysis {
+  background: #0d0d0d;
+  color: #f0ede8;
+  padding: clamp(96px, 14vw, 168px) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.consult-analysis__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.consult-analysis__lead {
+  max-width: 760px;
+  margin: 0 0 clamp(56px, 7vw, 88px);
+}
+
+.consult-analysis__intro {
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.18vw, 1.18rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(240, 237, 232, 0.6);
+  margin: 0;
+  max-width: 600px;
+}
+
+.consult-analysis__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgba(247, 247, 245, 0.08);
+}
+
+.consult-analysis__cell {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(16px, 2vw, 24px);
+  padding: clamp(22px, 3vw, 36px) clamp(18px, 2vw, 28px);
+  border-bottom: 1px solid rgba(247, 247, 245, 0.08);
+  border-right: 1px solid rgba(247, 247, 245, 0.08);
+  transition: background-color 320ms ease;
+}
+
+.consult-analysis__cell:nth-child(3n) {
+  border-right: none;
+}
+
+.consult-analysis__cell:hover {
+  background-color: rgba(216, 185, 140, 0.04);
+}
+
+.consult-analysis__num {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--champagne);
+  font-variant-numeric: tabular-nums;
+}
+
+.consult-analysis__label {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.2vw, 26px);
+  font-weight: 300;
+  letter-spacing: -0.008em;
+  line-height: 1.15;
+  color: #f0ede8;
+}
+
+/* ───────── Entrega final — asymmetric spread ───────── */
+
+.consult-delivery {
+  background: #060606;
+  color: #f0ede8;
+  padding: clamp(96px, 14vw, 168px) 0;
+}
+
+.consult-delivery__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(48px, 6vw, 112px);
+  align-items: center;
+}
+
+.consult-delivery__visual {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  max-width: 480px;
+}
+
+.consult-delivery__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: grayscale(0.2) contrast(1.05);
+}
+
+.consult-delivery__photo-frame {
+  position: absolute;
+  inset: clamp(14px, 1.8vw, 22px);
+  border: 1px solid rgba(216, 185, 140, 0.4);
+  pointer-events: none;
+}
+
+/* EXP wordmark stamped on the delivery photo as a brand mark. */
+.consult-delivery__wordmark {
+  position: absolute;
+  right: clamp(20px, 2.4vw, 32px);
+  top: clamp(20px, 2.4vw, 32px);
+  width: clamp(90px, 11vw, 140px);
+  height: auto;
+  opacity: 0.88;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+.consult-delivery__copy {
+  max-width: 640px;
+}
+
+.consult-delivery__title {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4.2vw, 56px);
+  font-weight: 300;
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+  color: #f5f3ef;
+  margin: 0 0 clamp(20px, 2.6vw, 32px);
+}
+
+.consult-delivery__body {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.1vw, 1.125rem);
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(240, 237, 232, 0.72);
+  margin: 0 0 clamp(28px, 3.4vw, 40px);
+}
+
+.consult-delivery__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.4vw, 14px);
+}
+
+.consult-delivery__item {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 14px;
+  align-items: baseline;
+  font-family: var(--font-body);
+  font-size: clamp(0.9375rem, 1vw, 1rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(240, 237, 232, 0.86);
+}
+
+.consult-delivery__check {
+  color: var(--champagne);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(2px);
+}
+
+/* ───────── CTA final ───────── */
+
+.consult-cta {
+  background: #0a0a0a;
+  color: #f0ede8;
+  padding: clamp(112px, 16vw, 200px) var(--gutter);
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(247, 247, 245, 0.06);
+}
+
+.consult-cta__inner {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.consult-cta__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  margin-bottom: clamp(28px, 3.6vw, 44px);
+}
+
+.consult-cta__title {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.8vw, 68px);
+  font-weight: 300;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: #f5f3ef;
+  margin: 0 0 clamp(24px, 3vw, 36px);
+}
+
+.consult-cta__body {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.1vw, 1.125rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(240, 237, 232, 0.7);
+  max-width: 620px;
+  margin: 0 0 clamp(36px, 4.6vw, 52px);
+}
+
+.consult-cta__actions {
+  display: flex;
+  gap: 20px;
+}
+
+/* ───────── Mobile ───────── */
+
+@media (max-width: 860px) {
+  .consult-hero {
+    margin-top: -80px;
+    padding:
+      clamp(140px, 22vw, 180px)
+      24px
+      clamp(72px, 12vw, 100px);
+  }
+
+  .consult-hero__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 8vw, 56px);
+  }
+
+  .consult-hero__title {
+    font-size: clamp(32px, 9vw, 52px);
+  }
+
+  .consult-hero__visual {
+    justify-self: stretch;
+    max-width: none;
+    aspect-ratio: 4 / 5;
+  }
+
+  .consult-hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .consult-btn--primary {
+    width: 100%;
+  }
+
+  .consult-for-whom {
+    padding: clamp(72px, 14vw, 110px) 0;
+  }
+
+  .consult-for-whom__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(32px, 6vw, 48px);
+  }
+
+  .consult-for-whom__lead {
+    position: static;
+  }
+
+  .consult-section-title {
+    font-size: clamp(28px, 7.6vw, 40px);
+  }
+
+  .consult-for-whom__item {
+    grid-template-columns: 48px 1fr;
+    gap: 14px;
+    padding: clamp(16px, 4vw, 22px) 0;
+  }
+
+  .consult-for-whom__text {
+    font-size: clamp(18px, 5vw, 22px);
+  }
+
+  .consult-analysis {
+    padding: clamp(72px, 14vw, 110px) 0;
+  }
+
+  .consult-analysis__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .consult-analysis__cell {
+    border-right: none;
+    padding: clamp(18px, 4vw, 24px) 0;
+  }
+
+  .consult-analysis__label {
+    font-size: clamp(18px, 5vw, 22px);
+  }
+
+  .consult-delivery {
+    padding: clamp(72px, 14vw, 110px) 0;
+  }
+
+  .consult-delivery__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 8vw, 56px);
+  }
+
+  .consult-delivery__visual {
+    max-width: none;
+    aspect-ratio: 4 / 3;
+  }
+
+  .consult-delivery__title {
+    font-size: clamp(26px, 7vw, 36px);
+  }
+
+  .consult-cta {
+    padding: clamp(80px, 16vw, 130px) 24px;
+  }
+
+  .consult-cta__title {
+    font-size: clamp(30px, 8vw, 44px);
+  }
+
+  .consult-cta__actions {
+    width: 100%;
+  }
+
+  .consult-cta__actions .consult-btn--primary {
+    width: 100%;
+  }
+}

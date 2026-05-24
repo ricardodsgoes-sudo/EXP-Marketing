@@ -1,35 +1,17 @@
 import RevealOnScroll from '../components/RevealOnScroll'
 import PageHero from '../components/PageHero'
 import FinalCTA from '../components/FinalCTA'
+import './Casos.css'
 
-const CASES = [
-  {
-    num: '01',
-    client: 'Clínica de estética avanzada',
-    segment: 'Estética avanzada · multiprofesional',
-    metric: '+182%',
-    metricLabel: 'crecimiento en facturación / 9 meses',
-    summary:
-      'Reestructuración de posicionamiento, ofertas y embudo. Foco en autoridad técnica y previsibilidad comercial.',
-  },
-  {
-    num: '02',
-    client: 'Marca de cosmética profesional',
-    segment: 'Producto · B2B + B2C',
-    metric: '4,2×',
-    metricLabel: 'retorno sobre inversión en tráfico',
-    summary:
-      'Construcción de embudo de captación, contenido editorial y estructura de campañas con lectura semanal de números.',
-  },
-  {
-    num: '03',
-    client: 'Profesional independiente · biomédica',
-    segment: 'Mentoría EXP Beauty Growth',
-    metric: '+340%',
-    metricLabel: 'agenda llena / 4 meses',
-    summary:
-      'Del Instagram sin dirección a una agenda llena, con ticket medio mayor y proceso de cierre estructurado.',
-  },
+const ARTIFACTS = [
+  'Testimonios',
+  'Antes y después',
+  'Capturas de métricas',
+  'Páginas creadas',
+  'Campañas',
+  'Creativos',
+  'Resultados de mentoradas',
+  'Estudios de caso',
 ]
 
 export default function Casos() {
@@ -39,44 +21,83 @@ export default function Casos() {
         eyebrow="Casos EXP"
         title={
           <>
-            Resultados reales
+            Resultados, proyectos y estrategias
             <br />
-            de negocios beauty.
+            aplicadas al mercado beauty.
           </>
         }
-        intro="Una muestra de lo que pasa cuando esfuerzo y técnica encuentran estrategia. Cada caso reúne contexto, decisiones y números, no solo el titular."
+        intro="Aquí reunimos casos, proyectos, campañas, páginas, contenidos y transformaciones construidas con estrategia, ejecución y análisis de datos."
       />
 
-      <section className="page-section" aria-labelledby="cases-list">
-        <h2 id="cases-list" className="visually-hidden">
-          Casos seleccionados
-        </h2>
-        <div className="page-section__inner">
-          <ol className="case-list">
-            {CASES.map((c, i) => (
+      <section
+        className="casos-archive"
+        aria-labelledby="casos-archive-title"
+      >
+        <div className="casos-archive__inner">
+          <RevealOnScroll
+            as="span"
+            className="casos-archive__eyebrow"
+          >
+            Archivo selectivo
+          </RevealOnScroll>
+
+          <RevealOnScroll
+            as="h2"
+            id="casos-archive-title"
+            className="casos-archive__title"
+            delay={120}
+          >
+            Los resultados <em>se comparten</em>
+            <br />
+            en confianza.
+          </RevealOnScroll>
+
+          <RevealOnScroll
+            as="p"
+            className="casos-archive__body"
+            delay={240}
+          >
+            Cada caso reúne procesos comerciales, métricas reales, decisiones
+            estratégicas y datos sensibles del negocio. Por eso no los
+            publicamos abiertamente. Los compartimos en sesiones de
+            diagnóstico, bajo NDA, con quien evalúa trabajar con EXP.
+          </RevealOnScroll>
+
+          <RevealOnScroll
+            as="p"
+            className="casos-archive__body"
+            delay={340}
+          >
+            En esas conversaciones presentamos lo que construimos junto a
+            clínicas, marcas y profesionales del mercado beauty:
+          </RevealOnScroll>
+
+          <ul
+            className="casos-archive__list"
+            aria-label="Materiales que se comparten en el diagnóstico"
+          >
+            {ARTIFACTS.map((item, i) => (
               <RevealOnScroll
-                key={c.num}
+                key={item}
                 as="li"
-                className="case-row"
-                delay={i * 110}
+                className="casos-archive__item"
+                delay={i * 70}
               >
-                <span className="case-row__num">{c.num}</span>
-                <div className="case-row__body">
-                  <span className="case-row__segment">{c.segment}</span>
-                  <h3 className="case-row__client">{c.client}</h3>
-                  <p className="case-row__summary">{c.summary}</p>
-                </div>
-                <div className="case-row__metric">
-                  <span className="case-row__metric-value">{c.metric}</span>
-                  <span className="case-row__metric-label">{c.metricLabel}</span>
-                </div>
+                <span className="casos-archive__num">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="casos-archive__label">{item}</span>
               </RevealOnScroll>
             ))}
-          </ol>
+          </ul>
 
-          <RevealOnScroll as="p" className="case-list__note" delay={200}>
-            Más casos publicados pronto. Los detalles completos se comparten en
-            las sesiones de diagnóstico bajo NDA.
+          <RevealOnScroll
+            as="p"
+            className="casos-archive__note"
+            delay={200}
+          >
+            Si quieres ver casos aplicados a tu segmento, escríbenos. Los
+            compartimos en privado durante el diagnóstico estratégico.
           </RevealOnScroll>
         </div>
       </section>

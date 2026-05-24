@@ -456,29 +456,23 @@
 }
 
 @media (max-width: 760px) {
+  /* Breathing room between Diagnóstico's pin and Method's section start. */
   .method {
+    margin-top: clamp(60px, 24vh, 200px);
     padding:
-      clamp(92px, 18vw, 128px)
+      clamp(72px, 14vw, 110px)
       24px
-      clamp(96px, 18vw, 136px);
+      0;
   }
 
   .method__header {
     text-align: left;
-    margin-bottom: clamp(52px, 12vw, 72px);
+    margin-bottom: clamp(36px, 8vw, 56px);
   }
 
-  .method__eyebrow {
-    gap: 12px;
-  }
-
-  .method__eyebrow::before {
-    width: 18px;
-  }
-
-  .method__eyebrow::after {
-    display: none;
-  }
+  .method__eyebrow { gap: 12px; }
+  .method__eyebrow::before { width: 18px; }
+  .method__eyebrow::after { display: none; }
 
   .method__title {
     font-size: clamp(34px, 9vw, 48px);
@@ -491,25 +485,160 @@
     font-size: 1rem;
   }
 
+  /* Pinned map: 100vh frame with wheel on top + card carousel below.
+     GSAP pins this element and translates cards up one by one. */
+  .method__map {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: 1fr;
+    padding: clamp(60px, 9vh, 90px) 0 clamp(36px, 6vh, 56px);
+    gap: 0;
+    margin-bottom: clamp(80px, 16vw, 140px);
+  }
+
   .method__visual {
-    min-height: 440px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 100%;
+    max-width: none;
+    height: clamp(360px, 50vh, 430px);
+    min-height: 0;
+    margin: 0;
   }
 
-  .method__connectors {
-    display: none;
-  }
-
-  .method__orbit-label {
-    display: none;
-  }
+  .method__connectors { display: none; }
 
   .method__wheel {
-    width: min(78vw, 320px);
+    width: min(70vw, 280px);
+    top: 40%;
   }
 
-  .method__strategy-card {
-    grid-template-columns: 1fr;
+  /* 4 orbit labels collapse into one slot below the wheel; the active
+     one fades in based on reachedCount. */
+  .method__orbit-label {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    top: auto;
+    right: auto;
+    transform: translate(-50%, 6px);
+    max-width: 320px;
+    margin: 0;
+    padding: 0 24px;
+    text-align: center;
+    font-size: clamp(20px, 5.4vw, 28px);
+    opacity: 0;
+    transition:
+      opacity 420ms ease,
+      transform 480ms cubic-bezier(0.22, 0.7, 0.2, 1);
+  }
+
+  .method__orbit-label.is-active {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  /* Card carousel — uses CSS grid stacking (all 4 cards placed in the
+     same grid cell) instead of position: absolute. This guarantees each
+     card has the same size as the grid cell with no risk of a collapsed
+     container leaving the cards 0px tall. GSAP animates translateY to
+     raise each card over the previous; z-index orders the deck. */
+  .method__strategy-list {
+    flex: 1 1 auto;
+    min-height: clamp(240px, 32vh, 320px);
+    position: relative;
+    display: grid;
+    grid-template-areas: 'stack';
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    list-style: none;
+    padding: 0;
+    margin: clamp(20px, 4vh, 32px) 24px 0;
+    overflow: hidden;
+  }
+
+  /* All 4 cards occupy the same grid cell — they stack perfectly without
+     needing position: absolute. !important on the layout/visibility
+     properties because the desktop base + .is-reached rules (same
+     specificity) set opacity 0.42, a 620ms transition, and a transform
+     offset that fight the GSAP scrub. */
+  .method__strategy-card,
+  .method__strategy-card.is-reached {
+    grid-area: stack !important;
+    margin: 0 !important;
+    background: #0d0d0d !important;
+    border: 1px solid rgba(216, 185, 140, 0.22) !important;
+    border-radius: 0 !important;
+    padding: clamp(22px, 5vw, 30px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: clamp(8px, 2vw, 14px) !important;
+    justify-content: center !important;
+    box-shadow: 0 -14px 40px rgba(0, 0, 0, 0.55) !important;
+    will-change: transform !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+
+  /* Initial transforms — card 1 visible, 2-4 off-screen below. NO
+     !important so GSAP's inline transform can override during scrub. */
+  .method__strategy-card:nth-child(1) { z-index: 1; transform: translateY(0); }
+  .method__strategy-card:nth-child(2) { z-index: 2; transform: translateY(110%); }
+  .method__strategy-card:nth-child(3) { z-index: 3; transform: translateY(110%); }
+  .method__strategy-card:nth-child(4) { z-index: 4; transform: translateY(110%); }
+
+  .method__strategy-num {
+    color: var(--champagne);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    margin: 0 0 4px;
+  }
+
+  .method__strategy-title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 7.2vw, 38px);
+    font-weight: 300;
+    line-height: 1.05;
+    margin: 0;
+    color: #f0ede8;
+  }
+
+  .method__strategy-text {
+    font-size: clamp(14px, 3.8vw, 16px);
+    line-height: 1.5;
+    color: rgba(240, 237, 232, 0.7);
+    margin: 4px 0 0;
+  }
+}
+
+/* Static fallback for reduced-motion users on mobile — overrides the pin
+   layout so the section becomes a stacked block. */
+@media (max-width: 760px) {
+  .method--reduced .method__map {
+    height: auto;
+    padding: 0;
+    margin-bottom: 0;
+    display: block;
+  }
+  .method--reduced .method__visual { height: 380px; }
+  .method--reduced .method__strategy-list {
+    flex: none;
+    position: static;
+    margin: clamp(40px, 8vw, 60px) 0 0;
+    display: flex;
+    flex-direction: column;
     gap: 12px;
-    min-height: auto;
+  }
+  .method--reduced .method__strategy-card {
+    position: relative;
+    inset: auto;
+    box-shadow: none;
+    transform: none !important;
   }
 }

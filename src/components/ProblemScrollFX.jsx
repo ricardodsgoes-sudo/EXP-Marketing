@@ -114,20 +114,25 @@ export default function ProblemScrollFX() {
 
     // Entrance — the whole section arrives slightly blurred and lifts
     // into focus quickly. Narrow handoff window + small max blur keep
-    // it as a subtle polish, not a dramatic transition.
-    const entranceBlur = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: 'top 22%',
-      end: 'top 4%',
-      scrub: 0.25,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        if (!pinRef.current) return
-        const p = self.progress
-        pinRef.current.style.filter = `blur(${(1 - p) * 5}px)`
-        pinRef.current.style.opacity = String(0.78 + p * 0.22)
-      },
-    })
+    // it as a subtle polish, not a dramatic transition. Skipped on mobile
+    // — the blur reads as a rendering glitch on small viewports where
+    // the pinned content is already close to viewport edges.
+    const isMobile = window.innerWidth <= 860
+    const entranceBlur = isMobile
+      ? null
+      : ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: 'top 22%',
+          end: 'top 4%',
+          scrub: 0.25,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            if (!pinRef.current) return
+            const p = self.progress
+            pinRef.current.style.filter = `blur(${(1 - p) * 5}px)`
+            pinRef.current.style.opacity = String(0.78 + p * 0.22)
+          },
+        })
 
     const mm = gsap.matchMedia()
 
@@ -295,8 +300,151 @@ export default function ProblemScrollFX() {
       )
     })
 
+    // Mobile — same animation choreography (chart reveal, word stagger,
+    // danger phase, resolution) but cards are absolute-stacked and swap
+    // via the .is-active class set by activeIndex. No horizontal track
+    // translation; the runway is a fixed multiple of viewport height.
+    mm.add('(max-width: 860px)', () => {
+      const revealRect = revealRectRef.current
+      const dangerRect = dangerRectRef.current
+      const dangerPath = dangerPathRef.current
+      const diag = diagRef.current
+      const resolution = resolutionRef.current
+      const resolutionLine = resolutionLineRef.current
+      const resolutionParts = resolutionPartsRef.current.filter(Boolean)
+      if (
+        !revealRect || !dangerRect || !dangerPath ||
+        !diag || !resolution || !resolutionLine || resolutionParts.length === 0
+      ) return
+
+      // ~80vh per pain card + ~100vh resolution runway — enough to feel
+      // each card land without overstaying its welcome on mobile.
+      const totalRunway = () => Math.round(window.innerHeight * (PAINS.length * 0.78 + 1.05))
+
+      const H_END = 0.82
+      const DANGER_DUR = 0.14
+      const DANGER_START = Math.max(0, H_END - DANGER_DUR)
+      const R_START = Math.min(0.999, H_END + 0.03)
+
+      gsap.set(revealRect, { attr: { width: 0 } })
+      gsap.set(dangerRect, { attr: { width: 0 } })
+      gsap.set(dangerPath, { opacity: 0 })
+      gsap.set(diag, { opacity: 1, filter: 'blur(0px)' })
+      gsap.set(resolution, { opacity: 0 })
+      gsap.set(resolutionLine, { strokeDasharray: 1, strokeDashoffset: 1 })
+      gsap.set(resolutionParts, { opacity: 0, y: 18 })
+
+      let lastInResolution = false
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: () => `+=${totalRunway()}`,
+          pin: pinRef.current,
+          pinSpacing: true,
+          scrub: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onRefresh: () => {
+            gsap.set(revealRect, { attr: { width: 0 } })
+            gsap.set(dangerRect, { attr: { width: 0 } })
+            gsap.set(dangerPath, { opacity: 0 })
+            gsap.set(diag, { opacity: 1, filter: 'blur(0px)' })
+            gsap.set(resolution, { opacity: 0 })
+            gsap.set(resolutionLine, { strokeDasharray: 1, strokeDashoffset: 1 })
+            gsap.set(resolutionParts, { opacity: 0, y: 18 })
+          },
+          onUpdate: (self) => {
+            const horizontalProgress = Math.min(1, self.progress / H_END)
+            const revealedX = horizontalProgress * VIEWBOX_W
+            const idx = PAIN_POINTS.reduce(
+              (latest, point, pointIndex) =>
+                revealedX >= point.x ? pointIndex : latest,
+              0,
+            )
+            setActiveIndex(idx)
+
+            const inResolution = self.progress >= R_START - 0.01
+            if (inResolution !== lastInResolution) {
+              lastInResolution = inResolution
+              setShowResolution(inResolution)
+            }
+          },
+        },
+      })
+
+      // Chart line reveals across the horizontal strip at the bottom
+      tl.to(revealRect, { attr: { width: VIEWBOX_W }, duration: H_END }, 0)
+
+      // Title words light up progressively
+      const titleWords = sectionRef.current.querySelectorAll('.pscroll__title-word')
+      if (titleWords.length > 0) {
+        gsap.set(titleWords, { opacity: 0.18 })
+        tl.to(
+          titleWords,
+          {
+            opacity: 1,
+            ease: 'none',
+            duration: 0.08,
+            stagger: (0.6 * H_END) / titleWords.length,
+          },
+          0,
+        )
+      }
+
+      // Danger phase
+      tl.to(
+        dangerRect,
+        { attr: { width: VIEWBOX_W - PAIN_POINTS[5].x }, duration: DANGER_DUR },
+        DANGER_START,
+      )
+      tl.to(
+        dangerPath,
+        { opacity: 0.7, ease: 'power1.inOut', duration: DANGER_DUR },
+        DANGER_START,
+      )
+
+      // Settle + dim
+      tl.to(
+        dangerPath,
+        { opacity: 0.12, ease: 'power2.out', duration: 0.05 },
+        H_END + 0.005,
+      )
+      tl.to(
+        diag,
+        {
+          opacity: 0.12,
+          filter: 'blur(8px)',
+          ease: 'power2.out',
+          duration: 0.1,
+        },
+        H_END,
+      )
+
+      // Resolution
+      tl.to(resolution, { opacity: 1, ease: 'power2.out', duration: 0.05 }, R_START)
+      tl.to(
+        resolutionLine,
+        { strokeDashoffset: 0, ease: 'power2.inOut', duration: 0.22 },
+        R_START + 0.005,
+      )
+      tl.to(
+        resolutionParts,
+        {
+          opacity: 1,
+          y: 0,
+          ease: 'power2.out',
+          duration: 0.11,
+          stagger: 0.06,
+        },
+        R_START + 0.08,
+      )
+    })
+
     return () => {
-      entranceBlur.kill()
+      entranceBlur?.kill()
       if (pinRef.current) {
         pinRef.current.style.filter = ''
         pinRef.current.style.opacity = ''

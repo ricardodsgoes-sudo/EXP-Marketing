@@ -132,7 +132,8 @@ export default function MethodSection() {
           return () => tween.scrollTrigger?.kill()
         })
 
-        methodMedia.add('(max-width: 1100px)', () => {
+        // Tablet — same as before (scroll-progress, no pin)
+        methodMedia.add('(min-width: 761px) and (max-width: 1100px)', () => {
           const tween = gsap.to(railRef.current, {
             '--method-progress': 1,
             ease: 'none',
@@ -153,6 +154,74 @@ export default function MethodSection() {
           })
 
           return () => tween.scrollTrigger?.kill()
+        })
+
+        // Mobile — wheel pinned, cards rise one by one stacking on top of
+        // each other. The card most recently raised covers the previous,
+        // and the wheel's progress arc + active orbit label follow scroll.
+        methodMedia.add('(max-width: 760px)', () => {
+          const rail = railRef.current
+          const cards = pillarsRef.current.filter(Boolean)
+          if (!rail || cards.length < PILLARS.length) return
+
+          // Cards 2-4 start off-screen below the carousel; card 1 is visible
+          gsap.set(cards.slice(1), { y: '110%' })
+
+          const tl = gsap.timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: {
+              trigger: rail,
+              start: 'top top',
+              end: '+=320%',
+              pin: true,
+              pinSpacing: true,
+              scrub: 1,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onRefresh: () => {
+                gsap.set(cards.slice(1), { y: '110%' })
+              },
+              onUpdate: (self) => {
+                const p = self.progress
+                rail.style.setProperty('--method-progress', p.toFixed(3))
+                rail.style.setProperty(
+                  '--method-finish',
+                  p > 0.92 ? '1' : '0',
+                )
+                // Active card flips at the midpoint of each rise phase
+                // so the orbit label changes when the new card is halfway
+                // over the previous one.
+                const reached = Math.max(1, Math.min(4, Math.round(p * 4)))
+                if (reached !== lastReachedRef.current) {
+                  lastReachedRef.current = reached
+                  setReachedCount(reached)
+                }
+              },
+              onLeave: () => {
+                rail.style.setProperty('--method-progress', '1')
+                rail.style.setProperty('--method-finish', '1')
+                lastReachedRef.current = PILLARS.length
+                setReachedCount(PILLARS.length)
+              },
+              onLeaveBack: () => {
+                rail.style.setProperty('--method-progress', '0')
+                rail.style.setProperty('--method-finish', '0')
+                lastReachedRef.current = 0
+                setReachedCount(0)
+              },
+            },
+          })
+
+          // Each card rises during a 25% phase of the timeline
+          tl.to(cards[1], { y: '0%', duration: 0.25 }, 0.25)
+          tl.to(cards[2], { y: '0%', duration: 0.25 }, 0.5)
+          tl.to(cards[3], { y: '0%', duration: 0.25 }, 0.75)
+
+          return () => {
+            tl.scrollTrigger?.kill()
+            tl.kill()
+            gsap.set(cards, { clearProps: 'transform' })
+          }
         })
 
         return () => methodMedia.revert()
@@ -197,18 +266,29 @@ export default function MethodSection() {
               <path className="method__connector method__connector--cards" d="M 392 250 H 590" />
             </svg>
 
-            <span className="method__orbit-label method__orbit-label--one">
-              Diagnóstico profundo
-            </span>
-            <span className="method__orbit-label method__orbit-label--two">
-              Estrategia clara
-            </span>
-            <span className="method__orbit-label method__orbit-label--three">
-              Ejecución profesional
-            </span>
-            <span className="method__orbit-label method__orbit-label--four">
-              Gestión con datos
-            </span>
+            {(() => {
+              // On mobile, the 4 orbit labels collapse into a single slot
+              // below the wheel and the active one fades in based on
+              // scroll progress (reachedCount). Desktop ignores .is-active.
+              const activeIndex = Math.max(0, reachedCount - 1)
+              const orbitLabels = [
+                'Diagnóstico profundo',
+                'Estrategia clara',
+                'Ejecución profesional',
+                'Gestión con datos',
+              ]
+              return orbitLabels.map((label, i) => (
+                <span
+                  key={i}
+                  className={
+                    `method__orbit-label method__orbit-label--${['one','two','three','four'][i]}` +
+                    (i === activeIndex ? ' is-active' : '')
+                  }
+                >
+                  {label}
+                </span>
+              ))
+            })()}
 
             <div className="method__wheel">
               <div className="method__wheel-progress" />

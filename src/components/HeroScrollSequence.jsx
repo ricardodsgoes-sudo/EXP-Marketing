@@ -14,6 +14,21 @@ const TOTAL_FRAMES = FRAME_URLS.length // 240
 
 const END_FRAME_INDEX = TOTAL_FRAMES - 1
 
+// Mobile: subsample 1 in every 8 frames + the final frame. ~31 frames at
+// ~20KB each → ~620KB total, well within a mobile data budget while still
+// reading as a continuous animation when scrubbed by scroll.
+const MOBILE_FRAME_STEP = 8
+const MOBILE_FRAME_URLS = (() => {
+  const urls = []
+  for (let i = 0; i < TOTAL_FRAMES; i += MOBILE_FRAME_STEP) urls.push(FRAME_URLS[i])
+  if (urls[urls.length - 1] !== FRAME_URLS[END_FRAME_INDEX]) {
+    urls.push(FRAME_URLS[END_FRAME_INDEX])
+  }
+  return urls
+})()
+const MOBILE_FRAME_COUNT = MOBILE_FRAME_URLS.length
+const MOBILE_END_INDEX = MOBILE_FRAME_COUNT - 1
+
 function clamp01(v) {
   return Math.max(0, Math.min(1, v))
 }
@@ -57,6 +72,31 @@ function drawCoverTop(ctx, img, w, h) {
   ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)
 }
 
+// Mobile draw: fills the whole canvas (no dark margin) since the canvas
+// IS the hero background on mobile. Slight left bias on the source crop
+// matches the model's framing in the photo. Top-aligned vertically so
+// the face stays visible above the gradient + headline.
+function drawCoverFill(ctx, img, w, h) {
+  const iw = img.naturalWidth
+  const ih = img.naturalHeight
+  if (!iw || !ih || !w || !h) return
+  const canvasRatio = w / h
+  const imgRatio    = iw / ih
+  let sx, sy, sw, sh
+  if (imgRatio > canvasRatio) {
+    sh = ih
+    sw = ih * canvasRatio
+    sx = (iw - sw) * H_BIAS
+    sy = 0
+  } else {
+    sw = iw
+    sh = iw / canvasRatio
+    sx = 0
+    sy = 0
+  }
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, w, h)
+}
+
 export default function HeroScrollSequence() {
   const sectionRef = useRef(null)
   const canvasRef  = useRef(null)
@@ -73,6 +113,8 @@ export default function HeroScrollSequence() {
       currentFrame: 0,
     }
     let rafId = null
+    const isMobile = window.innerWidth <= 860
+    const draw = isMobile ? drawCoverFill : drawCoverTop
 
     // ── Render helpers ─────────────────────────────────────────────
 
@@ -80,7 +122,7 @@ export default function HeroScrollSequence() {
       const img = state.images[index]
       if (!img) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      drawCoverTop(ctx, img, canvas.width, canvas.height)
+      draw(ctx, img, canvas.width, canvas.height)
     }
 
     // Find and render the nearest loaded frame to state.currentFrame
@@ -124,18 +166,53 @@ export default function HeroScrollSequence() {
       return () => ro.disconnect()
     }
 
-    // ── Mobile: load only the last frame statically ────────────────
+    // ── Mobile: mini scroll sequence (~31 frames, viewport-driven) ─
+    //
+    // The full 240-frame sequence is too heavy for mobile (network + RAM).
+    // Instead we ship 1-in-every-8 frames and tie the animation to the
+    // image's position in the viewport — frames scrub from first to last
+    // as the image scrolls from just-entering to just-leaving the screen.
+    // No sticky pinning, no layout changes — the user simply sees the
+    // photo come alive as they swipe past it.
 
     if (window.innerWidth <= 860) {
-      state.currentFrame = END_FRAME_INDEX
-      const img = new Image()
-      img.onload = () => {
-        state.images[END_FRAME_INDEX] = img
-        setSize()
+      state.images = new Array(MOBILE_FRAME_COUNT).fill(null)
+      state.currentFrame = 0
+
+      for (let i = 0; i < MOBILE_FRAME_COUNT; i++) {
+        const img = new Image()
+        img.decoding = 'async'
+        img.onload = () => {
+          state.images[i] = img
+          if (Math.abs(i - state.currentFrame) <= 3) renderBest()
+        }
+        img.src = MOBILE_FRAME_URLS[i]
       }
-      img.src = FRAME_URLS[END_FRAME_INDEX]
+
+      const computeMobile = () => {
+        // The section is 200vh tall and the inner sticky frame pins at the
+        // top; map scrollY within the section to a frame index, the same
+        // pattern as desktop but with the mobile-frame count.
+        const stickyEnd = section.offsetTop + section.offsetHeight - window.innerHeight
+        const p = clamp01(stickyEnd > 0 ? window.scrollY / stickyEnd : 0)
+        state.currentFrame = Math.round(p * MOBILE_END_INDEX)
+        renderBest()
+      }
+
+      const onScrollMobile = () => {
+        if (rafId) cancelAnimationFrame(rafId)
+        rafId = requestAnimationFrame(computeMobile)
+      }
+
       setSize()
-      return () => ro.disconnect()
+      computeMobile()
+      window.addEventListener('scroll', onScrollMobile, { passive: true })
+
+      return () => {
+        window.removeEventListener('scroll', onScrollMobile)
+        ro.disconnect()
+        if (rafId) cancelAnimationFrame(rafId)
+      }
     }
 
     // ── Desktop: progressive frame loading ─────────────────────────
@@ -221,6 +298,7 @@ export default function HeroScrollSequence() {
   // competing with the frame sequence. Skipped under reduced motion.
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (window.innerWidth <= 860) return
     if (!sectionRef.current || !contentRef.current) return
 
     gsap.registerPlugin(ScrollTrigger)

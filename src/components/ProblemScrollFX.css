@@ -114,11 +114,9 @@
   }
 }
 
-@media (max-width: 860px) {
-  .pscroll__title-word {
-    opacity: 1;
-  }
-}
+/* On mobile (with the pinned animation), keep the dim baseline so words
+   light up as the user scrolls — same as desktop. Static fallback is
+   covered by the .pscroll--reduced rule above. */
 
 .pscroll__intro {
   font-family: var(--font-body);
@@ -577,125 +575,205 @@
   stroke-dashoffset: 0 !important;
 }
 
-/* ───────── Mobile breakpoint ───────── */
+/* ───────── Mobile breakpoint — pinned + vertical scrub ─────────
+   Same animation choreography as desktop but the cards are
+   absolute-stacked at the same position and swap one at a time
+   via the existing .is-active state. No horizontal track scroll. */
 
 @media (max-width: 860px) {
+  /* Breathing room between the hero pin's end and the diagnostic pin's
+     start — gives the user a moment of "free scroll" before the next
+     pinned section engages. */
+  .pscroll {
+    margin-top: clamp(60px, 24vh, 200px);
+  }
+
   .pscroll__pin {
-    height: auto;
-    padding: clamp(72px, 14vw, 100px) 0;
+    height: 100vh;
   }
 
   .pscroll__diag {
-    position: relative;
-    inset: auto;
-    display: block;
-    padding: 0 24px;
-    opacity: 1 !important;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    gap: clamp(12px, 2.5vh, 20px);
+    padding: clamp(60px, 9vh, 84px) 24px clamp(32px, 5vh, 48px);
   }
 
   .pscroll__anchor {
     max-width: none;
-    margin-bottom: clamp(40px, 8vw, 56px);
+    min-height: 0;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .pscroll__eyebrow {
+    margin-bottom: 14px;
   }
 
   .pscroll__title {
-    font-size: clamp(34px, 8.6vw, 52px);
+    font-size: clamp(24px, 6.4vw, 34px);
+    margin: 0 0 12px;
   }
 
+  /* Intro paragraph would crowd the pinned frame on mobile — hide it
+     and let the headline + cards carry the diagnosis. */
   .pscroll__intro {
-    font-size: 1rem;
-    max-width: none;
+    display: none;
   }
 
+  .pscroll__progress {
+    margin-top: clamp(4px, 1vh, 10px);
+  }
+
+  /* Card carousel area — fills remaining vertical space below the
+     anchor. Chart sits at the bottom of this area. */
   .pscroll__viewport {
+    flex: 1;
+    min-height: 0;
     height: auto;
     overflow: visible;
     -webkit-mask-image: none;
             mask-image: none;
+    position: relative;
   }
 
   .pscroll__track {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    transform: none !important;
-  }
-
-  .pscroll__chart {
     position: relative;
-    inset: auto;
     width: 100%;
-    aspect-ratio: 5 / 2.6;
-    margin-bottom: clamp(32px, 6vw, 48px);
+    height: 100%;
+    transform: none !important;
+    display: block;
   }
 
-  .pscroll__chart-line,
-  .pscroll__chart-line-danger {
-    stroke-dasharray: none !important;
-    stroke-dashoffset: 0 !important;
+  /* Cards stack at the same position; only the active card is visible.
+     Fixed compact height (just enough for num + rule + 2-line text) so
+     the chart below can fill the rest of the viewport — eliminates the
+     dead space that appears when card text is short. */
+  .pscroll__card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: clamp(140px, 21vh, 180px);
+    flex: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: clamp(12px, 2vh, 20px) 0 0;
+    border-left: none;
+    border-right: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 360ms ease,
+      transform 360ms cubic-bezier(0.22, 0.7, 0.2, 1);
+  }
+
+  .pscroll__card.is-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .pscroll__card-num {
+    font-size: 0.6875rem;
+    margin-bottom: 10px;
+  }
+
+  .pscroll__card-rule {
+    width: 28px;
+    margin-bottom: 14px;
+  }
+
+  .pscroll__card-text {
+    font-size: clamp(22px, 5.6vw, 30px);
+    line-height: 1.18;
+    text-shadow: 0 0 24px rgba(23, 23, 23, 0.7);
+  }
+
+  /* Chart fills the entire viewport below the cards — no more empty
+     space between card text and chart. The card occupies a fixed compact
+     band at the top of the viewport; the chart spans from below that
+     band all the way to the viewport bottom. Tall + wide = prominent. */
+  .pscroll__chart {
+    position: absolute;
+    top: clamp(155px, 24vh, 200px);   /* card height + small gap */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: auto;
+    z-index: 0;
+  }
+
+  .pscroll__chart-logo {
+    width: clamp(70px, 14vw, 96px);
+    top: 50%;
   }
 
   .pscroll__chart-dot {
-    width: 16px;
-    height: 16px;
-    margin-left: -8px;
-    margin-top: -8px;
-    opacity: 0.7;
+    width: 20px;
+    height: 20px;
+    margin-left: -10px;
+    margin-top: -10px;
   }
 
-  .pscroll__card {
-    flex: 0 0 auto;
+  .pscroll__resolution {
+    padding: 0 24px;
+  }
+
+  .pscroll__resolution-text {
+    font-size: clamp(26px, 6.4vw, 36px);
+  }
+
+  .pscroll__resolution-line {
+    width: clamp(140px, 36vw, 220px);
+  }
+}
+
+/* Static fallback for reduced-motion users — overrides the mobile pin
+   styles so the section becomes a normal stacked block. */
+@media (max-width: 860px) {
+  .pscroll--reduced .pscroll__pin {
     height: auto;
+  }
+  .pscroll--reduced .pscroll__diag {
+    position: relative;
+    inset: auto;
+    display: block;
+    padding: clamp(72px, 12vw, 100px) 24px clamp(56px, 9vw, 80px);
+  }
+  .pscroll--reduced .pscroll__viewport { flex: none; position: static; }
+  .pscroll--reduced .pscroll__track { display: flex; flex-direction: column; height: auto; }
+  .pscroll--reduced .pscroll__card {
+    position: relative;
+    inset: auto;
+    height: auto;
+    opacity: 1 !important;
+    transform: none !important;
     flex-direction: row;
     align-items: center;
     gap: 14px;
     padding: 14px 0 14px 44px;
-    border-left: none;
     border-bottom: 1px solid rgba(240, 237, 232, 0.07);
+  }
+  .pscroll--reduced .pscroll__card-num {
+    position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0;
+  }
+  .pscroll--reduced .pscroll__card-rule { display: none; }
+  .pscroll--reduced .pscroll__chart {
     position: relative;
+    inset: auto;
+    width: 100%;
+    aspect-ratio: 5 / 2.6;
+    height: auto;
+    margin: 0 0 clamp(32px, 6vw, 48px);
   }
-
-  .pscroll__card:last-child {
-    border-right: none;
-  }
-
-  .pscroll__card-num {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    margin: 0;
-  }
-
-  .pscroll__card-rule {
-    display: none;
-  }
-
-  .pscroll__card-text {
-    font-size: clamp(17px, 4.6vw, 22px);
-    text-shadow: none;
-  }
-
-  /* Resolution overlay becomes a static block under the stacked
-     diagnosis on mobile — same content, no scroll-driven reveal. */
-  .pscroll__resolution {
+  .pscroll--reduced .pscroll__resolution {
     position: relative;
     inset: auto;
     padding: clamp(40px, 10vw, 64px) 24px;
-  }
-
-  .pscroll__resolution,
-  .pscroll__resolution-part {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .pscroll__resolution-line-stroke {
-    stroke-dasharray: none !important;
-    stroke-dashoffset: 0 !important;
-  }
-
-  .pscroll__resolution-text {
-    font-size: clamp(26px, 6.5vw, 36px);
   }
 }

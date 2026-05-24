@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import RevealOnScroll from '../components/RevealOnScroll'
-import heroPortrait from '../assets/mentoria/diagnostico.webp'
-import detailPhoto from '../assets/mentoria/plan.webp'
+import heroPortrait from '../assets/consultoria/hero-diagnostico.png'
+import detailPhoto from '../assets/consultoria/entrega-plan-accion.png'
 import expWordmark from '../assets/exp-wordmark-light.png'
 import './Consultoria.css'
 

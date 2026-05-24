@@ -546,13 +546,13 @@
       clamp(72px, 12vw, 100px);
   }
 
+  .consult-hero__title {
+    font-size: clamp(32px, 9vw, 52px);
+  }
+
   .consult-hero__inner {
     grid-template-columns: 1fr;
     gap: clamp(40px, 8vw, 56px);
-  }
-
-  .consult-hero__title {
-    font-size: clamp(32px, 9vw, 52px);
   }
 
   .consult-hero__visual {

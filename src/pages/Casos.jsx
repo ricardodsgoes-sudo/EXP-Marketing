@@ -1,6 +1,7 @@
 import RevealOnScroll from '../components/RevealOnScroll'
 import PageHero from '../components/PageHero'
 import FinalCTA from '../components/FinalCTA'
+import casosHero from '../assets/generated-heroes/casos-hero-generated.png'
 import './Casos.css'
 
 const ARTIFACTS = [
@@ -27,6 +28,7 @@ export default function Casos() {
           </>
         }
         intro="Aquí reunimos casos, proyectos, campañas, páginas, contenidos y transformaciones construidas con estrategia, ejecución y análisis de datos."
+        image={casosHero}
       />
 
       <section

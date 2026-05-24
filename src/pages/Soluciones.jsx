@@ -4,7 +4,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import RevealOnScroll from '../components/RevealOnScroll'
 import expX from '../assets/exp-x-light.png'
-import solucionesHero from '../assets/soluciones-hero.png'
+import solucionesHero from '../assets/generated-heroes/soluciones-hero-generated.png'
 
 const PATHS = [
   {

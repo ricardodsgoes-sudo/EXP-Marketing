@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SocialIcon from '../components/SocialIcon'
-import heroPortrait from '../assets/hero-sequence/frame-0050.webp'
+import heroMarketing from '../assets/generated-heroes/marketing-digital-hero-generated.png'
 import socialPhoto from '../assets/problem-cards/problem-01.png'
 import traficoPhoto from '../assets/problem-cards/problem-02.png'
 import landingPhoto from '../assets/mokup.webp'
@@ -352,7 +352,7 @@ export default function MarketingDigital() {
 
           <div className="md-hero__visual">
             <img
-              src={heroPortrait}
+              src={heroMarketing}
               alt=""
               className="md-hero__photo"
               loading="eager"

@@ -4,11 +4,12 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import RevealOnScroll from '../components/RevealOnScroll'
 import FinalCTA from '../components/FinalCTA'
-import stepImageDiagnostico from '../assets/mentoria/diagnostico.webp'
-import stepImagePlan from '../assets/mentoria/plan.webp'
-import stepImageAcompanamiento from '../assets/mentoria/acompanamiento.webp'
-import stepImageEvolucion from '../assets/mentoria/evolucion.webp'
+import stepImageDiagnostico from '../assets/mentoria/method/diagnostico-inicial.png'
+import stepImagePlan from '../assets/mentoria/method/plan-estrategico.png'
+import stepImageAcompanamiento from '../assets/mentoria/method/acompanamiento.png'
+import stepImageEvolucion from '../assets/mentoria/method/evolucion.png'
 import expMark from '../assets/mentoria/exp-mark.webp'
+import heroSalon from '../assets/generated-heroes/mentoria-hero-generated.png'
 
 /* ────────────────────────────────────────────────────────────────
    Content data — kept here so the JSX below stays a layout file.
@@ -413,6 +414,7 @@ export default function Mentoria() {
         className="mentoria-hero"
         aria-labelledby="mentoria-hero-title"
         ref={heroRef}
+        style={{ '--mentoria-hero-url': `url(${heroSalon})` }}
       >
         <div className="mentoria-hero__inner">
           <div className="mentoria-hero__content" ref={heroContentRef}>
@@ -476,15 +478,9 @@ export default function Mentoria() {
             as="div"
             className="mentoria-hero__visual"
             delay={420}
+            aria-hidden="true"
           >
-            <div className="mentoria-hero__photo" ref={heroPhotoRef}>
-              <span
-                className="mentoria-photo-placeholder__label"
-                aria-hidden="true"
-              >
-                Foto editorial · mentoría
-              </span>
-            </div>
+            <div className="mentoria-hero__photo" ref={heroPhotoRef} />
           </RevealOnScroll>
         </div>
       </section>

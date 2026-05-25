@@ -9,7 +9,7 @@ import stepImagePlan from '../assets/mentoria/method/plan-estrategico.png'
 import stepImageAcompanamiento from '../assets/mentoria/method/acompanamiento.png'
 import stepImageEvolucion from '../assets/mentoria/method/evolucion.png'
 import expMark from '../assets/mentoria/exp-mark.webp'
-import heroSalon from '../assets/generated-heroes/mentoria-hero-generated.png'
+import heroSalon from '../assets/mentoria/hero-online-mentoria.png'
 
 /* ────────────────────────────────────────────────────────────────
    Content data — kept here so the JSX below stays a layout file.

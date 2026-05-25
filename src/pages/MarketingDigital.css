@@ -107,8 +107,6 @@
 }
 
 .md-hero__inner {
-  position: relative;
-  z-index: 1;
   max-width: var(--container);
   margin: 0 auto;
   min-height: clamp(520px, 54vw, 720px);
@@ -197,12 +195,11 @@
 
 .md-hero__visual {
   position: absolute;
-  inset: 0 auto 0 50%;
+  inset: 0;
   z-index: 0;
-  width: 100vw;
+  width: 100%;
   max-width: none;
   height: 100%;
-  transform: translateX(-50%);
   pointer-events: none;
   overflow: hidden;
 }
@@ -216,15 +213,16 @@
     linear-gradient(
       90deg,
       rgba(6, 6, 6, 0.98) 0%,
-      rgba(6, 6, 6, 0.86) 30%,
-      rgba(6, 6, 6, 0.48) 58%,
-      rgba(6, 6, 6, 0.12) 86%
+      rgba(6, 6, 6, 0.74) 31%,
+      rgba(6, 6, 6, 0.28) 56%,
+      rgba(6, 6, 6, 0.04) 86%,
+      rgba(6, 6, 6, 0.1) 100%
     ),
     linear-gradient(
       180deg,
-      rgba(6, 6, 6, 0.48) 0%,
-      rgba(6, 6, 6, 0.08) 46%,
-      rgba(6, 6, 6, 0.62) 100%
+      rgba(6, 6, 6, 0.34) 0%,
+      rgba(6, 6, 6, 0.02) 46%,
+      rgba(6, 6, 6, 0.42) 100%
     );
   pointer-events: none;
 }
@@ -235,8 +233,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  filter: brightness(0.88) contrast(1.06) saturate(0.76);
+  object-position: center center;
+  filter: brightness(1.04) contrast(1.04) saturate(0.88);
   will-change: transform;
 }
 
@@ -513,7 +511,7 @@
   }
 
   .md-hero__visual {
-    height: 100%;
+    min-height: 100%;
   }
 
   .md-hero__wordmark {
@@ -525,14 +523,14 @@
       linear-gradient(
         90deg,
         rgba(6, 6, 6, 0.98) 0%,
-        rgba(6, 6, 6, 0.78) 62%,
-        rgba(6, 6, 6, 0.3) 100%
+        rgba(6, 6, 6, 0.84) 62%,
+        rgba(6, 6, 6, 0.36) 100%
       ),
       linear-gradient(
         180deg,
-        rgba(6, 6, 6, 0.42) 0%,
-        rgba(6, 6, 6, 0.18) 48%,
-        rgba(6, 6, 6, 0.76) 100%
+        rgba(6, 6, 6, 0.38) 0%,
+        rgba(6, 6, 6, 0.12) 48%,
+        rgba(6, 6, 6, 0.72) 100%
       );
   }
 

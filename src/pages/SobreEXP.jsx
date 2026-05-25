@@ -1,7 +1,7 @@
 import RevealOnScroll from '../components/RevealOnScroll'
 import FinalCTA from '../components/FinalCTA'
-import heroPortrait from '../assets/generated-heroes/sobre-exp-hero-generated.png'
-import institutionalPhoto from '../assets/mentoria/evolucion.webp'
+import heroPortrait from '../assets/sobre-exp/hero-brand-studio.png'
+import institutionalPhoto from '../assets/sobre-exp/method-integrated-growth.png'
 import expWordmark from '../assets/exp-wordmark-light.png'
 import './SobreEXP.css'
 
